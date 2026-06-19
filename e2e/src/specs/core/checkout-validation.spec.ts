@@ -31,6 +31,9 @@ import {
     INVALID_TEST_DATA,
     generateTestEmail,
 } from '../../test-data/checkout.data';
+import { installLoginPrefsStubHooks } from '../../utils/login-prefs-stub';
+
+installLoginPrefsStubHooks();
 
 scenarioFn('Contact info rejects invalid input', async () => {
     await apiCartSetupFlow.executeAndNavigateToCheckout(TEST_PRODUCT_CATEGORIES.MENS_JACKETS);
@@ -56,7 +59,8 @@ scenarioFn('Contact info rejects invalid input', async () => {
 })
     .config({ retries: 0 })
     .tag('@contact-info-validation')
-    .tag('@guest-checkout');
+    .tag('@guest-checkout')
+    .tag('@smoke');
 
 scenarioFn('Shipping address rejects empty fields', async () => {
     await apiCartSetupFlow.executeAndNavigateToCheckout(TEST_PRODUCT_CATEGORIES.MENS_JACKETS);

@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from '@/components/link';
 import { cn } from '@/lib/utils';
 
+// Cosmetic-specific footer legal links: matches canonical styling (plain text links)
 export default function LegalLinks({ className }: { className?: string }): ReactElement {
     const { t } = useTranslation('footer');
     return (

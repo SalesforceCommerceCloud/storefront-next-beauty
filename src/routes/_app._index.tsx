@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 import { Suspense } from 'react';
-import { Await, redirect, useAsyncError } from 'react-router';
-import type { Route } from './+types/_app._index';
+import { Await, redirect, useAsyncError, type LoaderFunctionArgs } from 'react-router';
 import type { ShopperProducts, ShopperSearch } from '@/scapi';
 import { fetchCarouselProducts } from '@/components/product-carousel/loaders';
 import { fetchCategories } from '@/lib/api/categories.server';
@@ -27,6 +26,7 @@ import { Region } from '@/components/region';
 import PopularCategories from '@/components/home/popular-categories';
 import ContentCard from '@/components/content-card';
 import { getConfig } from '@salesforce/storefront-next-runtime/config';
+import type { AppConfig } from '@/types/config';
 import { PageType } from '@/lib/decorators/page-type';
 import { RegionDefinition } from '@/lib/decorators/region-definition';
 
@@ -44,6 +44,8 @@ import { SeoMeta } from '@/components/seo-meta';
 import { buildCanonicalUrl } from '@/utils/canonical-url';
 import { useTranslation } from 'react-i18next';
 import { NormalizedApiError } from '@/lib/api/normalized-api-error';
+
+export { shouldRevalidate } from '@/lib/routes/revalidation/home';
 
 @PageType({
     name: 'Home Page',
@@ -65,6 +67,18 @@ import { NormalizedApiError } from '@/lib/api/normalized-api-error';
     },
 ])
 export class HomePageMetadata {}
+
+/**
+ * Route handle for UI configuration.
+ * The cosmetic vertical header starts transparent on the home page and becomes opaque on scroll.
+ */
+export const handle = {
+    ui: {
+        header: {
+            transparentOnLoad: true,
+        },
+    },
+};
 
 function FeaturedProductsError() {
     const error = useAsyncError() as NormalizedApiError;
@@ -96,11 +110,11 @@ export type HomePageData = {
  * This function runs on the server during SSR and prepares data for the home page.
  * @returns Promise that resolves to an object containing search result promise
  */
-export function loader(args: Route.LoaderArgs): HomePageData {
+export function loader(args: LoaderFunctionArgs): HomePageData {
     const logger = getLogger(args.context);
     logger.debug('HomePage: loader starting');
 
-    const config = getConfig(args.context);
+    const config = getConfig<AppConfig>(args.context);
     const requestUrl = new URL(args.request.url);
 
     // Redirect bare "/" to the default site/locale prefixed homepage
@@ -136,8 +150,8 @@ export function loader(args: Route.LoaderArgs): HomePageData {
 }
 
 /**
- * Home page component that displays the home page content with granular Suspense boundaries.
- * Components within the page handle their own Suspense boundaries for progressive loading.
+ * Cosmetic vertical homepage — full-bleed hero carousel with sage green CTA.
+ *
  * @returns JSX element representing the home page layout
  */
 export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
@@ -192,7 +206,58 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
 
     return (
         <WishlistProvider initialState={loaderData.wishlistInitialState}>
-            <div className="pb-16 -mt-8">
+            <div className="pb-16">
+                <style>{`
+                    /* Remove padding from hero carousel items and make each slide full viewport width */
+                    .cosmetic-hero-carousel [data-slot="carousel-item"] {
+                        padding-left: 0;
+                        flex-basis: 100vw;
+                        min-width: 100vw;
+                    }
+
+                    /* Remove negative margin from hero carousel content */
+                    .cosmetic-hero-carousel [data-slot="carousel-content"] > div {
+                        margin-left: 0;
+                    }
+
+                    /* Remove section-container constraints in hero carousel only */
+                    .cosmetic-hero-carousel .section-container {
+                        padding-left: 0;
+                        padding-right: 0;
+                        max-width: none;
+                    }
+
+                    /* Restore padding for hero carousel content overlay so text doesn't touch screen edges */
+                    .cosmetic-hero-carousel .section-container > * {
+                        padding-left: 1rem;
+                        padding-right: 1rem;
+                    }
+
+                    @media (min-width: 640px) {
+                        .cosmetic-hero-carousel .section-container > * {
+                            padding-left: 2rem;
+                            padding-right: 2rem;
+                        }
+                    }
+
+                    @media (min-width: 1024px) {
+                        .cosmetic-hero-carousel .section-container > * {
+                            padding-left: 4rem;
+                            padding-right: 4rem;
+                        }
+                    }
+
+                    /* Hero carousel CTA button — use sage green inspired by beauty vertical */
+                    .cosmetic-hero-carousel [data-slot="button"] {
+                        background-color: oklch(0.44 0.08 155);
+                        color: oklch(0.99 0.006 92);
+                        border-radius: var(--radius-ui);
+                    }
+
+                    .cosmetic-hero-carousel [data-slot="button"]:hover {
+                        background-color: oklch(0.36 0.065 155);
+                    }
+                `}</style>
                 <SeoMeta
                     rawTitle
                     title={t('meta.title', { defaultValue: 'NextGen PWA Kit Store' })}
@@ -213,19 +278,23 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
                         fallbackElement={
                             <>
                                 {/* Provide fallback skeletons for the above the fold content */}
-                                <HeroCarouselSkeleton showDots={true} showNavigation={true} />
+                                <div className="cosmetic-hero-carousel">
+                                    <HeroCarouselSkeleton showDots={true} showNavigation={true} />
+                                </div>
                                 <ProductCarouselSkeleton title={t('featuredProducts.title')} />
                             </>
                         }
                         errorElement={
                             <>
-                                <HeroCarousel
-                                    slides={heroSlides}
-                                    autoPlay={true}
-                                    autoPlayInterval={6000}
-                                    showNavigation={true}
-                                    showDots={true}
-                                />
+                                <div className="cosmetic-hero-carousel">
+                                    <HeroCarousel
+                                        slides={heroSlides}
+                                        autoPlay={true}
+                                        autoPlayInterval={6000}
+                                        showNavigation={true}
+                                        showDots={true}
+                                    />
+                                </div>
 
                                 {/* Featured Products */}
                                 <Suspense fallback={<ProductCarouselSkeleton title={t('featuredProducts.title')} />}>
@@ -255,8 +324,13 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
                             {/* Popular Categories - full-width section with its own gray bg and container */}
                             <PopularCategories categoriesPromise={loaderData.categories} />
 
-                            {/* Featured Content Cards - Static content */}
-                            <div className="pt-16">
+                            {/* Featured Content Cards - Static content. The
+                             * `data-section="home-content"` scope flattens the
+                             * Card primitive shape (radius / shadow) via base.css
+                             * so these editorial tiles match Dazzle's plain-div
+                             * presentation rather than reading as token-driven
+                             * Card surfaces. */}
+                            <div className="pt-16" data-section="home-content">
                                 <div className="section-container">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <ContentCard

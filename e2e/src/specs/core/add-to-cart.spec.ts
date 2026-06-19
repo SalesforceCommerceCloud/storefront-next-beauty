@@ -95,8 +95,7 @@ Scenario('Guest shopper should be able to add items to cart', async () => {
     expect(cartItemPrice, 'Cart item should have a price').to.not.be.empty;
 })
     .tag('@add-to-cart')
-    .tag('@guest-checkout')
-    .tag('@smoke');
+    .tag('@guest-checkout');
 
 /**
  * Registered Shopper Add to Cart Scenario

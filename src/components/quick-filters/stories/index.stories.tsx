@@ -15,43 +15,18 @@
  */
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import QuickFilters from '../index';
-import { useEffect, type ComponentType } from 'react';
-import { within, expect, userEvent } from 'storybook/test';
+import type { ComponentType } from 'react';
+import { within, expect } from 'storybook/test';
 import { waitForStorybookReady } from '@storybook/test-utils';
-import { useNavigate } from '@/hooks/use-navigate';
 import type { ShopperProducts } from '@/scapi';
 
-// ---------------------------------------------------------------------------
-// QuickFilters takes a `category` object and renders one chip per
-// `category.categories[]` entry. Visible state is fully a function of (a)
-// the count of subcategories and (b) which one is the active `cgid` in the
-// URL. Both fold into Controls. Empty `category.categories` returns null —
-// kept as a dedicated story.
-//
-// The component owns its click handling (writes URL via navigate). RouteSetter
-// keeps Controls-driven `activeCategoryId` in sync with the URL after first
-// render; the default URL is set via `parameters.initialEntries`.
-// ---------------------------------------------------------------------------
-
-function RouteSetter({ initialEntries }: { initialEntries: string[] }) {
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (initialEntries[0]) {
-            navigate(initialEntries[0], { replace: true });
-        }
-    }, [initialEntries, navigate]);
-    return null;
-}
-
 const ALL_SUBCATEGORIES: NonNullable<ShopperProducts.schemas['Category']['categories']> = [
-    { id: 'womens-tops', name: 'Tops' },
-    { id: 'womens-bottoms', name: 'Bottoms' },
-    { id: 'womens-dresses', name: 'Dresses' },
-    { id: 'womens-outerwear', name: 'Outerwear' },
-    { id: 'womens-shoes', name: 'Shoes' },
-    { id: 'womens-accessories', name: 'Accessories' },
-    { id: 'womens-bags', name: 'Bags' },
-    { id: 'womens-jewelry', name: 'Jewelry' },
+    { id: 'makeup-eyes', name: 'Eyes' },
+    { id: 'makeup-lips', name: 'Lips' },
+    { id: 'makeup-face', name: 'Face' },
+    { id: 'makeup-nails', name: 'Nails' },
+    { id: 'skincare', name: 'Skincare' },
+    { id: 'fragrance', name: 'Fragrance' },
 ];
 const MAX_VALUES = ALL_SUBCATEGORIES.length;
 
@@ -62,7 +37,7 @@ type SyntheticArgs = {
 };
 
 const meta: Meta<typeof QuickFilters> = {
-    title: 'Components/QuickFilters',
+    title: 'Cosmetic/QuickFilters',
     component: QuickFilters,
     tags: ['autodocs', 'interaction'],
     parameters: {
@@ -70,7 +45,7 @@ const meta: Meta<typeof QuickFilters> = {
         docs: {
             description: {
                 component:
-                    'Horizontal chip row of subcategory quick filters. Reads `category.categories[]` and renders one outline button per entry; the chip whose `cgid` is active in the URL gets the filled `default` variant.',
+                    'Cosmetic vertical override of QuickFilters. Displays subcategory chips with "Shop by Category" label and sparkles icon. Features rounded corners, custom colors, and data-state attributes for active/inactive states.',
             },
         },
     },
@@ -80,13 +55,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Rich-but-realistic baseline — 4 subcategories with no active `cgid`.
- * `valueCount` slices the canonical list (1–8). `activeCategoryId` seeds
- * the URL `refine=cgid=...` to drive the active-chip state. `showLabels`
- * toggles whether `name` is set on each subcategory (off = falls back to
- * the raw `id`).
+ * Shows the "Shop by Category" label with sparkles icon, followed by
+ * subcategory chips. The label is extracted from the cgid refinement in
+ * the loader data. Default shows 4 subcategories with no active selection.
  */
-export const FullyFeatured: StoryObj<ComponentType<Partial<SyntheticArgs>>> = {
+export const WithShopByLabel: StoryObj<ComponentType<Partial<SyntheticArgs>>> = {
     args: {
         valueCount: 4,
         activeCategoryId: '',
@@ -100,56 +73,162 @@ export const FullyFeatured: StoryObj<ComponentType<Partial<SyntheticArgs>>> = {
         },
         activeCategoryId: {
             description:
-                'Synthetic: seeds `refine=cgid=<id>` in the URL. The matching chip flips to the filled `default` variant. Empty = no active chip.',
+                'Synthetic: seeds `refine=cgid=<id>` in the URL. The matching chip shows active state with primary-foreground text color.',
             control: 'text',
             table: { category: 'Synthetic (data shape)' },
         },
         showLabels: {
-            description:
-                'Synthetic: when off, subcategory `name` fields are stripped so chips render the raw `id` (matches old `NoLabels` story).',
+            description: 'Synthetic: when off, subcategory `name` fields are stripped so chips render the raw `id`.',
             control: 'boolean',
             table: { category: 'Synthetic (data shape)' },
         },
     },
+    parameters: {
+        routeLoaderData: {
+            'routes/_app.category.$categoryId': {
+                searchResultCritical: {
+                    refinements: [
+                        {
+                            attributeId: 'cgid',
+                            label: 'Category',
+                        },
+                    ],
+                },
+            },
+        },
+    },
     render: (args) => {
-        const synthetic: SyntheticArgs = {
+        const synthetic = {
             valueCount: args.valueCount ?? 4,
             activeCategoryId: args.activeCategoryId ?? '',
             showLabels: args.showLabels ?? true,
         };
+
         const clamped = Math.max(1, Math.min(synthetic.valueCount, MAX_VALUES));
         const subcategories = ALL_SUBCATEGORIES.slice(0, clamped).map((cat) =>
             synthetic.showLabels ? cat : { id: cat.id }
         );
         const category: ShopperProducts.schemas['Category'] = {
-            id: 'womens',
-            name: 'Women',
+            id: 'makeup',
+            name: 'Makeup',
             categories: subcategories,
         };
-        const initialUrl = synthetic.activeCategoryId ? `/?refine=cgid=${synthetic.activeCategoryId}` : '/';
-        return (
-            <>
-                <RouteSetter initialEntries={[initialUrl]} />
-                <QuickFilters category={category} />
-            </>
-        );
+
+        return <QuickFilters category={category} />;
     },
     play: async ({ canvasElement }) => {
         await waitForStorybookReady(canvasElement);
         const canvas = within(canvasElement);
+
+        // Wait for component to render by finding the group role (proves router data is loaded)
+        const container = await canvas.findByRole('group');
+        await expect(container).toHaveAttribute('data-slot', 'quick-filters');
+
+        // Check for "Shop by" label with sparkles
+        const shopByLabel = canvas.getByText(/Shop by Category/i);
+        await expect(shopByLabel).toBeInTheDocument();
+
+        // Check buttons have proper aria-pressed and data-state attributes
         const buttons = canvas.getAllByRole('button');
         await expect(buttons.length).toBeGreaterThan(0);
-        const firstChip = buttons[0];
-        if (firstChip) {
-            await expect(firstChip).toHaveAttribute('aria-pressed');
-            await userEvent.click(firstChip);
+
+        // Verify all chips start in inactive state
+        for (const button of buttons) {
+            await expect(button).toHaveAttribute('aria-pressed', 'false');
+            await expect(button).toHaveAttribute('data-state', 'inactive');
         }
     },
 };
 
 /**
- * Empty `category.categories` makes the component return null. Worth a
- * bookmarkable URL to assert this null-render explicitly.
+ * Shows subcategory chips without the "Shop by" label header. This happens
+ * when the loader data doesn't include a cgid refinement with a label.
+ */
+export const WithoutShopByLabel: Story = {
+    parameters: {
+        routeLoaderData: {
+            'routes/_app.category.$categoryId': {
+                searchResultCritical: {
+                    refinements: [],
+                },
+            },
+        },
+    },
+    render: () => {
+        const category: ShopperProducts.schemas['Category'] = {
+            id: 'makeup',
+            name: 'Makeup',
+            categories: [
+                { id: 'makeup-eyes', name: 'Eyes' },
+                { id: 'makeup-lips', name: 'Lips' },
+                { id: 'makeup-face', name: 'Face' },
+            ],
+        };
+        return <QuickFilters category={category} />;
+    },
+    play: async ({ canvasElement }) => {
+        await waitForStorybookReady(canvasElement);
+        const canvas = within(canvasElement);
+
+        // Wait for buttons to render (proves router initialized)
+        const buttons = await canvas.findAllByRole('button');
+        await expect(buttons.length).toBe(3);
+
+        // Should NOT have "Shop by" label
+        const shopByLabel = canvas.queryByText(/Shop by/i);
+        await expect(shopByLabel).not.toBeInTheDocument();
+    },
+};
+
+/**
+ * Shows one active chip (Eyes) to demonstrate the active state styling
+ * with primary-foreground text color on primary background.
+ */
+export const WithActiveChip: Story = {
+    parameters: {
+        routeLoaderData: {
+            'routes/_app.category.$categoryId': {
+                searchResultCritical: {
+                    refinements: [
+                        {
+                            attributeId: 'cgid',
+                            label: 'Category',
+                        },
+                    ],
+                },
+            },
+        },
+        initialEntries: ['/?refine=cgid=makeup-eyes'],
+    },
+    render: () => {
+        const category: ShopperProducts.schemas['Category'] = {
+            id: 'makeup',
+            name: 'Makeup',
+            categories: [
+                { id: 'makeup-eyes', name: 'Eyes' },
+                { id: 'makeup-lips', name: 'Lips' },
+                { id: 'makeup-face', name: 'Face' },
+            ],
+        };
+        return <QuickFilters category={category} />;
+    },
+    play: async ({ canvasElement }) => {
+        await waitForStorybookReady(canvasElement);
+        const canvas = within(canvasElement);
+
+        // Wait for the active button to render with correct state
+        const eyesButton = await canvas.findByRole('button', { name: 'Eyes' });
+        await expect(eyesButton).toHaveAttribute('aria-pressed', 'true');
+        await expect(eyesButton).toHaveAttribute('data-state', 'active');
+
+        const lipsButton = canvas.getByRole('button', { name: 'Lips' });
+        await expect(lipsButton).toHaveAttribute('aria-pressed', 'false');
+        await expect(lipsButton).toHaveAttribute('data-state', 'inactive');
+    },
+};
+
+/**
+ * Empty categories array returns null - no component rendered.
  */
 export const EmptyState: Story = {
     args: {},

@@ -222,7 +222,7 @@ export const AppliedCouponRow = ({ item, basketId, currency, priceAdjustments }:
             <div className="inline-flex items-stretch">
                 <Badge
                     variant="secondary"
-                    className="gap-1 rounded-none text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words">
+                    className="gap-1 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words">
                     <Check className="size-3" />
                     {item.code}
                 </Badge>
@@ -232,7 +232,7 @@ export const AppliedCouponRow = ({ item, basketId, currency, priceAdjustments }:
                     size="icon-sm"
                     aria-label={`${t('promoCode.remove')} ${item.code}`}
                     disabled={isRemoving}
-                    className="h-auto w-auto rounded-none px-1.5 py-0.5"
+                    className="h-auto w-auto px-1.5 py-0.5"
                     onClick={() => {
                         if (item.couponItemId) {
                             removePromoCode(item.couponItemId);

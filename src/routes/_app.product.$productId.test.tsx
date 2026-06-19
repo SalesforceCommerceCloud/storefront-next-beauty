@@ -15,7 +15,20 @@
  */
 
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render as rtlRender, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
+import { AllProvidersWrapper } from '@/test-utils/context-provider';
+
+// The cosmetic PDP render tree mounts components (breadcrumbs, links, bottom
+// bar, product/wishlist/config consumers) that require a Router + the app
+// provider chain. Wrap every render so they resolve. Canonical's PDP test
+// renders bare because its tree is shallower; the cosmetic override's isn't.
+const render = (ui: React.ReactElement) =>
+    rtlRender(
+        <MemoryRouter>
+            <AllProvidersWrapper>{ui}</AllProvidersWrapper>
+        </MemoryRouter>
+    );
 import { use } from 'react';
 import type { ShopperProducts } from '@/scapi';
 import { shouldRevalidate, type ProductPageData } from './_app.product.$productId';
@@ -28,6 +41,12 @@ vi.mock('react-router', async (importOriginal) => {
     return {
         ...actual,
         useRouteLoaderData: (id: string) => (id === 'root' ? { nonce: undefined } : undefined),
+        // The cosmetic PDP tree reaches data-router hooks (useNavigation) that a
+        // plain MemoryRouter doesn't provide; stub them so the render-block tests
+        // exercise the cosmetic ProductPage without a full data router.
+        useNavigation: () => ({ state: 'idle', location: undefined }),
+        useNavigate: () => vi.fn(),
+        useSearchParams: () => [new URLSearchParams(), vi.fn()],
     };
 });
 
@@ -166,6 +185,39 @@ vi.mock('@/extensions/bopis/context/pickup-context', () => ({
     default: ({ children }: any) => <div data-testid="pickup-provider">{children}</div>,
 }));
 // @sfdc-extension-block-end SFDC_EXT_BOPIS
+
+// --- Cosmetic-specific component/provider mocks ---
+// The cosmetic PDP override pulls in a few modules the canonical route doesn't
+// (its editorial layout + the ProductView/Wishlist providers it wraps content
+// in). Stub them so the render-block tests exercise the cosmetic ProductPage
+// without dragging in real provider/SCAPI wiring.
+vi.mock('../components/product-bottom-bar', () => ({
+    default: () => <div data-testid="product-bottom-bar" />,
+}));
+
+vi.mock('@/components/category-breadcrumbs', () => ({
+    default: () => <div data-testid="category-breadcrumbs" />,
+}));
+
+vi.mock('@/components/category-breadcrumbs/skeleton', () => ({
+    CategoryBreadcrumbsSkeleton: () => <div data-testid="category-breadcrumbs-skeleton" />,
+}));
+
+vi.mock('@/components/seo-meta', () => ({
+    SeoMeta: () => null,
+}));
+
+vi.mock('@/providers/product-view', () => ({
+    default: ({ children }: any) => <div data-testid="product-view-provider">{children}</div>,
+    useProductView: () => ({ currentVariant: undefined, setCurrentVariant: vi.fn() }),
+    useOptionalProductView: () => undefined,
+}));
+
+vi.mock('@/providers/wishlist', () => ({
+    useIsInWishlist: () => false,
+    useWishlistActions: () => ({ add: vi.fn(), remove: vi.fn() }),
+    WishlistProvider: ({ children }: any) => <div data-testid="wishlist-provider">{children}</div>,
+}));
 
 // Import the functions we want to test
 import { isProductSet, isProductBundle } from '@/lib/product/product-utils';

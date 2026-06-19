@@ -16,14 +16,8 @@
 
 Feature('Checkout Registered Shopper Addresses & Billing Tests').tag('@core').tag('@checkout');
 
-const {
-    checkoutPage,
-    apiCartSetupFlow,
-    registeredShopperSetupFlow,
-    apiLoginFlow,
-    storefrontPage,
-    accountAddressesPage,
-} = inject();
+const { checkoutPage, apiCartSetupFlow, registeredShopperSetupFlow, loginFlow, storefrontPage, accountAddressesPage } =
+    inject();
 import { expect } from 'chai';
 import { TEST_SHIPPING_ADDRESS, TEST_PAYMENT, TEST_PRODUCT_CATEGORIES } from '../../test-data/checkout.data';
 
@@ -79,7 +73,7 @@ Scenario('Registered shopper can use different billing address', async () => {
         postalCode: '10001',
     };
 
-    await apiLoginFlow.executeWithEnsuredCredentials();
+    await loginFlow.execute();
 
     const productInfo = await apiCartSetupFlow.executeAndNavigateToCheckout(TEST_PRODUCT_CATEGORIES.MENS_JACKETS);
     expect(productInfo).to.not.be.undefined;

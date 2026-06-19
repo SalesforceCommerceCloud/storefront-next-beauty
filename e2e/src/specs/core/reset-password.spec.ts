@@ -16,20 +16,39 @@
 
 Feature('Reset Password').tag('@core').tag('@auth');
 
-// TODO: Skipped to keep the new pre-merge @core gate green on day one.
-//   1. "User can request password reset" — using a fixed email triggers the
-//      password-reset rate limit in CI; the "Check Your Email" heading never
-//      appears after submitting a known account email.
-//   2. "User can reset password using magic link" — flaky on the pre-merge
-//      pool target. Re-enable when both root causes are addressed.
+// TODO: Skipped pending two independent fixes.
+//   1. "User can request password reset" — re-enabled in PR #1865 (commit
+//      a20304122) and immediately failing in nightly; the "Check Your Email"
+//      heading never appears after submitting a known account email.
+//   2. "User can reset password using magic link" — Before hook (signupFlow)
+//      flakes intermittently on the new pre-merge gate (cc-nx_RefArchGlobal
+//      cookie wait timeout one run, "Last Name Input" disappearing mid-form
+//      the next). Same signup fragility as account-details/account-addresses.
 const isBroken = true;
 const scenarioFn = isBroken ? Scenario.skip : Scenario;
 
-const { forgotPasswordPage, resetPasswordPage } = inject();
+const { storefrontPage, forgotPasswordPage, resetPasswordPage, signupFlow } = inject();
 import { expect } from 'chai';
 
-// Get test email from environment variable or use default
-const testEmail = process.env.E2E_TEST_USER_EMAIL || 'e2e.test.user@gmail.com';
+/**
+ * Spec-scoped account credentials, lazily created on the first scenario.
+ * Keeping these in module-level variables (not the shared credential file)
+ * ensures this worker's account is never touched by other parallel workers.
+ */
+let specEmail = '';
+
+/**
+ * Before hook: on the first scenario, create a dedicated account via signup.
+ * On every subsequent scenario, clear cookies and re-login with stored creds.
+ * This ensures the tests avoid hitting the password reset limit for a shopper's email.
+ */
+Before(async () => {
+    if (!specEmail) {
+        await storefrontPage.clearCookies();
+        const { signupData } = await signupFlow.execute({ createBasket: false });
+        specEmail = signupData.email;
+    }
+});
 
 scenarioFn('User can request password reset', () => {
     // Navigate to the forgot password page
@@ -39,7 +58,7 @@ scenarioFn('User can request password reset', () => {
     forgotPasswordPage.validateResetPasswordHeading();
 
     // Enter email address
-    forgotPasswordPage.enterEmail(testEmail);
+    forgotPasswordPage.enterEmail(specEmail);
 
     // Submit the form
     forgotPasswordPage.submitForm();
@@ -56,7 +75,7 @@ scenarioFn('User can reset password using magic link', async () => {
     const testPassword = 'NewSecureP@ssw0rd!';
 
     // Navigate to reset password page with token and email
-    resetPasswordPage.navigate(testToken, testEmail);
+    resetPasswordPage.navigate(testToken, specEmail);
 
     // Dismiss cookie/consent dialog first so heading is visible, then verify heading
     await resetPasswordPage.dismissCookieDialog();
@@ -78,7 +97,7 @@ scenarioFn('User can reset password using magic link', async () => {
     // Verify request payload
     const params = new URLSearchParams(resetPasswordRequest.postData ?? '');
     expect(params.get('token'), 'Request should include token').to.equal(testToken);
-    expect(params.get('email'), 'Request should include email').to.equal(testEmail);
+    expect(params.get('email'), 'Request should include email').to.equal(specEmail);
     expect(params.get('newPassword'), 'Request should include password').to.equal(testPassword);
     expect(params.get('confirmPassword'), 'Request should include confirm password').to.equal(testPassword);
 })

@@ -14,36 +14,44 @@
  * limitations under the License.
  */
 import { type ReactElement, useCallback, useMemo } from 'react';
-import { useLocation, useNavigation } from 'react-router';
+import { useLocation, useNavigation, useRouteLoaderData } from 'react-router';
 import { useNavigate } from '@/hooks/use-navigate';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { ShopperProducts } from '@/scapi';
+import { useTranslation } from 'react-i18next';
+import type { loader as categoryLoader } from '@/routes/_app.category.$categoryId';
 
 interface QuickFiltersProps {
     category?: ShopperProducts.schemas['Category'];
 }
 
 /**
- * QuickFilters Component
+ * QuickFilters Component (Cosmetic Vertical Override)
  *
- * Displays category subcategories as horizontal chips for quick access without opening the refinements panel.
+ * Displays category subcategories as horizontal chips with a "Shop by {label}" header.
  *
  * Features:
- * - Horizontal chip/button layout
+ * - Horizontal chip/button layout with sparkles icon and label
  * - Active state for selected filters
  * - Optimistic UI during navigation
  * - Displays direct subcategories from category.categories on category pages
  * - Responsive with horizontal scroll on overflow
+ * - Extracts cgid refinement label from route loader data
  *
  * @param props - Component props
  * @param props.category - Category object with subcategories from SCAPI
  */
 export default function QuickFilters({ category }: QuickFiltersProps): ReactElement | null {
+    const { t } = useTranslation('common');
     const navigate = useNavigate();
     const location = useLocation();
     const navigation = useNavigation();
     const isPending = navigation.state !== 'idle';
+
+    // Extract cgid refinement label from route loader data
+    const loaderData = useRouteLoaderData<typeof categoryLoader>('routes/_app.category.$categoryId');
+    const label = loaderData?.searchResultCritical.refinements?.find((r) => r.attributeId === 'cgid')?.label;
 
     // Get subcategories to display from category.categories
     const categories = useMemo(() => {
@@ -101,11 +109,38 @@ export default function QuickFilters({ category }: QuickFiltersProps): ReactElem
         return null;
     }
 
+    // Derive the display label
+    const displayLabel = label ? `${t('shopBy', 'Shop by')} ${label}` : undefined;
+
     return (
         <div
-            className={`flex flex-wrap gap-2${isPending ? ' pointer-events-none opacity-50 transition-opacity' : ''}`}
+            className={`flex flex-wrap items-center gap-2${isPending ? ' pointer-events-none opacity-50 transition-opacity' : ''}`}
             role="group"
-            aria-label="Quick category filters">
+            aria-label={displayLabel || t('quickCategoryFilters', 'Quick category filters')}
+            data-slot="quick-filters">
+            {displayLabel && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground pr-2">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="size-3.5"
+                        aria-hidden="true">
+                        <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .963L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                        <path d="M20 3v4" />
+                        <path d="M22 5h-4" />
+                        <path d="M4 17v2" />
+                        <path d="M5 18H3" />
+                    </svg>
+                    {displayLabel}
+                </span>
+            )}
             {categories.map((cat) => {
                 const cgidRefinement = `cgid=${cat.value}`;
                 const isActive = activeRefinements.includes(cgidRefinement);
@@ -116,10 +151,11 @@ export default function QuickFilters({ category }: QuickFiltersProps): ReactElem
                         size="sm"
                         onClick={() => handleCategoryClick(cat.value)}
                         className={cn(
-                            'whitespace-nowrap rounded-none cursor-pointer text-sm font-normal leading-5 tracking-[-0.15px]',
-                            isActive ? 'text-primary-foreground' : 'text-foreground'
+                            'whitespace-nowrap rounded-md cursor-pointer gap-1.5',
+                            isActive ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-muted-hover'
                         )}
-                        aria-pressed={isActive}>
+                        aria-pressed={isActive}
+                        data-state={isActive ? 'active' : 'inactive'}>
                         {cat.label || cat.value}
                     </Button>
                 );

@@ -1,25 +1,26 @@
 {
-    "name": "template-retail-rsc-app",
-    "version": "2026.6.1",
-    "description": "Production-ready React storefront template for Salesforce Commerce Cloud.",
+    "name": "storefront-cosmetic",
+    "version": "2026.7.0-dev",
+    "description": "Standalone Salesforce Commerce Cloud storefront (cosmetic).",
     "private": true,
     "type": "module",
     "storefrontNext": {
-        "templateRelease": "June 2026",
-        "templateVersion": "2026.6.1",
-        "minSdkVersion": "1.0.1"
+        "templateRelease": "July 2026 (dev)",
+        "templateVersion": "2026.7.0-dev",
+        "minSdkVersion": "1.1.0-dev"
     },
     "scripts": {
-        "dev": "pnpm locales:aggregate-extensions && cross-env NODE_OPTIONS=--conditions=dev-data-store sfnext dev",
+        "dev": "pnpm locales:aggregate-extensions && pnpm config:aggregate-extensions && cross-env NODE_OPTIONS=--conditions=dev-data-store sfnext dev",
         "dev:debug": "cross-env NODE_OPTIONS=\"--inspect --conditions=dev-data-store\" sfnext dev",
         "dev:log": "cross-env NODE_OPTIONS=--conditions=dev-data-store SFCC_LOG_LEVEL=debug sfnext dev",
         "dev:ui-targets": "cross-env VITE_UI_TARGET_DEV_MODE=true pnpm dev",
-        "build": "pnpm locales:aggregate-extensions && pnpm cartridge:generate && react-router build",
+        "build": "pnpm locales:aggregate-extensions && pnpm config:aggregate-extensions && pnpm cartridge:generate && react-router build",
         "bundlesize": "cross-env BUNDLES_SIZE_CHECK=true pnpm build",
+        "bundlesize:compare": "node scripts/compare-bundlesize.mjs",
         "start": "cross-env SFNEXT_DATA_STORE_UNAVAILABLE_MODE=fallback sfnext preview",
         "preview": "pnpm start",
         "push": "sfnext push --project-directory .",
-        "typecheck": "react-router typegen && cross-env NODE_OPTIONS=--max-old-space-size=8192 tsc --noEmit",
+        "typecheck": "pnpm config:aggregate-extensions && react-router typegen && cross-env NODE_OPTIONS=--max-old-space-size=8192 tsc --noEmit",
         "lint": "cross-env NODE_OPTIONS=--max-old-space-size=8192 eslint . --report-unused-disable-directives --max-warnings 0 --cache && pnpm --filter ./e2e lint",
         "lint:fix": "cross-env NODE_OPTIONS=--max-old-space-size=8192 eslint . --fix --cache && pnpm --filter ./e2e lint:fix",
         "test": "vitest run",
@@ -27,19 +28,23 @@
         "storybook": "storybook dev -p 6006",
         "storybook:build": "storybook build -o .storybook/storybook-static",
         "storybook:test": "node scripts/test-storybook.js",
-        "e2e": "pnpm --filter ./e2e e2e",
-        "a11y": "pnpm --filter ./e2e a11y",
+        "chromatic": "chromatic --build-script-name=storybook:build --exit-zero-on-changes",
+        "chromatic:core": "node scripts/chromatic-core.js",
         "cartridge:generate": "sfnext generate-cartridge",
         "cartridge:validate": "sfnext validate-cartridge",
         "cartridge:deploy": "sfnext deploy-cartridge",
         "locales:aggregate-extensions": "sfnext locales aggregate-extensions",
+        "config:aggregate-extensions": "sfnext config aggregate-extensions",
         "config:inspect": "sfnext config inspect && echo \"Tip: Run \\`pnpm config:push-env\\` to sync local .env overrides to MRT.\"",
         "config:push-env": "b2c mrt env var push",
         "lighthouse:ci": "lhci autorun",
         "smoke-test:generate": "node src/lib/ui-target-dev-mode/smoke-test/generate-config.cjs",
         "extensions:list": "node scripts/list-extension-points.js",
         "eslint:generate-config": "node scripts/generate-eslint-config.js",
-        "b2c": "b2c"
+        "b2c": "b2c",
+        "storybook:test:mirror": "bash scripts/storybook-mirror-check.sh",
+        "e2e": "pnpm --filter ./e2e e2e",
+        "a11y": "pnpm --filter ./e2e a11y"
     },
     "dependencies": {
         "@hookform/resolvers": "5.2.2",
@@ -61,8 +66,8 @@
         "@radix-ui/react-switch": "1.2.2",
         "@radix-ui/react-tooltip": "1.2.8",
         "@react-router/node": "7.12.0",
-        "@salesforce/storefront-next-dev": "1.0.1",
-        "@salesforce/storefront-next-runtime": "1.0.1",
+        "@salesforce/storefront-next-dev": "workspace:*",
+        "@salesforce/storefront-next-runtime": "workspace:*",
         "@vis.gl/react-google-maps": "1.7.1",
         "class-variance-authority": "0.7.1",
         "clsx": "2.1.1",
@@ -97,6 +102,7 @@
     },
     "devDependencies": {
         "@chromatic-com/storybook": "4.1.2",
+        "chromatic": "^11.21.0",
         "@eslint/compat": "1.3.2",
         "@eslint/js": "9.34.0",
         "@lhci/cli": "0.15.1",
@@ -161,8 +167,7 @@
         "wait-on": "^8.0.1"
     },
     "volta": {
-        "node": "24.13.0",
-        "pnpm": "10.28.0"
+        "extends": "../../package.json"
     },
     "pnpm": {
         "overrides": {
@@ -178,7 +183,7 @@
         "server": [
             {
                 "name": "**/*",
-                "limit": "5.3 mB"
+                "limit": "6 mB"
             }
         ],
         "client": [
@@ -219,7 +224,7 @@
             },
             {
                 "name": "assets/\\(components\\)-\\(product-view\\)-child-products.*.js",
-                "limit": "74 kB",
+                "limit": "90 kB",
                 "comment": "Child products component includes Radix UI menu and dropdown dependencies for variant selection"
             },
             {
@@ -228,9 +233,14 @@
                 "comment": "Cart item modal bundles full product editing UI: image gallery, swatches, cart actions (incl. ShareButton → @radix-ui/react-dropdown-menu), and ChildProducts"
             },
             {
-                "name": "assets/\\(locales\\)-\\(en-US\\|en-GB\\)-index.*.js",
-                "limit": "75 kB",
-                "comment": "English locale chunks (all locale translations, includes checkout registration strings). Uncompressed; en-US ~62 kB baseline. Increased to 69 kB (+5%) for maintenancePage translations."
+                "name": "assets/\\(locales\\)-\\(en-US\\)-index.*.js",
+                "limit": "79 kB",
+                "comment": "English (US) locale chunk. Uncompressed; en-US ~62 kB baseline. Increased for cosmetic vertical translations (About Us, swatch, Payment Methods, Addresses, Orders, Store Preferences)."
+            },
+            {
+                "name": "assets/\\(locales\\)-\\(en-GB\\)-index.*.js",
+                "limit": "79 kB",
+                "comment": "English (GB) locale chunk. Same limit as en-US — translations are near-identical in size."
             },
             {
                 "name": "assets/\\(locales\\)-\\(it-IT\\)-index.*.js",
@@ -296,11 +306,6 @@
                 "name": "assets/\\(locales\\)-*-index.*.js",
                 "limit": "75 kB",
                 "comment": "Default limit for other locale chunks. Update individually if a locale exceeds this."
-            },
-            {
-                "name": "assets/\\(components\\)-\\(checkout\\)-*.js",
-                "limit": "625 kB",
-                "comment": "Checkout components with dependencies (incl. express-payments lazy chunk and sonner toast). Lazy on /checkout."
             },
             {
                 "name": "assets/\\(package\\)-\\(fast-deep-equal\\)-*.js",

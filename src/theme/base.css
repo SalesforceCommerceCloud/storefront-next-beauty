@@ -1,14 +1,20 @@
 @font-face {
-    font-family: 'Sen';
-    src: url('/fonts/sen-variable.woff2') format('woff2');
-    font-weight: 400 800;
+    font-family: 'Lora';
+    src: url('/fonts/lora-variable.woff2') format('woff2');
+    font-weight: 400 700;
     font-style: normal;
     font-display: swap;
 }
 
 @layer components {
+    /*
+     * Wider editorial column matches Dazzle (Lumiere): content stretches
+     * to 1680px on large monitors with tight side gutters, so cards, grids,
+     * and editorial type get maximum room. Full-bleed surfaces (hero, footer
+     * band, newsletter) opt out by living outside `.section-container`.
+     */
     .section-container {
-        @apply px-4 sm:px-8 lg:px-16 max-w-screen-2xl mx-auto;
+        @apply px-4 sm:px-4 lg:px-5 max-w-[1680px] mx-auto;
     }
 }
 
@@ -23,78 +29,258 @@
 
     /* Cursor pointer for all interactive elements */
     button:not(:disabled),
-    [role="button"]:not([aria-disabled="true"]):not([data-disabled]),
-    [role="tab"]:not([aria-disabled="true"]):not([data-disabled]),
+    [role='button']:not([aria-disabled='true']):not([data-disabled]),
+    [role='tab']:not([aria-disabled='true']):not([data-disabled]),
     a[href],
     select:not(:disabled),
-    input[type="button"]:not(:disabled),
-    input[type="submit"]:not(:disabled),
-    input[type="reset"]:not(:disabled),
-    input[type="date"]:not(:disabled),
-    input[type="datetime-local"]:not(:disabled),
-    input[type="month"]:not(:disabled),
-    input[type="time"]:not(:disabled),
-    input[type="week"]:not(:disabled),
-    input[type="color"]:not(:disabled),
-    input[type="file"]:not(:disabled),
+    input[type='button']:not(:disabled),
+    input[type='submit']:not(:disabled),
+    input[type='reset']:not(:disabled),
+    input[type='date']:not(:disabled),
+    input[type='datetime-local']:not(:disabled),
+    input[type='month']:not(:disabled),
+    input[type='time']:not(:disabled),
+    input[type='week']:not(:disabled),
+    input[type='color']:not(:disabled),
+    input[type='file']:not(:disabled),
     summary {
         cursor: pointer;
     }
 
+    /* Summary element hover background - override canonical hover:bg-accent with 50% opacity */
+    summary:hover {
+        background-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    }
+
     /* Cursor not-allowed for disabled interactive elements */
     button:disabled,
-    [role="button"][aria-disabled="true"],
-    [role="button"][data-disabled],
-    [role="tab"][aria-disabled="true"],
-    [role="tab"][data-disabled],
+    [role='button'][aria-disabled='true'],
+    [role='button'][data-disabled],
+    [role='tab'][aria-disabled='true'],
+    [role='tab'][data-disabled],
     select:disabled,
-    input[type="button"]:disabled,
-    input[type="submit"]:disabled,
-    input[type="reset"]:disabled,
-    input[type="date"]:disabled,
-    input[type="datetime-local"]:disabled,
-    input[type="month"]:disabled,
-    input[type="time"]:disabled,
-    input[type="week"]:disabled,
-    input[type="color"]:disabled,
-    input[type="file"]:disabled {
+    input[type='button']:disabled,
+    input[type='submit']:disabled,
+    input[type='reset']:disabled,
+    input[type='date']:disabled,
+    input[type='datetime-local']:disabled,
+    input[type='month']:disabled,
+    input[type='time']:disabled,
+    input[type='week']:disabled,
+    input[type='color']:disabled,
+    input[type='file']:disabled {
         cursor: not-allowed;
     }
 }
 
-/*
- * Square corners for all shadcn/ui primitives to match the design system.
- * This overrides the default rounded classes in shadcn components without
- * modifying their source files and maintain Shadcn components code intact from cli generated.
-   Placed outside @layer so it takes precedence
- * over Tailwind utility classes. Customers who want rounded corners can
- * remove this block or override per-component via className.
- */
-[data-slot="accordion-trigger"],
-[data-slot="alert"],
-[data-slot="alert-dialog-content"],
-[data-slot="button"],
-[data-slot="card"],
-[data-slot="dialog-content"],
-[data-slot="dialog-close"],
-[data-slot="dropdown-menu-content"],
-[data-slot="dropdown-menu-item"],
-[data-slot="dropdown-menu-checkbox-item"],
-[data-slot="dropdown-menu-radio-item"],
-[data-slot="dropdown-menu-sub-trigger"],
-[data-slot="dropdown-menu-sub-content"],
-[data-slot="input"],
-[data-slot="input-otp-slot"],
-[data-slot="native-select"],
-[data-slot="navigation-menu-trigger"],
-[data-slot="navigation-menu-content"],
-[data-slot="navigation-menu-viewport"],
-[data-slot="navigation-menu-link"],
-[data-slot="popover-content"],
-[data-slot="popover-trigger"],
-[data-slot="sheet-close"],
-[data-slot="skeleton"],
-[data-slot="textarea"],
-[data-slot="tooltip-content"] {
-    border-radius: 0;
+/* Cosmetic uses --ui-border-width: 0 (borderless Cards by default) and
+ * --ui-shadow: shadow-sm by default. Mirrors Dazzle's behaviour: most
+ * Cards in account / auth / checkout / order-confirmation sections sit
+ * on white backgrounds with delineation borders and explicitly opt out
+ * of shadow. We restore the 1px border here AND drop the shadow so
+ * cosmetic matches Dazzle's per-instance `border border-border
+ * shadow-none` pattern. :where() keeps specificity low so per-card
+ * className overrides (e.g. [--ui-border-width:0px]) still win. */
+:where([data-testid='account-layout']) [data-slot='card'],
+:where([data-section='auth']) [data-slot='card'],
+:where([data-section='checkout']) [data-slot='card'],
+:where([data-section='order-confirmation']) [data-slot='card'] {
+    --ui-border-width: 1px;
+    --ui-shadow: none;
+}
+
+/* Surface rounding — softer than the global --ui-radius default so cards,
+ * popovers, dialogs, and dropdowns read as editorial paper insets rather
+ * than chip-sized corners. Matches Dazzle's `beauty-radius.css`. */
+[data-slot='card'],
+[data-slot='popover-content'],
+[data-slot='dialog-content'],
+[data-slot='alert-dialog-content'],
+[data-slot='dropdown-menu-content'],
+[data-slot='navigation-menu-content'],
+[data-slot='select-content'] {
+    --ui-radius: var(--radius-2xl);
+}
+
+/* Pills — badges, status chips read as full-pill geometry */
+[data-slot='badge'] {
+    --ui-radius: 9999px;
+}
+
+/* Skeleton placeholders for the rounded card surfaces above mirror their
+ * eventual radius (1rem / --radius-2xl) so layout doesn't shift on
+ * hydrate. Matches Dazzle's beauty-radius.css `[data-slot='skeleton'].is-card`. */
+[data-slot='skeleton'].is-card {
+    --ui-radius: var(--radius-2xl);
+}
+
+/* Editorial content tiles on the home page (Women / Men / Style For Real
+ * Life ContentCards) wrap the canonical Card primitive but should read
+ * as flat editorial surfaces — Dazzle builds the equivalent banners from
+ * plain <div>s with no Card shape at all. Flatten radius and shadow so
+ * the visible result matches. Border is already 0 by default.
+ *
+ * IMPORTANT: override --ui-radius / --ui-shadow (the SOURCE tokens
+ * defined in core.css), not --radius-ui / --shadow-ui (the Tailwind
+ * @theme inline bridge values from tailwind.css). The .rounded-ui
+ * and .shadow-ui utilities resolve var(--ui-radius) and
+ * var(--ui-shadow) directly, so writing to the bridge vars has no
+ * effect. The other :where() blocks in this file get the same right.
+ *
+ * This rule also intentionally sits AFTER the [data-slot='card']
+ * surface block above. :where() flattens specificity to (0,0,1) —
+ * same as the surface block — so cascade order is the tiebreaker.
+ * Don't move this earlier in the file. */
+:where([data-section='home-content']) [data-slot='card'] {
+    --ui-radius: 0;
+    --ui-shadow: none;
+}
+
+/* Cosmetic vertical: product tile uses the cream --card surface so it
+ * stands out a touch warmer than the page background. Shadow inherits
+ * the global --ui-shadow default (Tailwind v4 shadow-sm) — matches
+ * Dazzle product tiles exactly, no deeper drop. */
+.product-card[data-slot='card'] {
+    background-color: var(--card);
+}
+
+/* PDP image gallery: apply rounded corners to main hero image */
+main[data-has-top-padding='true'] [data-gallery-hero] {
+    border-radius: var(--radius-2xl);
+}
+
+/* PDP image gallery: apply smaller rounded corners to thumbnail images */
+main[data-has-top-padding='true'] [data-gallery-thumbs] button {
+    border-radius: var(--radius-xl);
+}
+
+/* PDP express checkout container: warm cream surface + sage border for
+ * brand chrome. Shadow drops to none — Dazzle's express-payments Card is
+ * explicitly `shadow-none`. The surface --radius-2xl is inherited from
+ * the surface rule above. */
+main[data-has-top-padding='true'] [data-testid='express-payments'] [data-slot='card'] {
+    --ui-shadow: none;
+    background-color: var(--express-checkout-bg);
+    border: 1px solid var(--express-checkout-border);
+}
+
+/* PDP product info cards: apply small border radius (30 day returns, Estimated Delivery, etc.) */
+main[data-has-top-padding='true'] .border-order-border {
+    border-radius: var(--radius-md);
+}
+
+/* By default, pad <main> by the fixed header's own height so non-hero
+ * pages (PDP, PLP, account, etc.) don't have their first content element
+ * hidden under the header. The headerless `_empty` layout (login, signup,
+ * password reset, maintenance, 404) renders no header, so it opts out via
+ * `data-layout="empty"` — otherwise it'd carry phantom top padding. */
+main:not([data-layout='empty']) {
+    padding-top: var(--header-height);
+}
+
+/* Pages whose route handle declares `header.transparentOnLoad = true`
+ * (currently just the home page) opt OUT of the padding so the hero can
+ * bleed full-bleed behind the transparent header. Driven by a stable
+ * data attribute set by PageConfigManager from the route's transparency
+ * config (mount + transparency changes), NOT by the live
+ * `data-page-at-top` scroll state — that way the header
+ * transparent → opaque transition does NOT also trigger a layout shift
+ * on <main>'s padding. The header chrome alone fades; content stays put.
+ *
+ * Mirrors Dazzle's _app.tsx pattern (`isHomepage ? undefined : padding`). */
+main[data-hero-bleed='true'] {
+    padding-top: 0;
+}
+
+/* PDP: add extra vertical spacing beyond header height.
+ *
+ * Scoped to `:not([data-hero-bleed='true'])` so hero-bleed always wins
+ * when both flags are set. The two flags come from independent effects in
+ * page-config-manager.tsx (`data-hero-bleed` from `transparentOnLoad`,
+ * `data-has-top-padding` from `hasTopPadding`) with no mutual exclusion in
+ * the component — today's routes set exactly one each (home=transparent,
+ * PDP=padding), but a future landing page wanting a transparent hero PLUS
+ * extra spacing would otherwise hit a same-specificity (0,1,1) tiebreak
+ * resolved purely by source order, silently getting `header-height + 2rem`
+ * instead of 0 and reopening the layout-shift gap. This guard pins the
+ * intended winner regardless of source order. */
+main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
+    padding-top: calc(var(--header-height) + var(--ui-vertical-spacing));
+}
+
+/* Header logo: uses header-logo-color token (sage green on opaque, white on transparent) */
+.header-logo {
+    color: var(--header-logo-color);
+}
+
+/* Footer logo: always sage green */
+.footer-logo {
+    color: oklch(0.44 0.08 155); /* sage green - matches --primary */
+}
+
+/* Use primary-hover token for button hover state instead of opacity-based hover */
+[data-slot='button'][data-variant='default']:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Express payment buttons: override primary-hover with explicit brand hover colors
+ * No !important needed — these rules are outside @layer so they naturally beat
+ * Tailwind's @layer utilities via cascade layer ordering (unlayered > utilities) */
+[data-testid='express-payments'] [data-slot='button']:hover {
+    background-color: unset;
+}
+
+/* Google Pay & Apple Pay: dark charcoal hover */
+[data-testid='express-payments'] [data-slot='button'].bg-foreground:hover {
+    background-color: var(--express-foreground-hover);
+}
+
+/* Amazon Pay: uses muted-hover (already defined in core tokens) */
+[data-testid='express-payments'] [data-slot='button'].bg-muted:hover {
+    background-color: var(--muted-hover);
+}
+
+/* PayPal: gold hover */
+[data-testid='express-payments'] [data-slot='button'][class*='paypal']:hover,
+[data-testid='express-payments'] [data-slot='button'][aria-label*='PayPal']:hover {
+    background-color: var(--paypal-gold-hover);
+}
+
+/* Venmo: darker blue hover */
+[data-testid='express-payments'] [data-slot='button'][class*='venmo']:hover,
+[data-testid='express-payments'] [data-slot='button'][aria-label*='Venmo']:hover {
+    background-color: var(--venmo-blue-hover);
+}
+
+/* Inventory message bullet: perfectly round */
+[data-slot='inventory-message'] > span[aria-hidden='true'] {
+    border-radius: 50%;
+}
+
+/* Add bottom padding when product bottom bar is visible to prevent footer overlap */
+body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
+    padding-bottom: 88px;
+}
+
+/* Category page: filters-wrapper should be vertical on all screen sizes */
+[data-slot='filters-wrapper'] {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem; /* gap-3 */
+}
+
+/* Category page: quick-filters buttons use accent-foreground text color.
+ * Radius comes from the button's own `rounded-md` className. */
+[data-slot='quick-filters'] [data-slot='button'] {
+    color: var(--accent-foreground);
+}
+
+/* Category page: active quick-filters buttons use primary-foreground text color */
+[data-slot='quick-filters'] [data-slot='button'][data-state='active'] {
+    color: var(--primary-foreground);
+}
+
+/* Category page: filters button badge should be circular */
+[data-slot='filters-wrapper'] [data-slot='badge'] {
+    border-radius: 50%;
 }

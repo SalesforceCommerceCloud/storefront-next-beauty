@@ -427,7 +427,7 @@ export default function CategoryPage({
 
                     <div className="flex flex-col lg:flex-row gap-2">
                         {/* Filters toggle button + Quick Filters - mobile only (above panel) */}
-                        <div className="lg:hidden mb-4 flex flex-col items-start gap-2">
+                        <div className="lg:hidden mb-4 flex flex-col items-start gap-2" data-slot="filters-wrapper">
                             <FiltersButton
                                 onClick={toggleFiltersOpen}
                                 isActive={filtersOpen}
@@ -445,7 +445,7 @@ export default function CategoryPage({
 
                         <div className="flex-grow">
                             {/* Filters toggle button + Quick Filters - desktop only (inside content area) */}
-                            <div className="mb-4 hidden lg:flex lg:items-center lg:gap-4">
+                            <div className="mb-4 hidden lg:flex lg:items-center lg:gap-4" data-slot="filters-wrapper">
                                 <FiltersButton
                                     onClick={toggleFiltersOpen}
                                     isActive={filtersOpen}

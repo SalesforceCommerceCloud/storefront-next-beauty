@@ -19,6 +19,16 @@ vi.mock('react-router', () => ({
     href: (path: string) => path,
     useLocation: () => ({ pathname: '/', search: '', hash: '', state: null, key: 'test' }),
     useNavigation: () => ({ state: 'idle', location: undefined }),
+    useRouteLoaderData: () => ({
+        searchResultCritical: {
+            refinements: [
+                {
+                    attributeId: 'cgid',
+                    label: 'Category',
+                },
+            ],
+        },
+    }),
 }));
 
 vi.mock('storybook/test', () => ({
@@ -43,7 +53,7 @@ afterEach(() => {
     cleanup();
 });
 
-describe('QuickFilters stories snapshot', () => {
+describe('Cosmetic QuickFilters stories snapshot', () => {
     for (const [storyName, Story] of Object.entries(composed)) {
         test(`${storyName} story renders and matches snapshot`, () => {
             const { container } = render(<Story />);

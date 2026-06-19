@@ -1,1 +1,1 @@
-AGENTS.md
+/Users/daniel.diaz/dev/git-repos/emu/storefront-next/packages/template/AGENTS.md

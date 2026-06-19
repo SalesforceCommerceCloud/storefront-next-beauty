@@ -18,7 +18,6 @@ const { I, storefrontPage, signupPage, addToCartFlow } = inject();
 import type { SignupData, SignupFlowOptions } from '../types/auth.types';
 import type { ProductInfo } from '../types/product.types';
 import { credentialStore } from '../utils/credential-store';
-import { getSiteId } from '../utils/site-id';
 
 /**
  * Signup Flow
@@ -120,7 +119,7 @@ class SignupFlow {
 
             signupPage.clickCreateAccount();
 
-            const siteId = getSiteId();
+            const siteId = process.env.SITE_ID || 'RefArchGlobal';
             await storefrontPage.waitForSessionCookies('registered', siteId, 45);
 
             // Store credentials in credential store for login flow reuse

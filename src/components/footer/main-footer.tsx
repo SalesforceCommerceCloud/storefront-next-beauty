@@ -20,12 +20,12 @@ import { Link } from '@/components/link';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import { stripPathPrefix } from '@salesforce/storefront-next-runtime/site-context';
 import type { AppConfig } from '@/types/config';
-import logo from '/images/logo.svg';
-import LegalLinks from './legal-links';
-import NewsletterSection from './newsletter-section';
-import PolicyLinks from './policy-links';
-import SocialIcons from './social-icons';
-import Switchers from './switchers';
+import Logo from '../logo';
+import LegalLinks from '@/components/footer/legal-links';
+import NewsletterSection from '@/components/footer/newsletter-section';
+import PolicyLinks from '@/components/footer/policy-links';
+import SocialIcons from '@/components/footer/social-icons';
+import Switchers from '@/components/footer/switchers';
 
 export default function MainFooter(): ReactElement {
     const { t } = useTranslation('footer');
@@ -45,7 +45,7 @@ export default function MainFooter(): ReactElement {
                         <div className="flex w-full flex-col items-start lg:flex-row gap-6">
                             <div className="flex w-full items-center gap-6">
                                 <Link to="/">
-                                    <img src={logo} alt={t('logoAlt')} className="h-4 w-auto" />
+                                    <Logo className="footer-logo h-4 w-auto" />
                                 </Link>
                                 <PolicyLinks className="hidden lg:flex" />
                                 <SocialIcons className="ml-auto" />

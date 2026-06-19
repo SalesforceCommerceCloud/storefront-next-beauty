@@ -1,29 +1,23 @@
-/*
- * Market Street brand palette — NOT in Figma JSON.
- * These are storefront-theme primitives owned by the brand team; downstream
- * tokens may reference them, but Figma's design-system file does not define
- * them as variables.
- */
 :root {
-    /* brand primary (e.g. Write a Review button) */
-    --brand-primary: #000000;
-    --brand-primary-hover: #333333;
+    /* brand primary (e.g. Write a Review button) — sage, matches Dazzle */
+    --brand-primary: oklch(0.44 0.08 155);
+    --brand-primary-hover: oklch(0.36 0.065 155);
 
-    /* Market Street Brand Colors */
-    --brand-black: #000000;
-    --brand-black-off: #121212;
-    --brand-black-charcoal: #242424;
-    --brand-white: #ffffff;
-    --brand-white-bone: #fafaf9;
-    --brand-white-ivory: #fcfcfc;
-    --brand-gray-50: #fafafa;
-    --brand-gray-100: #f5f5f5;
-    --brand-gray-200: #ededed;
-    --brand-gray-300: #e5e5e5;
-    --brand-gray-400: #d4d4d4;
-    --brand-gray-500: #9e9e9e;
-    --brand-gray-600: #757575;
-    --brand-gray-700: #616161;
-    --brand-gray-800: #424242;
-    --brand-gray-900: #212121;
+    /* Brand neutrals — warm beige scale matching Dazzle exactly */
+    --brand-black: oklch(0.2 0.015 78);
+    --brand-black-off: oklch(0.23 0.015 78);
+    --brand-black-charcoal: oklch(0.31 0.018 80);
+    --brand-white: oklch(0.995 0.005 90);
+    --brand-white-bone: oklch(0.985 0.012 90);
+    --brand-white-ivory: oklch(0.99 0.008 90);
+    --brand-gray-50: oklch(0.985 0.012 92);
+    --brand-gray-100: oklch(0.965 0.015 90);
+    --brand-gray-200: oklch(0.92 0.02 89);
+    --brand-gray-300: oklch(0.86 0.02 88);
+    --brand-gray-400: oklch(0.73 0.02 86);
+    --brand-gray-500: oklch(0.61 0.02 85);
+    --brand-gray-600: oklch(0.49 0.022 84);
+    --brand-gray-700: oklch(0.4 0.02 82);
+    --brand-gray-800: oklch(0.31 0.018 80);
+    --brand-gray-900: oklch(0.23 0.015 78);
 }

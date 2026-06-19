@@ -13,7 +13,7 @@ Before you begin, ensure you have the following installed:
 
 ```bash
 # 1. Clone or use this template
-git clone https://github.com/SalesforceCommerceCloud/storefront-next-beauty my-storefront
+git clone https://github.com/SalesforceCommerceCloud/storefront-next-template my-storefront
 cd my-storefront
 
 # 2. Set up environment
@@ -47,7 +47,7 @@ git tag -l
 
 # Clone specific version
 git clone --branch v1.0.0 --depth 1 \
-  https://github.com/SalesforceCommerceCloud/storefront-next-beauty my-storefront
+  https://github.com/SalesforceCommerceCloud/storefront-next-template my-storefront
 ```
 
 Check **[Releases](../../releases)** for all versions.

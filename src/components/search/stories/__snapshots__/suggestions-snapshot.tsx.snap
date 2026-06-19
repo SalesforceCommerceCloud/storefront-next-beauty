@@ -207,7 +207,7 @@ exports[`Suggestions stories snapshot > FullyFeatured story renders and matches 
         <div
           class="text-sm font-semibold text-muted-foreground tracking-wide mb-2"
         >
-          Popular Searches
+          Popular with the community
         </div>
         <div
           class="space-y-0"
@@ -354,7 +354,7 @@ exports[`Suggestions stories snapshot > FullyFeatured story renders and matches 
           <div
             class="text-sm font-semibold text-muted-foreground tracking-wide mb-2"
           >
-            Popular Searches
+            Popular with the community
           </div>
           <div
             class="space-y-0"
