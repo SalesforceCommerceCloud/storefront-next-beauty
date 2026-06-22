@@ -81,7 +81,7 @@ export default function GuestWishlist({
                 </AlertDescription>
             </Alert>
             <Suspense fallback={<WishlistSkeleton />}>
-                <Await resolve={loaderData.productsByProductId} errorElement={null}>
+                <Await resolve={loaderData.productsByProductId}>
                     {(productsByProductId) => (
                         <WishlistPageContent items={loaderData.items} productsByProductId={productsByProductId} />
                     )}

@@ -124,10 +124,8 @@ import StoreLocatorProvider from '@/extensions/store-locator/providers/store-loc
 // @sfdc-extension-block-end SFDC_EXT_STORE_LOCATOR
 import { type Maintenance, maintenanceContext } from '@/lib/maintenance';
 
-// Layout Components - logo for error page. Imported via `@/...` so the Vite
-// vertical resolver swaps in the active vertical's logo override (e.g. cosmetic's
-// inline-SVG wordmark) instead of the canonical raster asset.
-import Logo from '@/components/logo';
+// Layout Components - logo for error page
+import logo from '/images/logo.svg';
 
 export const links: Route.LinksFunction = () => {
     return [
@@ -412,7 +410,11 @@ function ErrorPageContent({
                 <div className="section-container">
                     <div className="flex items-center gap-x-4 lg:gap-x-6 h-16">
                         <a href={homepageUrl} className="flex-shrink-0 flex items-center">
-                            <Logo className="h-3 lg:h-4 w-auto [filter:var(--header-logo-filter)]" />
+                            <img
+                                src={logo}
+                                alt="Logo"
+                                className="h-3 lg:h-4 w-auto [filter:var(--header-logo-filter)]"
+                            />
                         </a>
                     </div>
                 </div>
