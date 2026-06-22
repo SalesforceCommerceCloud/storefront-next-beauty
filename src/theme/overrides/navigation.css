@@ -1,0 +1,53 @@
+/* Header navigation uses header-specific colors */
+header [data-slot='navigation-menu-trigger'] {
+    color: var(--header-foreground);
+}
+
+header button:not([data-slot]),
+header a:not([data-slot]) {
+    color: var(--header-foreground);
+}
+
+header svg {
+    color: var(--header-foreground);
+}
+
+/* Remove gap between header and navigation dropdowns for seamless look.
+ * Square off the top corners so the dropdown reads as a continuous
+ * downward extension of the (flat, full-width) header band rather than
+ * a rounded floating panel. Bottom corners stay rounded to cap the
+ * dropdown cleanly against the page below. */
+header [data-slot='navigation-menu-viewport'] {
+    margin-top: 0 !important;
+    border-top-color: var(--header-border);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Navigation viewport positioned flush with header */
+header ~ * [data-slot='navigation-menu-viewport'],
+.absolute.top-full.left-0.isolate.z-50:has([data-slot='navigation-menu-viewport']) {
+    margin-top: 0 !important;
+}
+
+/* Navigation menu trigger hover text color */
+[data-slot='navigation-menu-trigger']:hover,
+[data-slot='navigation-menu-trigger']:focus,
+[data-slot='navigation-menu-trigger'][data-state='open']:hover,
+[data-slot='navigation-menu-trigger'][data-state='open']:focus,
+[data-slot='navigation-menu-link']:hover,
+[data-slot='navigation-menu-link']:focus {
+    color: var(--header-menu-hover-foreground) !important;
+}
+
+/* Leaf links ("Gift Certificates", "Top Sellers") render via NavigationMenuLink,
+ * whose canonical className carries `transition-all` — so on hover their TEXT
+ * COLOR fades in. The dropdown triggers (New Arrivals/Womens/Mens) use
+ * `transition-[color,box-shadow]` and read as a near-instant snap. To make the
+ * leaf links match, restrict their transition to background-color only (kept at
+ * the shared scroll-to-solid rate for the hover pill) and let the text color
+ * change instantly like the triggers. `transition` is not animatable, so no
+ * !important needed — this just out-specifies the utility class. */
+header [data-slot='navigation-menu-link'] {
+    transition: background-color 300ms ease-out;
+}

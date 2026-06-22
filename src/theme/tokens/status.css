@@ -1,0 +1,37 @@
+:root {
+    /* WCAG AA: 6.47:1 on white; 5.30:1 on --destructive-foreground */
+    --destructive: #b91c1c;
+    --destructive-foreground: #fee2e2;
+
+    /* warning (e.g. caution messages, default-payment warning) — WCAG AA: 5.02:1 on white */
+    --warning: #b45309;
+    --warning-foreground: #fef9c3;
+    --warning-bg: #fff7ed;
+    --warning-border: #fed7aa;
+
+    /* active status (e.g. authorized pickup person badge) */
+    --active-bg: #dcfce7;
+    --active-foreground: #15803d;
+
+    /* account/payment destructive actions */
+    --account-action-destructive: var(--destructive);
+    --account-action-destructive-foreground: #ffffff;
+
+    /* WCAG AA: 7.13:1 on white; 5.53:1 on --success-foreground */
+    --success: #166534;
+    --success-foreground: #cbead7;
+
+    /* WCAG AA: 5.93:1 on white; 4.86:1 on --info-foreground */
+    --info: #0369a1;
+    --info-foreground: #dbeafe;
+
+    /* status colors (for inventory, availability indicators, etc.) */
+    --status-positive: var(--success);
+    --status-warning: #c2410c;
+    --status-critical: #dc2626;
+    --status-critical-strong: #dc2626;
+    --status-critical-bg: #fef2f2;
+    --status-critical-foreground: #991b1b;
+    --status-critical-border: #fecaca;
+    --status-info: #2563eb;
+}

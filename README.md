@@ -2,9 +2,6 @@
 
 A production-ready React storefront template for Salesforce B2C Commerce, built with React Router 7 and React 19.
 
-> [!IMPORTANT]
-> Storefront Next is a pilot or beta service that is subject to the Beta Services Terms at [Agreements - Salesforce.com](https://www.salesforce.com/company/legal/agreements/) or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the [Product Terms Directory](https://ptd.salesforce.com/). Use of this pilot or beta service is at the Customer's sole discretion.
-
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -54,6 +51,10 @@ git clone --branch v1.0.0 --depth 1 \
 ```
 
 Check **[Releases](../../releases)** for all versions.
+
+### Template version & SDK compatibility
+
+This template is dated by a **release stamp** (e.g. "June 2026"), recorded in `package.json` under `storefrontNext` (`templateRelease`, `templateVersion`, `minSdkVersion`). The Storefront Next **SDK** (`@salesforce/storefront-next-dev` / `-runtime`) versions separately, with SemVer. See the **[compatibility matrix](./docs/COMPATIBILITY.md)** for which SDK version each template release needs.
 
 ## Configuration
 
@@ -162,7 +163,7 @@ src/
 - 🔎 [SEO (Hreflang, Canonical URLs, and Meta Tags)](./docs/README-SEO.md)
 - 🎨 [UI and Styling](./docs/README-UI-STYLING.md)
 - 🔌 [Adapter Pattern Implementation Guide](./docs/README-ADAPTER-PATTERN-GUIDE.md)
-- 🔧 [Custom SCAPI Clients](./docs/README-CUSTOM-APIS.md)
+- 🔧 [SCAPI Client Overrides and Custom APIs](./docs/README-SCAPI.md)
 - 📖 [Story Coverage & Code Quality Enforcement](./docs/README-STORY-COVERAGE.md)
 
 ## Contributing
@@ -178,8 +179,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
 ## Support
 
-- 📖 [Documentation (Pilot)](https://d1ahe7q2dhpmux.cloudfront.net/docs/commerce/storefront-next/overview)
-  - Use the username and password that were shared with you in the pilot Slack channel
+- 📖 [Documentation](https://developer.salesforce.com/docs/commerce/sfnext/guide/sfnext-get-started.html)
 - 🐛 [Report Issues](https://github.com/SalesforceCommerceCloud/storefront-next/issues)
 
 ## License

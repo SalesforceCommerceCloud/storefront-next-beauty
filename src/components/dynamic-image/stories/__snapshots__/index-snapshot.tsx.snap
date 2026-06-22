@@ -1,0 +1,137 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DynamicImage stories snapshot > Default story renders and matches snapshot 1`] = `
+<div
+  class=""
+>
+  <picture>
+    <source
+      media="(min-width: 768px)"
+      sizes="1200px"
+      srcset="https://via.placeholder.com/800?sw=1200&q=60 1200w, https://via.placeholder.com/800?sw=2400&q=60 2400w"
+      type="image/webp"
+    />
+    <source
+      media="(min-width: 640px)"
+      sizes="800px"
+      srcset="https://via.placeholder.com/800?sw=800&q=60 800w, https://via.placeholder.com/800?sw=1600&q=60 1600w"
+      type="image/webp"
+    />
+    <source
+      sizes="400px"
+      srcset="https://via.placeholder.com/800?sw=400&q=60 400w, https://via.placeholder.com/800?sw=800&q=60 800w"
+      type="image/webp"
+    />
+    <img
+      alt="Example image"
+      class="object-cover"
+      fetchpriority="auto"
+      loading="lazy"
+      src="https://via.placeholder.com/800"
+    />
+  </picture>
+</div>
+`;
+
+exports[`DynamicImage stories snapshot > DisDisabled story renders and matches snapshot 1`] = `
+<div
+  class=""
+>
+  <img
+    alt="DIS disabled image"
+    class="object-cover"
+    fetchpriority="auto"
+    loading="lazy"
+    src="/product.jpg"
+  />
+</div>
+`;
+
+exports[`DynamicImage stories snapshot > MissingSrc story renders and matches snapshot 1`] = `
+<div
+  class=""
+>
+  <img
+    alt="No image source provided"
+    class="object-cover"
+    fetchpriority="auto"
+    loading="lazy"
+  />
+</div>
+`;
+
+exports[`DynamicImage stories snapshot > Playground story renders and matches snapshot 1`] = `
+<div
+  class="w-96"
+>
+  <div
+    class=""
+  >
+    <picture>
+      <source
+        media="(min-width: 768px)"
+        sizes="1200px"
+        srcset="https://via.placeholder.com/800?sw=1200&q=60 1200w, https://via.placeholder.com/800?sw=2400&q=60 2400w"
+        type="image/webp"
+      />
+      <source
+        media="(min-width: 640px)"
+        sizes="800px"
+        srcset="https://via.placeholder.com/800?sw=800&q=60 800w, https://via.placeholder.com/800?sw=1600&q=60 1600w"
+        type="image/webp"
+      />
+      <source
+        sizes="400px"
+        srcset="https://via.placeholder.com/800?sw=400&q=60 400w, https://via.placeholder.com/800?sw=800&q=60 800w"
+        type="image/webp"
+      />
+      <img
+        alt="Responsive product image"
+        class="object-cover"
+        fetchpriority="auto"
+        loading="lazy"
+        src="https://via.placeholder.com/800"
+      />
+    </picture>
+  </div>
+</div>
+`;
+
+exports[`DynamicImage stories snapshot > ResponsiveWidths story renders and matches snapshot 1`] = `
+<div
+  class=""
+>
+  <picture>
+    <source
+      media="(min-width: 1024px)"
+      sizes="1200px"
+      srcset="https://via.placeholder.com/800?sw=1200&q=60 1200w, https://via.placeholder.com/800?sw=2400&q=60 2400w"
+      type="image/webp"
+    />
+    <source
+      media="(min-width: 768px)"
+      sizes="800px"
+      srcset="https://via.placeholder.com/800?sw=800&q=60 800w, https://via.placeholder.com/800?sw=1600&q=60 1600w"
+      type="image/webp"
+    />
+    <source
+      media="(min-width: 640px)"
+      sizes="600px"
+      srcset="https://via.placeholder.com/800?sw=600&q=60 600w, https://via.placeholder.com/800?sw=1200&q=60 1200w"
+      type="image/webp"
+    />
+    <source
+      sizes="400px"
+      srcset="https://via.placeholder.com/800?sw=400&q=60 400w, https://via.placeholder.com/800?sw=800&q=60 800w"
+      type="image/webp"
+    />
+    <img
+      alt="Responsive object widths"
+      class="object-cover"
+      fetchpriority="auto"
+      loading="lazy"
+      src="https://via.placeholder.com/800"
+    />
+  </picture>
+</div>
+`;

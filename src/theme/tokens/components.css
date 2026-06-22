@@ -1,0 +1,32 @@
+:root {
+    /* payment provider colors */
+    --paypal-gold: #ffc439;
+    --paypal-gold-hover: #f5bb41; /* rgb(245, 187, 65) */
+    --venmo-blue: #3d95ce;
+    --venmo-blue-hover: #427db3; /* rgb(66, 125, 179) */
+    --express-foreground-hover: #39342b; /* rgb(57, 52, 43) - Google Pay & Apple Pay hover */
+
+    /* cart & mini-cart tokens */
+    --cart-summary-px: 1rem;
+    --cart-free-price: #2e844a;
+    --cart-free-price-size: 1.125rem;
+
+    /* product badge — promo variant (Sale, Best Seller); aliases of semantic tokens */
+    --product-badge-promo-bg: var(--primary);
+    --product-badge-promo-foreground: var(--info-foreground);
+
+    /* footer — near-white surface with deep brown text (Dazzle Beauty parity) */
+    --footer-background: oklch(0.99 0.006 92);
+    --footer-foreground: oklch(0.24 0.02 80);
+
+    /* filter chip — selected state (semantic alias of --info*) */
+    --filter-selected: var(--info-foreground);
+    --filter-selected-border: var(--info);
+
+    /* review verified badge — semantic alias of --success* */
+    --review-verified-bg: var(--success-foreground);
+    --review-verified-text: var(--success);
+
+    /* order info card border */
+    --order-border: #d9d3c7; /* rgb(217, 211, 199) */
+}

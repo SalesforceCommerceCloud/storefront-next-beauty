@@ -1,0 +1,23 @@
+:root {
+    /* brand primary (e.g. Write a Review button) — sage, matches Dazzle */
+    --brand-primary: oklch(0.44 0.08 155);
+    --brand-primary-hover: oklch(0.36 0.065 155);
+
+    /* Brand neutrals — warm beige scale matching Dazzle exactly */
+    --brand-black: oklch(0.2 0.015 78);
+    --brand-black-off: oklch(0.23 0.015 78);
+    --brand-black-charcoal: oklch(0.31 0.018 80);
+    --brand-white: oklch(0.995 0.005 90);
+    --brand-white-bone: oklch(0.985 0.012 90);
+    --brand-white-ivory: oklch(0.99 0.008 90);
+    --brand-gray-50: oklch(0.985 0.012 92);
+    --brand-gray-100: oklch(0.965 0.015 90);
+    --brand-gray-200: oklch(0.92 0.02 89);
+    --brand-gray-300: oklch(0.86 0.02 88);
+    --brand-gray-400: oklch(0.73 0.02 86);
+    --brand-gray-500: oklch(0.61 0.02 85);
+    --brand-gray-600: oklch(0.49 0.022 84);
+    --brand-gray-700: oklch(0.4 0.02 82);
+    --brand-gray-800: oklch(0.31 0.018 80);
+    --brand-gray-900: oklch(0.23 0.015 78);
+}

@@ -1,0 +1,138 @@
+/*
+ * Cosmetic header + footer chrome — mirrors Dazzle's beauty-header.css.
+ *
+ * The only structural difference from Dazzle: Dazzle drives the transparent
+ * state off `data-on-hero` (set on the <header> by the header component);
+ * cosmetic uses `data-page-at-top` (set by PageConfigManager). The token
+ * values, scopes, and cascade are otherwise identical.
+ *
+ * The 4 NET-NEW tokens here (--header-foreground-transparent,
+ * --header-menu-hover-foreground-transparent, --header-logo-color,
+ * --footer-logo-color) exist exclusively to support the transparent
+ * header variant — they are not part of the canonical chrome contract.
+ */
+:root {
+    /* header & navigation */
+    --header-background: oklch(0.985 0.012 90);
+    --header-foreground: oklch(0.24 0.02 80);
+    --header-border: oklch(0.87 0.02 88);
+    --header-divider: oklch(0.87 0.02 88);
+    /* Transparent-on-hero variant — text colors used when the header sits
+     * over a full-bleed hero (homepage). Cream (not pure white) keeps a
+     * touch of brand warmth and reads cleanly against hero imagery. */
+    --header-foreground-transparent: oklch(0.99 0.006 92);
+    --header-menu-hover-foreground-transparent: oklch(0.99 0.006 92 / 70%);
+    /* header menu dropdowns — match the header surface exactly so the
+     * mega-menu reads as a continuous extension of the header band. */
+    --header-menu-background: var(--header-background);
+    --header-menu-foreground: oklch(0.24 0.02 80);
+    --header-menu-border: oklch(0.87 0.02 88);
+    --header-menu-hover-background: oklch(0.93 0.03 88);
+    --header-menu-hover-foreground: oklch(0.28 0.035 70);
+    --header-menu-active-background: oklch(0.9 0.08 86);
+    --header-menu-icon: oklch(0.49 0.022 84);
+    /* logo.svg colors are brand-positive on light header; no filter needed */
+    --header-logo-filter: none;
+    --header-logo-filter-transparent: brightness(0) invert(1);
+    --header-logo-color: var(--primary);
+    --footer-logo-color: var(--primary);
+}
+
+/*
+ * Transparent-on-hero scope. When the page is at the top, the header surface
+ * goes transparent and all text/icons read as cream over the hero. We
+ * re-point the same tokens components already consume — never swap layout,
+ * never swap classes. CSS transitions on the <header> host interpolate the
+ * change smoothly. The data-attribute selector is more specific than :root
+ * so it wins inside the header subtree.
+ */
+[data-page-at-top='true'] {
+    --header-background: transparent;
+    --header-foreground: var(--header-foreground-transparent);
+    --header-border: transparent;
+    --header-menu-foreground: var(--header-foreground-transparent);
+    --header-menu-hover-foreground: var(--header-foreground-transparent);
+    --header-menu-icon: var(--header-foreground-transparent);
+    /* Translucent white wash for hover on a transparent header — sits
+     * cleanly on any hero color while still reading as hover-able. */
+    --header-menu-hover-background: oklch(1 0 0 / 14%);
+    --header-logo-filter: var(--header-logo-filter-transparent);
+    --header-logo-color: var(--header-foreground-transparent);
+}
+
+/*
+ * "Header opaque" override scopes: when any floating header surface
+ * (hamburger drawer, search suggestions, mega-menu dropdown) is open, drop
+ * the transparent-on-hero treatment so the dropdown reads against the cream
+ * header instead of letting the hero bleed through. Declared TWICE so it
+ * lands on BOTH the <header data-page-at-top='true'> element itself (so its
+ * bg-header-background utility resolves to cream) AND :root (so any
+ * portaled dropdown viewport at body level also picks up the cream surface).
+ */
+html[data-mobile-menu-open='true'] [data-page-at-top='true'],
+html[data-search-open='true'] [data-page-at-top='true'],
+html[data-mega-menu-open='true'] [data-page-at-top='true'],
+html[data-mobile-menu-open='true'],
+html[data-search-open='true'],
+html[data-mega-menu-open='true'] {
+    --header-background: oklch(0.985 0.012 90);
+    --header-foreground: oklch(0.24 0.02 80);
+    --header-border: oklch(0.87 0.02 88);
+    --header-menu-foreground: oklch(0.24 0.02 80);
+    --header-menu-hover-foreground: oklch(0.28 0.035 70);
+    --header-menu-hover-background: oklch(0.93 0.03 88);
+    --header-menu-icon: oklch(0.49 0.022 84);
+    --header-logo-filter: none;
+    --header-logo-color: var(--primary);
+}
+
+/*
+ * Mega-menu viewport surface + text pins.
+ *
+ * Unlike Dazzle (where the viewport resolves cream "for free"), our
+ * viewport is a DOM descendant of <header data-page-at-top='true'>, so
+ * when the page is at the top it would inherit the transparent
+ * --header-background / cream --header-menu-foreground from the header
+ * subtree and render as a see-through panel with cream-on-cream
+ * (invisible) text. Pin the surface and text to the solid cream values
+ * directly so the dropdown always reads correctly regardless of the
+ * header's transparent state.
+ *
+ * The literal background matches the :root --header-background above.
+ */
+header [data-slot='navigation-menu-viewport'] {
+    background-color: oklch(0.985 0.012 90);
+    color: oklch(0.24 0.02 80);
+}
+
+[data-page-at-top='true'] [data-slot='navigation-menu-viewport'] {
+    --header-menu-foreground: oklch(0.24 0.02 80);
+    --header-menu-hover-foreground: oklch(0.28 0.035 70);
+    --header-menu-icon: oklch(0.49 0.022 84);
+}
+
+[data-page-at-top='true'] [data-slot='navigation-menu-viewport'] a {
+    color: oklch(0.24 0.02 80);
+}
+
+/* Nav triggers + links share the same radius and hover treatment. The
+ * canonical NavigationMenuTrigger carries hover classes in its own
+ * className, but NavigationMenuLink (rendered via asChild for leaf items
+ * like "Gift Certificates" / "Top Sellers") does not reliably get the
+ * same hover background through the merge — so we pin the hover state
+ * explicitly for BOTH data-slots here. The shared transition keeps every
+ * nav item changing colour at the same rate during the scroll-to-solid
+ * flip regardless of which Radix primitive it is. */
+header [data-slot='navigation-menu-trigger'],
+header [data-slot='navigation-menu-link'] {
+    --ui-radius: var(--radius-md);
+    transition:
+        background-color 300ms ease-out,
+        color 300ms ease-out;
+}
+
+[data-slot='navigation-menu-trigger']:hover,
+[data-slot='navigation-menu-link']:hover {
+    background-color: var(--header-menu-hover-background);
+    color: var(--header-menu-hover-foreground);
+}

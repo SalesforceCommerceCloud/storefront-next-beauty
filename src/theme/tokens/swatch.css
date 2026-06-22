@@ -1,0 +1,104 @@
+:root {
+    --swatch-group-bg: transparent;
+    --swatch-bg: var(--secondary);
+    --swatch-bg-selected: var(--primary);
+    --swatch-border: var(--input);
+    --swatch-border-selected: var(--primary);
+    --swatch-text: var(--secondary-foreground);
+    --swatch-text-selected: var(--primary-foreground);
+    --swatch-color-label: none;
+    --swatch-color-size: 2rem;
+    --swatch-color-padding: 0rem;
+    --swatch-color-dot: 100%;
+    --swatch-color-bg: var(--swatch-bg);
+    --swatch-color-bg-selected: var(--swatch-bg-selected);
+    --swatch-color-text: var(--swatch-text);
+    --swatch-color-text-selected: var(--swatch-text-selected);
+    --swatch-color-border: var(--swatch-border);
+    --swatch-color-border-selected: var(--swatch-border-selected);
+    --swatch-color-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --swatch-color-dot-border: 1px solid white;
+    --swatch-color-border-hover: #000000;
+    --swatch-labeled-padding: 0rem;
+    --swatch-labeled-min-size: 2rem;
+    --swatch-border-width: 1.5px;
+    --swatch-pill-size: 2rem;
+    --swatch-pill-padding: 0px;
+    --swatch-pill-gap: 0.5rem;
+}
+
+/* Color swatches without labels - make circular with fixed size */
+[role='radio'][data-swatch-type='color']:not([data-labeled]) {
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
+    min-height: 2rem;
+    max-width: 2rem;
+    max-height: 2rem;
+    border-radius: 50%;
+    padding: 0;
+}
+
+/* Color swatches with labels - allow flexible sizing while keeping circular shape */
+[role='radio'][data-swatch-type='color'][data-labeled] {
+    min-width: 2rem;
+    min-height: 2rem;
+    border-radius: 50%;
+}
+
+[role='radio'][data-swatch-type='color']:not([data-labeled]) [data-slot='swatch-dot'] {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+[role='radio'][data-swatch-type='color'][data-labeled] [data-slot='swatch-dot'] {
+    border-radius: 50%;
+}
+
+/* Hide text label on color swatches only when not explicitly labeled */
+[role='radio'][data-swatch-type='color']:not([data-labeled]) [data-slot='swatch-text'] {
+    display: none;
+}
+
+[role='radio'][data-swatch-type='color']:not([data-labeled]) [data-slot='swatch-label'] {
+    display: none;
+}
+
+/* Text/size swatches - pill shape */
+[role='radio']:not([data-swatch-type='color']) {
+    border-radius: 9999px;
+}
+
+/* Color swatch container - styled to match express payment container (p-3) */
+[role='radiogroup']:has([role='radio'][data-swatch-type='color']) [data-slot='swatch-container'] {
+    background-color: var(--express-checkout-bg);
+    border-radius: var(--ui-radius);
+    border-width: 0;
+    padding: 0.75rem; /* p-3 */
+}
+
+/* Non-color swatches: hover border effect (foreground/40) */
+[role='radio']:not([data-swatch-type='color']):not([aria-checked='true']) {
+    --swatch-color-border-hover: rgb(from var(--foreground) r g b / 0.4);
+}
+
+/* Color swatches: border stays same color on hover (no visible change) */
+[role='radio'][data-swatch-type='color']:not([aria-checked='true']) {
+    --swatch-color-border-hover: var(--swatch-color-border);
+}
+
+/* Color swatches: scale on hover (only when not selected) */
+[role='radio'][data-swatch-type='color']:not([aria-checked='true']):hover {
+    transform: scale(1.05);
+}
+
+/* Color swatches: no scale when selected */
+[role='radio'][data-swatch-type='color'][aria-checked='true']:hover {
+    transform: none;
+}
+
+/* All swatches: disable hover border effect when selected */
+[role='radio'][aria-checked='true'] {
+    --swatch-color-border-hover: currentColor;
+}
