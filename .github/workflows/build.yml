@@ -34,3 +34,5 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           pnpm-version: ${{ env.PNPM_VERSION }}
+
+# sync-cosmetic-mirror App workflows:write probe
