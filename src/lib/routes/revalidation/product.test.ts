@@ -16,7 +16,7 @@
 import { describe, expect, test } from 'vitest';
 import type { ShouldRevalidateFunctionArgs } from 'react-router';
 import { shouldRevalidate as productShouldRevalidate } from './product';
-import { resourceRoutes } from '@/route-paths';
+import { resourceRoutes, routes } from '@/route-paths';
 
 /** Builds a full ShouldRevalidateFunctionArgs with sensible defaults, overridable per test. */
 function buildArgs(overrides: Partial<ShouldRevalidateFunctionArgs>): ShouldRevalidateFunctionArgs {
@@ -38,7 +38,7 @@ function buildArgs(overrides: Partial<ShouldRevalidateFunctionArgs>): ShouldReva
     } as ShouldRevalidateFunctionArgs;
 }
 
-describe('productShouldRevalidate', () => {
+describe('shouldRevalidate', () => {
     describe('action axis — product-irrelevant mutations skip the loader re-run', () => {
         // Walk the full denylist: a forgotten entry only wastes a fan-out, but a wrongly-skipped entry
         // would leave the PDP showing stale product data, so denylist accuracy is load-bearing. Removing
@@ -73,6 +73,40 @@ describe('productShouldRevalidate', () => {
                     buildArgs({
                         formMethod: 'POST',
                         formAction: `http://localhost${resourceRoutes.cartItemAdd}?foo=bar`,
+                    })
+                )
+            ).toBe(false);
+        });
+
+        test('matches a denylisted action when the bare path carries an ?index suffix', () => {
+            // Index-route submissions arrive as `<path>?index`; the query must be stripped before comparing.
+            expect(
+                productShouldRevalidate(
+                    buildArgs({ formMethod: 'POST', formAction: `${resourceRoutes.cartItemAdd}?index` })
+                )
+            ).toBe(false);
+        });
+
+        test.each(['DELETE', 'PATCH', 'PUT'] as const)(
+            'skips revalidation for a denylisted action submitted via %s (the gate is not POST-specific)',
+            (formMethod) => {
+                expect(
+                    productShouldRevalidate(buildArgs({ formMethod, formAction: resourceRoutes.cartItemRemove }))
+                ).toBe(false);
+            }
+        );
+
+        test('action-axis skip short-circuits ahead of the navigation axis', () => {
+            // A denylisted submission returns false before the pathname check runs. In practice these are
+            // non-navigating useFetcher() submits, so currentUrl/nextUrl match; this locks in the ordering
+            // guarantee that the cheap skip wins even if a path change were somehow present.
+            expect(
+                productShouldRevalidate(
+                    buildArgs({
+                        formMethod: 'POST',
+                        formAction: resourceRoutes.cartItemAdd,
+                        currentUrl: new URL('http://localhost/product/product-1'),
+                        nextUrl: new URL('http://localhost/product/product-2'),
                     })
                 )
             ).toBe(false);
@@ -114,21 +148,37 @@ describe('productShouldRevalidate', () => {
             ).toBe(true);
         });
 
+        // Auth is a cross-cutting pricing/promotions dimension: a logged-in shopper can see member prices and
+        // personalized promotions, so the PDP loader must re-run when auth state flips. These page-route actions are
+        // deliberately kept OFF the denylist — pinning them here so a future edit can't silently skip them and stale
+        // member pricing. The default defaultShouldRevalidate:true models the post-redirect full revalidation auth
+        // triggers; if any were added to PRODUCT_IRRELEVANT_MUTATIONS the action axis would short-circuit to false.
+        test.each([routes.login, routes.signup, routes.logout])(
+            'revalidates after %s (auth changes pricing)',
+            (formAction) => {
+                expect(productShouldRevalidate(buildArgs({ formMethod: 'POST', formAction }))).toBe(true);
+            }
+        );
+
         test('revalidates a mutation with no formAction (cannot confirm it is safe to skip)', () => {
             expect(productShouldRevalidate(buildArgs({ formMethod: 'POST', formAction: undefined }))).toBe(true);
         });
 
         test('does not skip a GET that happens to target a denylisted path', () => {
             // Only non-GET submissions are candidates for skipping; a GET must defer to the navigation axis.
+            // Pair the denylisted path with a pathname change so the navigation axis would return true: if the
+            // GET were wrongly treated as a skip-candidate, this would flip to false.
             expect(
                 productShouldRevalidate(
                     buildArgs({
                         formMethod: 'GET',
                         formAction: resourceRoutes.cartItemAdd,
+                        currentUrl: new URL('http://localhost/product/product-1'),
+                        nextUrl: new URL('http://localhost/product/product-2'),
                         defaultShouldRevalidate: false,
                     })
                 )
-            ).toBe(false);
+            ).toBe(true);
         });
     });
 
@@ -155,6 +205,43 @@ describe('productShouldRevalidate', () => {
                     })
                 )
             ).toBe(true);
+        });
+
+        test('revalidates when a pid appears (base product → selected variant)', () => {
+            expect(
+                productShouldRevalidate(
+                    buildArgs({
+                        currentUrl: new URL('http://localhost/product/product-1'),
+                        nextUrl: new URL('http://localhost/product/product-1?pid=variant-1'),
+                        defaultShouldRevalidate: false,
+                    })
+                )
+            ).toBe(true);
+        });
+
+        test('revalidates when a pid is cleared (selected variant → base product)', () => {
+            expect(
+                productShouldRevalidate(
+                    buildArgs({
+                        currentUrl: new URL('http://localhost/product/product-1?pid=variant-1'),
+                        nextUrl: new URL('http://localhost/product/product-1'),
+                        defaultShouldRevalidate: false,
+                    })
+                )
+            ).toBe(true);
+        });
+
+        test('does NOT revalidate when the pid is unchanged but client-only params differ', () => {
+            // Same variant, only color/size moved — the loader doesn't read those, so no re-run.
+            expect(
+                productShouldRevalidate(
+                    buildArgs({
+                        currentUrl: new URL('http://localhost/product/product-1?pid=variant-1&color=red'),
+                        nextUrl: new URL('http://localhost/product/product-1?pid=variant-1&color=blue'),
+                        defaultShouldRevalidate: false,
+                    })
+                )
+            ).toBe(false);
         });
 
         test('does NOT revalidate for client-only param changes (color/size)', () => {
