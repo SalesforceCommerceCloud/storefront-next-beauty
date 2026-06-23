@@ -6,7 +6,7 @@ exports[`OrderListItem stories snapshot > Default story renders and matches snap
   href="/account/orders/ORD-2024-001"
 >
   <div
-    class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui py-0 border-0 border-b border-separator hover:bg-transparent"
+    class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui order-list-item-card py-0 border-0 border-b border-separator hover:bg-transparent"
     data-slot="card"
   >
     <div
@@ -159,7 +159,7 @@ exports[`OrderListItem stories snapshot > WithPickupLocation story renders and m
   href="/account/orders/ORD-2024-001"
 >
   <div
-    class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui py-0 border-0 border-b border-separator hover:bg-transparent"
+    class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui order-list-item-card py-0 border-0 border-b border-separator hover:bg-transparent"
     data-slot="card"
   >
     <div
@@ -381,7 +381,7 @@ exports[`OrderListItem stories snapshot > WithThumbnailOverflow story renders an
   href="/account/orders/ORD-2024-001"
 >
   <div
-    class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui py-0 border-0 border-b border-separator hover:bg-transparent"
+    class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui order-list-item-card py-0 border-0 border-b border-separator hover:bg-transparent"
     data-slot="card"
   >
     <div

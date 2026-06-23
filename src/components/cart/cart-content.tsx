@@ -327,7 +327,9 @@ export default function CartContent({
                         {/* @sfdc-extension-block-end SFDC_EXT_BOPIS */}
                         {/* Show delivery items if any exist */}
                         {deliveryItems.length > 0 && (
-                            <div className="md:p-8 p-3 border border-muted-foreground/10 mb-3">
+                            <div
+                                data-slot="cart-delivery-group"
+                                className="md:p-8 p-3 border border-muted-foreground/10 mb-3">
                                 <CartTitle basket={basket} deliveryCount={deliveryItems.length} />
                                 <ProductItemsList
                                     promotions={promotions}
@@ -341,7 +343,7 @@ export default function CartContent({
                             </div>
                         )}
                     </div>
-                    <div className="hidden md:block md:order-1 lg:order-2">
+                    <div data-slot="order-summary" className="hidden md:block md:order-1 lg:order-2">
                         <OrderSummary
                             basket={basket}
                             showCartItems={false}
@@ -364,7 +366,7 @@ export default function CartContent({
                     const promotion = bonusItem.promotionId ? promotions?.[bonusItem.promotionId] : undefined;
                     const promotionName = promotion?.calloutMsg || promotion?.name;
                     return (
-                        <div key={bonusItem.id || index} className="mt-6">
+                        <div key={bonusItem.id || index} data-slot="bonus-products-rail" className="mt-6">
                             <Suspense fallback={null}>
                                 <LazyBonusProductSelection
                                     bonusDiscountLineItem={bonusItem}

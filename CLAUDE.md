@@ -1,1 +1,1 @@
-/Users/daniel.diaz/dev/git-repos/emu/storefront-next-scratch/packages/template/AGENTS.md
+/home/runner/work/storefront-next/storefront-next/packages/template/AGENTS.md

@@ -91,6 +91,14 @@
     --express-checkout-bg: #f8f5ed; /* rgb(248, 245, 237) - warm cream background */
     --express-checkout-border: #d9dbc7; /* rgb(217, 219, 199) - soft sage border */
 
+    /* Lucide `gift` icon (lucide-react@0.544) as a mask data URI. Consumed via
+       `mask: var(--icon-gift)` so the shape can be tinted with background-color
+       (see base.css bonus-products-rail). Standard lucide wrapper: 24x24
+       viewBox, fill none, stroke-width 2, round caps/joins. Stroke is a literal
+       color (not currentColor, which doesn't resolve inside a mask). The shape's
+       alpha is the mask — the stroke color itself is never painted. */
+    --icon-gift: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>');
+
     [role='radio']:not([data-labeled]) {
         min-width: var(--swatch-pill-size);
         min-height: var(--swatch-pill-size);

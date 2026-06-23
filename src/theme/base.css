@@ -107,6 +107,28 @@
     --ui-radius: 9999px;
 }
 
+/* Order-history list rows render as flat divider-separated rows (canonical
+ * OrderListItem applies `border-b border-separator` between rows). The
+ * default surface radius (--radius-2xl from the surface block above) leaves
+ * the top corners rounded while the bottom flat divider reads square,
+ * producing an asymmetric look. Flatten the radius on these specific Cards
+ * so the rows match the canonical fashion render (and the flat-divider
+ * visual rhythm). */
+.order-list-item-card[data-slot='card'] {
+    --ui-radius: 0;
+}
+
+/* Inputs and native-selects inside a dialog should sit on the dialog's
+ * white surface, not pick up the cosmetic --input cream tone. Cosmetic's
+ * --input is #ece0d8 (cream); against the white dialog Card it reads as a
+ * filled cream input. Use --bg-input-30 (#ffffff, defined in core.css) so
+ * the bg-transparent base of the Input/NativeSelect primitives renders
+ * white inside dialogs. */
+[data-slot='dialog-content'] [data-slot='input'],
+[data-slot='dialog-content'] [data-slot='native-select'] {
+    background-color: var(--bg-input-30);
+}
+
 /* Skeleton placeholders for the rounded card surfaces above mirror their
  * eventual radius (1rem / --radius-2xl) so layout doesn't shift on
  * hydrate. Matches Dazzle's beauty-radius.css `[data-slot='skeleton'].is-card`. */
@@ -278,6 +300,95 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
 /* Category page: active quick-filters buttons use primary-foreground text color */
 [data-slot='quick-filters'] [data-slot='button'][data-state='active'] {
     color: var(--primary-foreground);
+}
+
+/* Cart: delivery group (delivery count + cart items) sits on the warm cream
+ * card surface so it reads as a distinct panel against the page background,
+ * matching the rest of the cosmetic vertical's card chrome. Border color and
+ * radius match the order summary Card (var(--border), --radius-2xl) so the
+ * three cart panels read as one set. The canonical `border` utility supplies
+ * the 1px width; we only recolor it here. */
+[data-slot='cart-delivery-group'] {
+    background-color: var(--card);
+    border-color: var(--border);
+    border-radius: var(--radius-2xl);
+}
+
+/* Cart: bonus product rail mirrors the cart-items grid (66% / 1fr split) so
+ * the bonus carousel aligns under the cart items column rather than spanning
+ * the full editorial width. Uses the same utility string as the items grid in
+ * cart-content.tsx so the two stay in sync. */
+[data-slot='bonus-products-rail'] {
+    @apply grid grid-cols-1 lg:grid-cols-[66%_1fr] lg:gap-11;
+}
+
+/* The visible bonus panel is the <section> inside the rail wrapper (the wrapper
+ * itself is a transparent grid track). Match the delivery group + order summary
+ * surface: cream --card background, --border color, --radius-2xl. */
+[data-slot='bonus-products-rail'] > section {
+    background-color: var(--card);
+    border-color: var(--border);
+    border-radius: var(--radius-2xl);
+}
+
+/* Cart line-item product images: soften the thumbnail corners (6px /
+ * --radius-md). Scoped to the cart page via the container testid so the shared
+ * ProductItem thumbnails in mini-cart, order details, and checkout stay square.
+ * The wrapper already has overflow-hidden, so the radius clips the image. */
+[data-testid='sf-cart-container'] [data-slot='product-item-image'] {
+    border-radius: var(--radius-md);
+}
+
+/* Bonus panel title: spread the promotion name (left) and the compact
+ * "selected/max" count (right) across the full width. The canonical <h3>
+ * renders both as inline spans; flexing it pushes the count to the far right
+ * (count text is overridden to "{{selected}}/{{max}}" in the cosmetic locale). */
+[data-slot='bonus-products-rail'] > section > h3 {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+/* Title span (left): its own flex row so the gift icon and the promotion text
+ * are flex items spaced by gap (gap-2 / 0.5rem). This is a nested flex inside
+ * the <h3> — the <h3>'s flex only spaces the title span from the count span. */
+[data-slot='bonus-products-rail'] > section > h3 > span:first-child {
+    display: inline-flex;
+    align-items: center; /* icon vertically centered against the title text */
+    gap: 0.5rem; /* gap-2 — icon ↔ title text */
+    font-size: var(--text-sm); /* text-sm — 0.875rem */
+    line-height: var(--text-sm--line-height); /* 1.25rem */
+}
+
+/* Count span (right): smaller than the title. */
+[data-slot='bonus-products-rail'] > section > h3 > span:last-child {
+    font-size: var(--text-xs); /* text-xs — 0.75rem */
+    line-height: var(--text-xs--line-height); /* 1rem */
+}
+
+/* Lucide `gift` icon before the promotion name (first flex item of the title
+ * span). Lucide ships icons as React components, not asset files, so the SVG
+ * node is inlined as a mask data URI — mask + background-color keeps it
+ * tintable (currentColor / card-foreground), which a `content: url(...)` image
+ * would not be. Path data mirrors lucide-react@0.544 `gift`; bump it if the
+ * dependency changes. */
+[data-slot='bonus-products-rail'] > section > h3 > span:first-child::before {
+    content: '';
+    display: inline-block;
+    flex-shrink: 0;
+    width: 1rem; /* size-4 */
+    height: 1rem;
+    background-color: currentColor; /* matches the title text color (card-foreground) */
+    -webkit-mask: var(--icon-gift) center / contain no-repeat;
+    mask: var(--icon-gift) center / contain no-repeat;
+}
+
+/* Cart order summary Card: opt into a 1px border (cosmetic Cards are
+ * borderless by default). Color comes from the global `* { border-border }`
+ * default (var(--border)), matching the delivery group and bonus rail. */
+[data-slot='order-summary'] [data-slot='card'] {
+    --ui-border-width: 1px;
 }
 
 /* Category page: filters button badge should be circular */

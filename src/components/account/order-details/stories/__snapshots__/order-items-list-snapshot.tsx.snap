@@ -18,6 +18,7 @@ exports[`OrderItemsList stories snapshot > Default story renders and matches sna
       >
         <div
           class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+          data-slot="product-item-image"
         >
           <img
             alt="Sweater"
@@ -148,6 +149,7 @@ exports[`OrderItemsList stories snapshot > MultipleItems story renders and match
       >
         <div
           class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+          data-slot="product-item-image"
         >
           <div
             class="w-full h-full bg-muted"
@@ -231,6 +233,7 @@ exports[`OrderItemsList stories snapshot > MultipleItems story renders and match
       >
         <div
           class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+          data-slot="product-item-image"
         >
           <div
             class="w-full h-full bg-muted"

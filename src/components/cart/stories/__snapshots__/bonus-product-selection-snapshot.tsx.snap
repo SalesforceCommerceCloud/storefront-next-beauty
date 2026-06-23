@@ -19,7 +19,7 @@ exports[`BonusProductSelection stories snapshot > Default story renders and matc
       <span
         class="font-normal"
       >
-         (0 of 3 selected)
+        0/3
       </span>
     </h3>
     <div

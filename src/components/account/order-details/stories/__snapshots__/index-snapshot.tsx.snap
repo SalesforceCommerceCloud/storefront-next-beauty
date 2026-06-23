@@ -150,6 +150,7 @@ exports[`OrderDetails stories snapshot > CompletedStatus story renders and match
                         >
                           <div
                             class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+                            data-slot="product-item-image"
                           >
                             <img
                               alt="First Product"
@@ -519,6 +520,7 @@ exports[`OrderDetails stories snapshot > Default story renders and matches snaps
                         >
                           <div
                             class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+                            data-slot="product-item-image"
                           >
                             <img
                               alt="First Product"
@@ -888,6 +890,7 @@ exports[`OrderDetails stories snapshot > MultipleShipments story renders and mat
                         >
                           <div
                             class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+                            data-slot="product-item-image"
                           >
                             <div
                               class="w-full h-full bg-muted"
@@ -1033,6 +1036,7 @@ exports[`OrderDetails stories snapshot > MultipleShipments story renders and mat
                         >
                           <div
                             class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+                            data-slot="product-item-image"
                           >
                             <div
                               class="w-full h-full bg-muted"
@@ -1386,6 +1390,7 @@ exports[`OrderDetails stories snapshot > ReplacedStatus story renders and matche
                         >
                           <div
                             class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+                            data-slot="product-item-image"
                           >
                             <img
                               alt="First Product"
@@ -1755,6 +1760,7 @@ exports[`OrderDetails stories snapshot > WithPaymentMethod story renders and mat
                         >
                           <div
                             class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+                            data-slot="product-item-image"
                           >
                             <img
                               alt="First Product"
@@ -2158,6 +2164,7 @@ exports[`OrderDetails stories snapshot > WithShippingStatus story renders and ma
                         >
                           <div
                             class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden h-24 w-24"
+                            data-slot="product-item-image"
                           >
                             <img
                               alt="First Product"

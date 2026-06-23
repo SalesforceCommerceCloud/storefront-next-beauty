@@ -267,7 +267,7 @@ export function OrderListItem({
             to={orderDetailsUrl}
             className={cn('block transition-opacity hover:opacity-95 m-0', className)}
             onClick={() => onViewDetails?.(order.orderNo)}>
-            <Card className="py-0 border-0 border-border border-b border-separator hover:bg-transparent">
+            <Card className="order-list-item-card py-0 border-0 border-border border-b border-separator hover:bg-transparent">
                 <CardContent className="p-6 space-y-4 border-b border-separator">
                     {/* Header: Order ID, Date, Total, Items + Status */}
                     <div className="flex flex-wrap items-start justify-between -mx-6 -mt-6 px-6 pt-3 pb-3 mb-6 border-b border-separator bg-muted">

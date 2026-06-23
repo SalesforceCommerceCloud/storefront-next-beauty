@@ -33,7 +33,7 @@ exports[`OrderList stories snapshot > Default story renders and matches snapshot
       href="/account/orders/INV001"
     >
       <div
-        class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui py-0 border-0 border-b border-separator hover:bg-transparent"
+        class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui order-list-item-card py-0 border-0 border-b border-separator hover:bg-transparent"
         data-slot="card"
       >
         <div
@@ -252,7 +252,7 @@ exports[`OrderList stories snapshot > Default story renders and matches snapshot
       href="/account/orders/INV002"
     >
       <div
-        class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui py-0 border-0 border-b border-separator hover:bg-transparent"
+        class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui order-list-item-card py-0 border-0 border-b border-separator hover:bg-transparent"
         data-slot="card"
       >
         <div
@@ -388,7 +388,7 @@ exports[`OrderList stories snapshot > Default story renders and matches snapshot
       href="/account/orders/INV003"
     >
       <div
-        class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui py-0 border-0 border-b border-separator hover:bg-transparent"
+        class="bg-card text-card-foreground flex flex-col gap-6 rounded-ui border-ui shadow-ui order-list-item-card py-0 border-0 border-b border-separator hover:bg-transparent"
         data-slot="card"
       >
         <div
@@ -613,7 +613,7 @@ exports[`OrderList stories snapshot > EmptyState story renders and matches snaps
         <h4
           class="text-2xl font-semibold tracking-tight text-left text-muted-foreground w-fit"
         >
-          No orders yet. Find your next favourite and we'll keep the box safe here.
+          You haven't placed an order yet. Once you place an order the details will show up here.
         </h4>
         <a
           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3"

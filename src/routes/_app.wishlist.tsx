@@ -81,7 +81,9 @@ export default function GuestWishlist({
                 </AlertDescription>
             </Alert>
             <Suspense fallback={<WishlistSkeleton />}>
-                <Await resolve={loaderData.productsByProductId}>
+                <Await
+                    resolve={loaderData.productsByProductId}
+                    errorElement={<WishlistLoadError retryHref={routes.wishlist} />}>
                     {(productsByProductId) => (
                         <WishlistPageContent items={loaderData.items} productsByProductId={productsByProductId} />
                     )}

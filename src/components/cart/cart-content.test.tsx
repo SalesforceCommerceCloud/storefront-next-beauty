@@ -198,6 +198,34 @@ describe('CartContent', () => {
         expect(screen.queryByTestId('sf-cart-container')).not.toBeInTheDocument();
     });
 
+    test('exposes the cart-delivery-group, order-summary, and bonus-products-rail data-slot hooks', () => {
+        // These data-slot attributes are the styling contract verticals hook into
+        // (cosmetic restyles all three via base.css). A bonus discount line item is
+        // included so the bonus rail branch renders alongside delivery + summary.
+        const basketWithBonus = {
+            ...mockBasket,
+            bonusDiscountLineItems: [
+                {
+                    id: 'bdli-1',
+                    promotionId: 'promo-1',
+                    maxBonusItems: 1,
+                    bonusProducts: [{ productId: 'bonus-1', productName: 'Free Bonus' }],
+                },
+            ],
+        } as any;
+
+        const { container } = renderCartContent({
+            basket: basketWithBonus,
+            productsByItemId: mockProductMap,
+            bonusProductsById: { 'bonus-1': { id: 'bonus-1', name: 'Free Bonus' } as any },
+            promotions: mockPromotionMap as any,
+        });
+
+        expect(container.querySelector('[data-slot="cart-delivery-group"]')).toBeInTheDocument();
+        expect(container.querySelector('[data-slot="order-summary"]')).toBeInTheDocument();
+        expect(container.querySelector('[data-slot="bonus-products-rail"]')).toBeInTheDocument();
+    });
+
     test('renders empty cart when basket is undefined', () => {
         renderCartContent({
             basket: undefined,

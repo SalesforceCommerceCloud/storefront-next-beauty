@@ -22,6 +22,7 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <img
                 alt="Men's Classic Deer Gloves, , small"
@@ -179,6 +180,7 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <img
                 alt="Men's Classic Deer Gloves, , small"
@@ -356,6 +358,7 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <img
                 alt="Men's Classic Deer Gloves, , small"
@@ -519,6 +522,7 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <img
                 alt="Men's Classic Deer Gloves, , small"
@@ -707,6 +711,7 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <img
                 alt="Men's Classic Deer Gloves, , small"
@@ -870,6 +875,7 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <div
                 class="w-full h-full bg-muted"
@@ -1031,6 +1037,7 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <img
                 alt="Men's Classic Deer Gloves, , small"
@@ -1203,6 +1210,7 @@ exports[`ProductItem stories snapshot > SummaryVariant story renders and matches
     >
       <div
         class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden w-16"
+        data-slot="product-item-image"
       >
         <img
           alt="Men's Classic Deer Gloves, , small"
@@ -1296,6 +1304,7 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <img
                 alt="Men's Classic Deer Gloves, , small"
@@ -1481,6 +1490,7 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
           >
             <div
               class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              data-slot="product-item-image"
             >
               <img
                 alt="Men's Classic Deer Gloves, , small"
