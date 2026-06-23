@@ -15,10 +15,12 @@
  */
 
 /**
- * Cosmetic (Dazzle) per-page UI overrides. Hides the cart recommendation
- * carousels — Dazzle's cart is a focused checkout-intent page with no
- * below-the-fold cross-sell — which also skips the two Einstein recommendation
- * fetches in the cart loader.
+ * Cosmetic (Dazzle) per-page UI overrides:
+ * - Hides the cart recommendation carousels — Dazzle's cart is a focused
+ *   checkout-intent page with no below-the-fold cross-sell — which also skips
+ *   the two Einstein recommendation fetches in the cart loader.
+ * - Shows the category-page QuickFilters "Shop by {label}" header — Dazzle
+ *   leads the subcategory chips with a labelled, sparkles-iconed prompt.
  *
  * This module shadows the canonical `@/lib/config.ui` and the mirror script
  * overlays (overwrites) the canonical file with this one in the flattened
@@ -31,6 +33,9 @@ interface UIConfig {
         cart: {
             showRecommendations: boolean;
         };
+        category: {
+            showCategoryLabel: boolean;
+        };
     };
 }
 
@@ -38,6 +43,9 @@ export const uiConfig: UIConfig = {
     pages: {
         cart: {
             showRecommendations: false,
+        },
+        category: {
+            showCategoryLabel: true,
         },
     },
 };

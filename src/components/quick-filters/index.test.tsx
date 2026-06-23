@@ -15,74 +15,44 @@
  */
 import { describe, expect, test, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router';
-import type { ShopperProducts, ShopperSearch } from '@/scapi';
+import type { ShopperProducts } from '@/scapi';
 import { ConfigProvider } from '@salesforce/storefront-next-runtime/config';
 import { mockConfig } from '@/test-utils/config';
-import { I18nextProvider } from 'react-i18next';
-import i18next from 'i18next';
 import QuickFilters from './index';
 
 const mockNavigate = vi.fn();
-const mockUseRouteLoaderData = vi.hoisted(() => vi.fn());
 
 vi.mock('@/hooks/use-navigate', () => ({
     useNavigate: () => mockNavigate,
 }));
 
-vi.mock('react-router', async () => {
-    const actual = await vi.importActual<typeof import('react-router')>('react-router');
-    return {
-        ...actual,
-        useRouteLoaderData: mockUseRouteLoaderData,
-    };
-});
-
-void i18next.init({
-    lng: 'en-US',
-    fallbackLng: 'en-US',
-    resources: {
-        'en-US': {
-            common: {
-                shopBy: 'Shop by',
-                quickCategoryFilters: 'Quick category filters',
-            },
-        },
-    },
-});
-
-const mockLoaderData = {
-    searchResultCritical: {
-        refinements: [
-            {
-                attributeId: 'cgid',
-                label: 'Category',
-            },
-        ],
-    } as ShopperSearch.schemas['ProductSearchResult'],
-};
-
 const renderComponent = ({
     category,
-    loaderData = mockLoaderData,
     initialPath = '/',
+    categoryLabel,
 }: {
     category?: ShopperProducts.schemas['Category'];
-    loaderData?: typeof mockLoaderData | null;
     initialPath?: string;
+    categoryLabel?: string;
 }) => {
-    mockUseRouteLoaderData.mockReturnValue(loaderData);
-
     const router = createMemoryRouter(
         [
             {
                 path: '/',
                 element: (
-                    <I18nextProvider i18n={i18next}>
-                        <ConfigProvider config={mockConfig}>
-                            <QuickFilters category={category} />
-                        </ConfigProvider>
-                    </I18nextProvider>
+                    <ConfigProvider config={mockConfig}>
+                        <QuickFilters category={category} categoryLabel={categoryLabel} />
+                    </ConfigProvider>
+                ),
+            },
+            {
+                path: '/category/:categoryId',
+                element: (
+                    <ConfigProvider config={mockConfig}>
+                        <QuickFilters category={category} categoryLabel={categoryLabel} />
+                    </ConfigProvider>
                 ),
             },
         ],
@@ -94,64 +64,44 @@ const renderComponent = ({
     return render(<RouterProvider router={router} />);
 };
 
-describe('QuickFilters (Cosmetic Vertical)', () => {
-    test('renders "Shop by" label with cgid refinement label from loader data', () => {
+describe('QuickFilters', () => {
+    test('renders subcategories from category.categories', () => {
         const category = {
             id: 'mens',
             name: 'Men',
-            categories: [{ id: 'mens-suits', name: 'Suits' }],
-        } as ShopperProducts.schemas['Category'];
-
-        renderComponent({ category });
-
-        expect(screen.getByText(/Shop by Category/i)).toBeInTheDocument();
-    });
-
-    test('does not render "Shop by" label when cgid refinement not found in loader data', () => {
-        const category = {
-            id: 'mens',
-            name: 'Men',
-            categories: [{ id: 'mens-suits', name: 'Suits' }],
-        } as ShopperProducts.schemas['Category'];
-
-        const loaderDataWithoutCgid = {
-            searchResultCritical: {
-                ...mockLoaderData.searchResultCritical,
-                refinements: [],
-            },
+            categories: [
+                { id: 'mens-suits', name: 'Suits' },
+                { id: 'mens-shorts', name: 'Shorts' },
+                { id: 'mens-pants', name: 'Pants' },
+            ],
         };
 
-        renderComponent({ category, loaderData: loaderDataWithoutCgid });
+        renderComponent({ category });
 
-        expect(screen.queryByText(/Shop by/i)).not.toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Suits' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Shorts' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Pants' })).toBeInTheDocument();
     });
 
-    test('does not render "Shop by" label when loader data is not available', () => {
+    test('does not render when no category provided', () => {
+        renderComponent({});
+
+        expect(screen.queryByRole('group', { name: 'Quick category filters' })).not.toBeInTheDocument();
+    });
+
+    test('does not render when category has no subcategories', () => {
         const category = {
             id: 'mens',
             name: 'Men',
-            categories: [{ id: 'mens-suits', name: 'Suits' }],
-        } as ShopperProducts.schemas['Category'];
-
-        renderComponent({ category, loaderData: null });
-
-        expect(screen.queryByText(/Shop by/i)).not.toBeInTheDocument();
-    });
-
-    test('has data-slot attribute for deterministic selection', () => {
-        const category = {
-            id: 'mens',
-            name: 'Men',
-            categories: [{ id: 'mens-tops', name: 'Tops' }],
-        } as ShopperProducts.schemas['Category'];
+            categories: [],
+        };
 
         renderComponent({ category });
 
-        const container = screen.getByRole('group');
-        expect(container).toHaveAttribute('data-slot', 'quick-filters');
+        expect(screen.queryByRole('group', { name: 'Quick category filters' })).not.toBeInTheDocument();
     });
 
-    test('renders subcategories as buttons with data-state attribute', () => {
+    test('highlights active category based on URL refinements', () => {
         const category = {
             id: 'mens',
             name: 'Men',
@@ -159,14 +109,158 @@ describe('QuickFilters (Cosmetic Vertical)', () => {
                 { id: 'mens-tops', name: 'Tops' },
                 { id: 'mens-bottoms', name: 'Bottoms' },
             ],
-        } as ShopperProducts.schemas['Category'];
+        };
 
         renderComponent({ category, initialPath: '/?refine=cgid%3Dmens-tops' });
 
         const topsButton = screen.getByRole('button', { name: 'Tops' });
-        expect(topsButton).toHaveAttribute('data-state', 'active');
+        expect(topsButton).toHaveAttribute('aria-pressed', 'true');
 
         const bottomsButton = screen.getByRole('button', { name: 'Bottoms' });
-        expect(bottomsButton).toHaveAttribute('data-state', 'inactive');
+        expect(bottomsButton).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    test('adds cgid refinement when chip is clicked', async () => {
+        const user = userEvent.setup();
+        const category = {
+            id: 'mens',
+            name: 'Men',
+            categories: [
+                { id: 'mens-tops', name: 'Tops' },
+                { id: 'mens-bottoms', name: 'Bottoms' },
+            ],
+        };
+
+        renderComponent({ category });
+
+        const topsButton = screen.getByRole('button', { name: 'Tops' });
+        await user.click(topsButton);
+
+        expect(mockNavigate).toHaveBeenCalledWith({
+            pathname: '/',
+            search: '?refine=cgid%3Dmens-tops&offset=0',
+        });
+    });
+
+    test('preserves non-cgid refinements when adding cgid refinement', async () => {
+        const user = userEvent.setup();
+        const category = {
+            id: 'mens',
+            name: 'Men',
+            categories: [{ id: 'mens-tops', name: 'Tops' }],
+        };
+
+        renderComponent({
+            category,
+            initialPath: '/?refine=c_refinementColor%3Dblack&refine=cgid%3Dmens',
+        });
+
+        const topsButton = screen.getByRole('button', { name: 'Tops' });
+        await user.click(topsButton);
+
+        expect(mockNavigate).toHaveBeenCalledWith(
+            expect.objectContaining({
+                pathname: '/',
+                search: expect.stringMatching(/refine=c_refinementColor%3Dblack.*refine=cgid%3Dmens-tops/),
+            })
+        );
+        const call = mockNavigate.mock.calls[0][0];
+        expect(call.search).not.toContain('cgid%3Dmens&');
+    });
+
+    test('removes cgid refinement when clicking active chip (toggle off)', async () => {
+        const user = userEvent.setup();
+        const category = {
+            id: 'mens',
+            name: 'Men',
+            categories: [
+                { id: 'mens-tops', name: 'Tops' },
+                { id: 'mens-bottoms', name: 'Bottoms' },
+            ],
+        };
+
+        renderComponent({
+            category,
+            initialPath: '/?refine=cgid%3Dmens-tops',
+        });
+
+        const topsButton = screen.getByRole('button', { name: 'Tops' });
+        expect(topsButton).toHaveAttribute('aria-pressed', 'true');
+
+        await user.click(topsButton);
+
+        expect(mockNavigate).toHaveBeenCalledWith({
+            pathname: '/',
+            search: '?offset=0',
+        });
+    });
+
+    test('renders category ID when name is missing', () => {
+        const category = {
+            id: 'mens',
+            name: 'Men',
+            categories: [{ id: 'mens-tops', name: '' }],
+        };
+
+        renderComponent({ category });
+
+        expect(screen.getByRole('button', { name: 'mens-tops' })).toBeInTheDocument();
+    });
+
+    test('has proper accessibility attributes', () => {
+        const category = {
+            id: 'mens',
+            name: 'Men',
+            categories: [{ id: 'mens-tops', name: 'Tops' }],
+        };
+
+        renderComponent({ category });
+
+        const container = screen.getByRole('group', { name: 'Quick category filters' });
+        expect(container).toBeInTheDocument();
+
+        const button = screen.getByRole('button', { name: 'Tops' });
+        expect(button).toHaveAttribute('aria-pressed');
+    });
+
+    test('renders "Shop by {label}" header when categoryLabel is provided', () => {
+        const category = {
+            id: 'womens',
+            name: 'Women',
+            categories: [{ id: 'womens-tops', name: 'Tops' }],
+        };
+
+        renderComponent({ category, categoryLabel: 'Women' });
+
+        expect(screen.getByText('Shop by Women')).toBeInTheDocument();
+        // Header label is also the group's accessible name when present.
+        expect(screen.getByRole('group', { name: 'Shop by Women' })).toBeInTheDocument();
+    });
+
+    test('omits the header when categoryLabel is not provided', () => {
+        const category = {
+            id: 'womens',
+            name: 'Women',
+            categories: [{ id: 'womens-tops', name: 'Tops' }],
+        };
+
+        renderComponent({ category });
+
+        expect(screen.queryByText(/^Shop by/)).not.toBeInTheDocument();
+        // Falls back to the generic group label.
+        expect(screen.getByRole('group', { name: 'Quick category filters' })).toBeInTheDocument();
+    });
+
+    test('has data-slot attribute for deterministic selection', () => {
+        const category = {
+            id: 'mens',
+            name: 'Men',
+            categories: [{ id: 'mens-tops', name: 'Tops' }],
+        };
+
+        renderComponent({ category });
+
+        const container = screen.getByRole('group', { name: 'Quick category filters' });
+        expect(container).toHaveAttribute('data-slot', 'quick-filters');
     });
 });

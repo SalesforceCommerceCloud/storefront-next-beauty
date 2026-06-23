@@ -55,6 +55,7 @@ import {
     useFiltersPanelState,
 } from '@/hooks/use-filters-panel-state';
 import { getLogger } from '@/lib/logger.server';
+import { uiConfig } from '@/lib/config.ui';
 
 @PageType({
     name: 'Product Listing Page',
@@ -311,6 +312,16 @@ export default function CategoryPage({
         () => new URLSearchParams(location.search).getAll('refine').length,
         [location.search]
     );
+
+    // QuickFilters "Shop by {label}" header is opt-in per build target via
+    // `uiConfig.pages.category.showCategoryLabel`. When on, derive the label from
+    // the active `cgid` refinement and pass it down; when off, pass nothing so
+    // QuickFilters renders the chips-only baseline. Keeping this in the (shared)
+    // route means QuickFilters stays presentational and no vertical has to fork
+    // either the component or this route. See @/lib/config.ui.
+    const categoryLabel = uiConfig.pages.category.showCategoryLabel
+        ? searchResultCritical.refinements?.find((r) => r.attributeId === 'cgid')?.label
+        : undefined;
     const isProductGridLoading = useMemo(() => {
         if (navigation.state === 'idle' || !navigation.location) {
             return false;
@@ -415,7 +426,7 @@ export default function CategoryPage({
                                 isActive={filtersOpen}
                                 selectedFiltersCount={selectedFiltersCount}
                             />
-                            <QuickFilters category={category} />
+                            <QuickFilters category={category} categoryLabel={categoryLabel} />
                         </div>
 
                         {/* Category Refinements - toggles visibility on left side */}
@@ -433,7 +444,7 @@ export default function CategoryPage({
                                     isActive={filtersOpen}
                                     selectedFiltersCount={selectedFiltersCount}
                                 />
-                                <QuickFilters category={category} />
+                                <QuickFilters category={category} categoryLabel={categoryLabel} />
                             </div>
 
                             <ActiveFilters result={searchResultCritical} />

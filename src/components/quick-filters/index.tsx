@@ -14,44 +14,51 @@
  * limitations under the License.
  */
 import { type ReactElement, useCallback, useMemo } from 'react';
-import { useLocation, useNavigation, useRouteLoaderData } from 'react-router';
+import { useLocation, useNavigation } from 'react-router';
 import { useNavigate } from '@/hooks/use-navigate';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { ShopperProducts } from '@/scapi';
 import { useTranslation } from 'react-i18next';
-import type { loader as categoryLoader } from '@/routes/_app.category.$categoryId';
 
 interface QuickFiltersProps {
     category?: ShopperProducts.schemas['Category'];
+    /**
+     * Optional label for the active category (e.g. the `cgid` refinement label).
+     * When provided, a "Shop by {label}" header with a leading sparkles icon is
+     * rendered before the chips. When omitted, no header is shown.
+     *
+     * The component stays presentational: the caller decides whether to supply a
+     * label (e.g. a vertical gating on `uiConfig.pages.category.showCategoryLabel`
+     * computes it from loader data and passes it). Keeps this component free of
+     * config/loader coupling so it renders the same way given the same props.
+     */
+    categoryLabel?: string;
 }
 
 /**
- * QuickFilters Component (Cosmetic Vertical Override)
+ * QuickFilters Component
  *
- * Displays category subcategories as horizontal chips with a "Shop by {label}" header.
+ * Displays category subcategories as horizontal chips for quick access without opening the refinements panel.
  *
  * Features:
- * - Horizontal chip/button layout with sparkles icon and label
+ * - Horizontal chip/button layout
+ * - Optional "Shop by {label}" header (see `categoryLabel`)
  * - Active state for selected filters
  * - Optimistic UI during navigation
  * - Displays direct subcategories from category.categories on category pages
  * - Responsive with horizontal scroll on overflow
- * - Extracts cgid refinement label from route loader data
  *
  * @param props - Component props
  * @param props.category - Category object with subcategories from SCAPI
+ * @param props.categoryLabel - Optional active-category label; renders a header when set
  */
-export default function QuickFilters({ category }: QuickFiltersProps): ReactElement | null {
+export default function QuickFilters({ category, categoryLabel }: QuickFiltersProps): ReactElement | null {
     const { t } = useTranslation('common');
     const navigate = useNavigate();
     const location = useLocation();
     const navigation = useNavigation();
     const isPending = navigation.state !== 'idle';
-
-    // Extract cgid refinement label from route loader data
-    const loaderData = useRouteLoaderData<typeof categoryLoader>('routes/_app.category.$categoryId');
-    const label = loaderData?.searchResultCritical.refinements?.find((r) => r.attributeId === 'cgid')?.label;
 
     // Get subcategories to display from category.categories
     const categories = useMemo(() => {
@@ -109,17 +116,24 @@ export default function QuickFilters({ category }: QuickFiltersProps): ReactElem
         return null;
     }
 
-    // Derive the display label
-    const displayLabel = label ? `${t('shopBy', 'Shop by')} ${label}` : undefined;
+    // Header text shown when a category label is supplied (e.g. "Shop by Dresses").
+    const displayLabel = categoryLabel ? `${t('shopBy', 'Shop by')} ${categoryLabel}` : undefined;
 
     return (
         <div
-            className={`flex flex-wrap items-center gap-2${isPending ? ' pointer-events-none opacity-50 transition-opacity' : ''}`}
+            className={cn(
+                'flex flex-wrap gap-2',
+                // items-center only matters once the header sits inline with the chips
+                displayLabel && 'items-center',
+                isPending && 'pointer-events-none opacity-50 transition-opacity'
+            )}
             role="group"
             aria-label={displayLabel || t('quickCategoryFilters', 'Quick category filters')}
             data-slot="quick-filters">
             {displayLabel && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground pr-2">
+                <span
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground pr-2"
+                    data-slot="quick-filters-label">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -151,11 +165,10 @@ export default function QuickFilters({ category }: QuickFiltersProps): ReactElem
                         size="sm"
                         onClick={() => handleCategoryClick(cat.value)}
                         className={cn(
-                            'whitespace-nowrap rounded-md cursor-pointer gap-1.5',
-                            isActive ? 'bg-primary text-primary-foreground' : 'bg-card hover:bg-muted-hover'
+                            'whitespace-nowrap cursor-pointer text-sm font-normal leading-5 tracking-[-0.15px]',
+                            isActive ? 'text-primary-foreground' : 'text-foreground'
                         )}
-                        aria-pressed={isActive}
-                        data-state={isActive ? 'active' : 'inactive'}>
+                        aria-pressed={isActive}>
                         {cat.label || cat.value}
                     </Button>
                 );

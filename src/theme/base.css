@@ -319,14 +319,27 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
     gap: 0.75rem; /* gap-3 */
 }
 
-/* Category page: quick-filters buttons use accent-foreground text color.
- * Radius comes from the button's own `rounded-md` className. */
+/* Category page: quick-filters chips. Dazzle renders these as cream card-surface
+ * pills (vs the canonical bordered/outline chip). The canonical QuickFilters
+ * emits the structure + state hooks (`[data-slot="button"]`, `aria-pressed`);
+ * the cosmetic chip *appearance* lives here so the component stays a shared,
+ * unforked canonical. Inactive = card surface + accent text; active =
+ * primary fill + primary-foreground text. Radius via the `--ui-radius` source
+ * token (medium) rather than a hardcoded value — see shape-token rules. */
 [data-slot='quick-filters'] [data-slot='button'] {
+    --ui-radius: var(--radius-md);
+    gap: 0.375rem; /* gap-1.5 — icon/label spacing inside the chip */
+    background-color: var(--card);
     color: var(--accent-foreground);
 }
 
-/* Category page: active quick-filters buttons use primary-foreground text color */
-[data-slot='quick-filters'] [data-slot='button'][data-state='active'] {
+[data-slot='quick-filters'] [data-slot='button']:hover {
+    background-color: var(--muted-hover);
+}
+
+/* Active chip (selected cgid refinement): canonical sets aria-pressed="true". */
+[data-slot='quick-filters'] [data-slot='button'][aria-pressed='true'] {
+    background-color: var(--primary);
     color: var(--primary-foreground);
 }
 
