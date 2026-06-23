@@ -197,37 +197,34 @@ describe('PageConfigManager', () => {
     });
 
     describe('main padding configuration', () => {
-        it('sets data-has-top-padding="true" when hasTopPadding is true', () => {
+        // `data-has-top-padding` / `data-hero-bleed` on <main> are no longer set
+        // by PageConfigManager — they're reflected at render time by the
+        // canonical shell (routes/_app.tsx via mainPaddingDataAttributes) so the
+        // padding ships in the SSR'd HTML and never shifts post-hydration. This
+        // component must therefore NOT touch <main>; assert that explicitly.
+        it('does not set data-has-top-padding on <main> (handled by the canonical shell at render)', () => {
             vi.mocked(usePageUIConfig).mockReturnValue({
                 main: { hasTopPadding: true },
             } as PageUIConfig);
 
             render(<PageConfigManager />);
 
-            expect(mainElement.getAttribute('data-has-top-padding')).toBe('true');
+            expect(mainElement.hasAttribute('data-has-top-padding')).toBe(false);
         });
 
-        it('sets data-has-top-padding="false" when hasTopPadding is false', () => {
+        it('does not set data-hero-bleed on <main> (handled by the canonical shell at render)', () => {
             vi.mocked(usePageUIConfig).mockReturnValue({
-                main: { hasTopPadding: false },
+                header: { transparentOnLoad: true },
             } as PageUIConfig);
 
             render(<PageConfigManager />);
 
-            expect(mainElement.getAttribute('data-has-top-padding')).toBe('false');
-        });
-
-        it('sets data-has-top-padding="false" by default when not configured', () => {
-            vi.mocked(usePageUIConfig).mockReturnValue({} as PageUIConfig);
-
-            render(<PageConfigManager />);
-
-            expect(mainElement.getAttribute('data-has-top-padding')).toBe('false');
+            expect(mainElement.hasAttribute('data-hero-bleed')).toBe(false);
         });
     });
 
     describe('combined configuration', () => {
-        it('applies both header and main configuration simultaneously', async () => {
+        it('drives header scroll state without touching <main>', async () => {
             vi.mocked(usePageUIConfig).mockReturnValue({
                 header: { transparentOnLoad: true },
                 main: { hasTopPadding: true },
@@ -236,7 +233,8 @@ describe('PageConfigManager', () => {
             render(<PageConfigManager />);
 
             expect(headerElement.getAttribute('data-page-at-top')).toBe('true');
-            expect(mainElement.getAttribute('data-has-top-padding')).toBe('true');
+            // <main> attributes are the canonical shell's responsibility, not this component's.
+            expect(mainElement.hasAttribute('data-has-top-padding')).toBe(false);
 
             // Verify scroll still works
             Object.defineProperty(window, 'scrollY', { value: 100, writable: true });
@@ -247,7 +245,6 @@ describe('PageConfigManager', () => {
             });
 
             expect(headerElement.getAttribute('data-page-at-top')).toBe('false');
-            expect(mainElement.getAttribute('data-has-top-padding')).toBe('true');
         });
     });
 

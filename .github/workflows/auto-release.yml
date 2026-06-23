@@ -1,7 +1,9 @@
 name: Auto Release
 
 # This workflow automatically creates releases when stable versions are pushed
-# from release-* branches in the monorepo.
+# from cosmetic-release-* branches in the monorepo (cosmetic vertical overlay
+# of the canonical auto-release.yml — differs only in this trigger so cosmetic
+# promotes its own `latest` independently of the fashion/retail release-* train).
 #
 # ⚠️ FOR CUSTOMERS: After cloning this template, you can safely delete this workflow
 # file.
@@ -13,7 +15,7 @@ name: Auto Release
 on:
   push:
     branches:
-      - 'release-*'
+      - 'cosmetic-release-*'
 
 env:
   NODE_VERSION: '24'
@@ -227,13 +229,18 @@ jobs:
             core.setOutput('is_equal', isEqual);
             core.setOutput('is_less', isLess);
 
+      # Cosmetic overlay uses BEAUTY_SYNC_APP_* (not canonical's MIRROR_SYNC_APP_*):
+      # this workflow runs IN storefront-next-beauty, which is provisioned with
+      # its own dedicated GitHub App (storefront-next-beauty-sync, App 4096890).
+      # Do not "fix" these back to MIRROR_SYNC_APP_* — that app is not installed
+      # on beauty and the token would be empty, failing the latest push.
       - name: Generate GitHub App Token for latest branch update
         id: app-token
         if: steps.check_stable.outputs.is-stable == 'true' && (steps.compare.outputs.is_greater == 'true' || steps.compare.outputs.is_equal == 'true')
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ secrets.MIRROR_SYNC_APP_ID }}
-          private-key: ${{ secrets.MIRROR_SYNC_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.BEAUTY_SYNC_APP_ID }}
+          private-key: ${{ secrets.BEAUTY_SYNC_APP_PRIVATE_KEY }}
 
       - name: Update latest branch for stable releases
         id: update_latest

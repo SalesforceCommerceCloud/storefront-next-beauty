@@ -197,7 +197,24 @@ main[data-has-top-padding='true'] .border-order-border {
  * password reset, maintenance, 404) renders no header, so it opts out via
  * `data-layout="empty"` — otherwise it'd carry phantom top padding. */
 main:not([data-layout='empty']) {
-    padding-top: var(--header-height);
+    /* Fallback so <main> reserves the fixed header's space in the SERVER-rendered
+     * HTML. Without it, `--header-height` is undefined until the header's mount
+     * effect measures it (header/index.tsx) and `padding-top: var(--header-height)`
+     * resolves to 0 at first paint — <main> renders flush to the top, then jumps
+     * down ~header-height after hydration (deterministic CLS ~0.23 on the PDP).
+     *
+     * The fallback is responsive because the header is: it carries a mobile-only
+     * search row (`lg:hidden`, header/index.tsx) so it measures ~145px below `lg`
+     * and ~105px at `lg`+. Match those so first paint reserves the right space at
+     * both widths; the mount effect then refines to the exact measured px (a
+     * sub-pixel correction). Keep these in sync with the header's layout. */
+    padding-top: var(--header-height, 145px);
+}
+
+@media (min-width: 64rem) {
+    main:not([data-layout='empty']) {
+        padding-top: var(--header-height, 105px);
+    }
 }
 
 /* Pages whose route handle declares `header.transparentOnLoad = true`
@@ -227,7 +244,18 @@ main[data-hero-bleed='true'] {
  * instead of 0 and reopening the layout-shift gap. This guard pins the
  * intended winner regardless of source order. */
 main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
-    padding-top: calc(var(--header-height) + var(--ui-vertical-spacing));
+    /* Same responsive header-height fallback as the base rule above (145px
+     * mobile; the `lg`+ 105px override is the @media block below — placed AFTER
+     * this rule so it wins by source order at same specificity) — keeps the
+     * PDP's `header-height + vertical-spacing` padding present at SSR so there's
+     * no post-hydration jump. */
+    padding-top: calc(var(--header-height, 145px) + var(--ui-vertical-spacing));
+}
+
+@media (min-width: 64rem) {
+    main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
+        padding-top: calc(var(--header-height, 105px) + var(--ui-vertical-spacing));
+    }
 }
 
 /* Header logo: uses header-logo-color token (sage green on opaque, white on transparent) */

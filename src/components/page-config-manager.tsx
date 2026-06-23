@@ -18,14 +18,20 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { usePageUIConfig } from '../lib/page-ui-config';
 
 /**
- * Manager that applies page-level UI configuration from route handles to DOM elements.
+ * Manager for the SCROLL-DRIVEN header transparency state.
  *
- * Reads UI configuration from the current route's `handle` export and applies:
- * - Header transparency behavior (scroll-based transition on/off)
- * - Main area padding configuration
+ * Reads `handle.ui.header.transparentOnLoad` and, when enabled, toggles
+ * `data-page-at-top` on the header as the user scrolls past the header height
+ * (transparent → opaque transition). This is genuinely interactive state, so it
+ * lives in a client component.
  *
- * Data attributes are applied to page elements, enabling per-page styling via CSS selectors.
- * This makes layout behaviors configurable per-page without hardcoding URL patterns.
+ * NOTE: the STATIC, handle-derived layout attributes — `data-has-top-padding`
+ * and `data-hero-bleed` on `<main>` — are NOT set here. They're reflected onto
+ * `<main>` during render by the canonical shell (`routes/_app.tsx` via
+ * `mainPaddingDataAttributes`), so the correct padding ships in the SSR'd HTML.
+ * Setting them in a post-hydration effect here previously caused a ~2rem layout
+ * shift on the PDP/cart (CLS ~0.25). Keep layout-affecting, route-static
+ * attributes server-rendered; keep only scroll/interaction state in this effect.
  *
  * Isolated as a separate component to prevent unnecessary re-renders.
  */
@@ -35,9 +41,6 @@ export function PageConfigManager() {
     // Header transparency configuration
     const transparencyEnabled = uiConfig.header?.transparentOnLoad ?? false;
     const [isOnHero, setIsOnHero] = useState(transparencyEnabled);
-
-    // Main padding configuration
-    const hasTopPadding = uiConfig.main?.hasTopPadding ?? false;
 
     // Scroll detection for transparent header state
     useEffect(() => {
@@ -87,29 +90,10 @@ export function PageConfigManager() {
         }
     }, [isOnHero]);
 
-    // Apply hero-bleed attribute on <main> based on the route's static
-    // transparency config. Runs on mount and whenever transparency changes
-    // across SPA navigation (NOT on every scroll flip) — a hero→non-hero
-    // navigation must reset `data-hero-bleed` since PageConfigManager
-    // persists in the always-mounted header. Keeping it off the live
-    // scroll state means <main>'s padding-top doesn't shift while the
-    // header chrome is mid-transition. Same pattern as Dazzle's
-    // `isHomepage ? undefined : padding` in _app.tsx — the layout decision
-    // is route-driven, not scroll-driven.
-    useLayoutEffect(() => {
-        const mainElement = document.querySelector('main');
-        if (mainElement) {
-            mainElement.setAttribute('data-hero-bleed', transparencyEnabled ? 'true' : 'false');
-        }
-    }, [transparencyEnabled]);
-
-    // Apply main padding attribute
-    useEffect(() => {
-        const mainElement = document.querySelector('main');
-        if (mainElement) {
-            mainElement.setAttribute('data-has-top-padding', hasTopPadding ? 'true' : 'false');
-        }
-    }, [hasTopPadding]);
+    // NOTE: `data-hero-bleed` and `data-has-top-padding` on <main> are
+    // reflected at render time by the canonical shell (routes/_app.tsx), NOT
+    // here — see this component's header comment. Setting them in an effect
+    // would re-introduce the post-hydration padding jump (CLS).
 
     return null;
 }
