@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { type ReactElement, Suspense } from 'react';
-import { Await, redirect, type ShouldRevalidateFunctionArgs } from 'react-router';
+import { Await, redirect } from 'react-router';
 import type { Route } from './+types/_app.wishlist';
 import { loadWishlistPageData, type WishlistPageData } from '@/lib/api/wishlist.server';
 import { WishlistPageContent, WishlistSkeleton } from '@/components/wishlist/wishlist-page';
@@ -28,7 +28,7 @@ import { hasUsableShopperSession } from '@/middlewares/auth.utils';
 import { buildUrlFromContext } from '@/lib/url.server';
 import { useTranslation } from 'react-i18next';
 import { WishlistPageAnalytics } from '@/analytics/wishlist-page-analytics';
-import { resourceRoutes, routes } from '@/route-paths';
+import { routes } from '@/route-paths';
 
 /**
  * Cosmetic-vertical guest wishlist. Mirrors the canonical loader and error
@@ -47,12 +47,11 @@ export async function loader({ context }: Route.LoaderArgs): Promise<WishlistPag
     return loadWishlistPageData(context);
 }
 
-export function shouldRevalidate({ formAction, defaultShouldRevalidate }: ShouldRevalidateFunctionArgs) {
-    if (formAction === resourceRoutes.wishlistRemove) {
-        return false;
-    }
-    return defaultShouldRevalidate;
-}
+// Same data shape as canonical (delegates to `loadWishlistPageData`), so it
+// shares the canonical wishlist revalidation policy (#2060 tightened it to a
+// home-style ambient-mutation allowlist). Re-export rather than re-implement so
+// the cosmetic override doesn't drift from the policy it mirrors.
+export { shouldRevalidate } from '@/lib/routes/revalidation/wishlist';
 
 export function ErrorBoundary(): ReactElement {
     return <WishlistLoadError retryHref={routes.wishlist} />;
