@@ -16,7 +16,16 @@
 
 Feature('Storefront Wishlist Tests').tag('@core').tag('@wishlist');
 
-const { I, loginFlow, addToWishlistFlow, accountWishlistPage } = inject();
+// TODO: The "Removing wishlist item updates count accurately" and
+// "Wishlist item persists after logout and login" scenarios intermittently
+// fail at the login step inside add-to-wishlist.flow with a 30s Email Input
+// timeout. Observed across multiple unrelated PR branches on stg-016.
+// Tracked in W-22970888 (CC Sharks). Re-enable when the underlying flake
+// is fixed.
+const isWishlistLoginFlaky = true;
+const wishlistLoginScenario = isWishlistLoginFlaky ? Scenario.skip : Scenario;
+
+const { I, apiLoginFlow, storefrontPage, addToWishlistFlow, accountWishlistPage } = inject();
 import { expect } from 'chai';
 
 Scenario('Registered shopper can add product to wishlist and see it in account wishlist', async () => {
@@ -61,7 +70,7 @@ Scenario('Wishlist item added from PDP persists after wishlist page refresh', as
     .tag('@wishlist-add')
     .tag('@persistence');
 
-Scenario('Removing wishlist item updates count accurately', async () => {
+wishlistLoginScenario('Removing wishlist item updates count accurately', async () => {
     await addToWishlistFlow.execute();
 
     accountWishlistPage.navigate();
@@ -79,7 +88,7 @@ Scenario('Removing wishlist item updates count accurately', async () => {
     .tag('@wishlist-remove')
     .tag('@count');
 
-Scenario('Wishlist item persists after logout and login', async () => {
+wishlistLoginScenario('Wishlist item persists after logout and login', async () => {
     const productTitle = await addToWishlistFlow.execute();
 
     accountWishlistPage.navigate();
@@ -91,8 +100,8 @@ Scenario('Wishlist item persists after logout and login', async () => {
     );
     expect(appearsBeforeLogout, `Expected wishlist to contain "${productTitle}" before logout`).to.be.true;
 
-    await loginFlow.logout();
-    await loginFlow.execute();
+    await storefrontPage.logout();
+    await apiLoginFlow.executeWithEnsuredCredentials();
 
     accountWishlistPage.navigate();
     const afterRelogin = await accountWishlistPage.pollUntilItemsAppear();

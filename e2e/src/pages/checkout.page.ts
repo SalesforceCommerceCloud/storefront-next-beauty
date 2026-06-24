@@ -19,6 +19,52 @@ import { buildSitePath } from '../utils/url-utils';
 const { I } = inject();
 
 /**
+ * Extract customerId (gcid/rcid from `isb`) and usid (from `sub`) from a SLAS access token JWT.
+ * Used by SCAPI helper calls that previously read these values from server-only cookies.
+ *
+ * Customer-id selection mirrors the storefront's `getCustomerIdFromClaims`:
+ * - userType='registered' (default): prefer rcid, fall back to gcid
+ * - userType='guest': use gcid only
+ *
+ * Throws if either claim is missing — both values are required by the SCAPI helpers that
+ * consume the result, and an absent claim would surface as a server-side 404/400 anyway.
+ */
+function extractCustomerIdAndUsidFromJwt(
+    accessToken: string,
+    userType: 'guest' | 'registered' = 'registered'
+): { customerId: string; usid: string } {
+    const parts = accessToken.split('.');
+    if (parts.length !== 3 || !parts[1]) {
+        throw new Error('Invalid SLAS access token: expected JWT with 3 parts');
+    }
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(Buffer.from(base64, 'base64').toString('utf-8')) as Record<string, unknown>;
+
+    const parseDelimitedClaim = (claim: unknown, prefix: string): string | null => {
+        if (typeof claim !== 'string' || !claim) return null;
+        for (const segment of claim.split('::')) {
+            if (segment.startsWith(prefix)) return segment.slice(prefix.length);
+        }
+        return null;
+    };
+
+    const isb = payload.isb;
+    const sub = payload.sub;
+    const gcid = parseDelimitedClaim(isb, 'gcid:');
+    const rcid = parseDelimitedClaim(isb, 'rcid:');
+    const customerId = userType === 'registered' ? (rcid ?? gcid) : gcid;
+    const usid = parseDelimitedClaim(sub, 'usid:');
+
+    if (!customerId) {
+        throw new Error('Customer ID not found in SLAS access token isb claim');
+    }
+    if (!usid) {
+        throw new Error('usid not found in SLAS access token sub claim');
+    }
+    return { customerId, usid };
+}
+
+/**
  * Checkout Page Object
  * Handles interactions with the multi-step checkout page
  *
@@ -1277,6 +1323,44 @@ class CheckoutPage {
         I.click(this.locators.promoCodeApplyButton);
     }
 
+    /**
+     * Returns true when the shipping options form is visible (radio inputs rendered in edit mode).
+     */
+    async isShippingOptionsFormVisible(): Promise<boolean> {
+        const count = await I.grabNumberOfVisibleElements(this.locators.shippingMethodOption);
+        return count > 0;
+    }
+
+    /**
+     * Returns true when the payment form submit button is visible (payment step is in edit mode).
+     */
+    async isPaymentFormOpen(): Promise<boolean> {
+        const count = await I.grabNumberOfVisibleElements(
+            '[data-testid="sf-toggle-card-payment"] button[type="submit"]'
+        );
+        return count > 0;
+    }
+
+    /**
+     * Wait for the shipping options "Continue to Payment" button to become enabled (price
+     * recalculation complete), then click it using Playwright force-click so viewport clipping
+     * from the fixed mobile bar does not block the action.
+     *
+     * @param timeoutSeconds - How long to wait for the button to become enabled
+     */
+    async waitForShippingRecalcAndContinue(timeoutSeconds: number = 30): Promise<void> {
+        I.waitForElement(
+            '[data-testid="sf-toggle-card-shipping-options"] button[type="submit"]:not([disabled])',
+            timeoutSeconds
+        );
+        await (I.usePlaywrightTo('click Continue to Payment', async ({ page }) => {
+            const btn = page.locator('[data-testid="sf-toggle-card-shipping-options"] button[type="submit"]').first();
+            await btn.scrollIntoViewIfNeeded();
+            await btn.click({ force: true });
+        }) as unknown as Promise<void>);
+        I.waitForElement('form[data-checkout-mobile-bar]', 30);
+    }
+
     async getPromoCodeError(): Promise<string> {
         const count = await I.grabNumberOfVisibleElements(this.locators.promoCodeError);
         if (count === 0) return '';
@@ -1692,18 +1776,17 @@ class CheckoutPage {
 
                 const accessTokenCookie = cookies.find((c: { name: string }) => c.name === `cc-at_${siteId}`);
                 const refreshTokenCookie = cookies.find((c: { name: string }) => c.name === `cc-nx_${siteId}`);
-                const usidCookie = cookies.find((c: { name: string }) => c.name === `usid_${siteId}`);
-                const customerIdCookie = cookies.find((c: { name: string }) => c.name === `customerId_${siteId}`);
 
-                if (!accessTokenCookie || !customerIdCookie) {
+                if (!accessTokenCookie) {
                     throw new Error('Customer session cookies not found - user may not be logged in');
                 }
 
+                const { customerId, usid } = extractCustomerIdAndUsidFromJwt(accessTokenCookie.value);
                 const tokens = {
                     accessToken: accessTokenCookie.value,
                     refreshToken: refreshTokenCookie?.value ?? '',
-                    usid: usidCookie?.value ?? '',
-                    customerId: customerIdCookie.value,
+                    usid,
+                    customerId,
                     expiresIn: 1800,
                 };
 
@@ -1773,18 +1856,17 @@ class CheckoutPage {
 
                 const accessTokenCookie = cookies.find((c: { name: string }) => c.name === `cc-at_${siteId}`);
                 const refreshTokenCookie = cookies.find((c: { name: string }) => c.name === `cc-nx_${siteId}`);
-                const usidCookie = cookies.find((c: { name: string }) => c.name === `usid_${siteId}`);
-                const customerIdCookie = cookies.find((c: { name: string }) => c.name === `customerId_${siteId}`);
 
-                if (!accessTokenCookie || !customerIdCookie) {
+                if (!accessTokenCookie) {
                     throw new Error('Customer session cookies not found - user may not be logged in');
                 }
 
+                const { customerId, usid } = extractCustomerIdAndUsidFromJwt(accessTokenCookie.value);
                 const tokens = {
                     accessToken: accessTokenCookie.value,
                     refreshToken: refreshTokenCookie?.value ?? '',
-                    usid: usidCookie?.value ?? '',
-                    customerId: customerIdCookie.value,
+                    usid,
+                    customerId,
                     expiresIn: 1800,
                 };
 
@@ -1899,28 +1981,6 @@ class CheckoutPage {
     // =========================================================================
 
     /**
-     * Mock the passwordless authorization API to return success.
-     * This simulates the backend detecting a registered email and sending an OTP.
-     *
-     * React Router v7 fetchers POST to the `.data` endpoint which returns turbo-stream
-     * (`text/x-script`) format. We intercept that specific endpoint.
-     */
-    async mockPasswordlessAuthorizationSuccess(email: string): Promise<void> {
-        await (I.usePlaywrightTo('mock passwordless API', async ({ browserContext }) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            await browserContext.route('**/action/authorize-passwordless-email.data**', async (route: any) => {
-                // Turbo-stream format: flattened index-referenced JSON
-                const body = JSON.stringify([{ _1: 2 }, 'data', { _3: 4, _5: 6 }, 'success', true, 'email', email]);
-                await route.fulfill({
-                    status: 200,
-                    contentType: 'text/x-script; charset=utf-8',
-                    body,
-                });
-            });
-        }) as unknown as Promise<void>);
-    }
-
-    /**
      * Mock the registration API to return unavailable (SLAS "Email not verified" 400).
      * The component should silently uncheck the checkbox with no toast or error.
      */
@@ -1958,35 +2018,6 @@ class CheckoutPage {
             await new Promise((resolve) => setTimeout(resolve, 500));
         }
         return false;
-    }
-
-    /**
-     * Mock the passwordless authorization API to return requiresLogin (400 scenario).
-     * Simulates SLAS responding with 400 when passwordless is not available for the email.
-     */
-    async mockPasswordlessAuthorizationRequiresLogin(email: string): Promise<void> {
-        await (I.usePlaywrightTo('mock passwordless API with requiresLogin', async ({ browserContext }) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            await browserContext.route('**/action/authorize-passwordless-email.data**', async (route: any) => {
-                // Turbo-stream format: flattened index-referenced JSON
-                const body = JSON.stringify([
-                    { _1: 2 },
-                    'data',
-                    { _3: 4, _5: 6, _7: 8 },
-                    'success',
-                    false,
-                    'requiresLogin',
-                    true,
-                    'email',
-                    email,
-                ]);
-                await route.fulfill({
-                    status: 200,
-                    contentType: 'text/x-script; charset=utf-8',
-                    body,
-                });
-            });
-        }) as unknown as Promise<void>);
     }
 
     /**
