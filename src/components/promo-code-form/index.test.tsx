@@ -187,10 +187,14 @@ describe('PromoCodeForm', () => {
     test('surfaces the server status-specific error message on apply failure', async () => {
         const user = userEvent.setup();
         // A valid-but-ineligible coupon: SCAPI returns statusCode
-        // 'no_applicable_promotion', the add action maps it to this message.
-        const notApplicable = t('cart:promoCode.errors.notApplicable');
+        // 'no_applicable_promotion', which the add action maps to this
+        // invalidCode message (the same one returned for unknown/disabled codes
+        // and for a code SCAPI rejects outright, so the form can't be used to
+        // tell which codes exist). The message echoes the shopper's own code via
+        // the `{{code}}` placeholder.
+        const serverMessage = t('cart:promoCode.errors.invalidCode', { code: 'INELIGIBLE' });
         renderWithFetcherActions({
-            addAction: () => ({ success: false, error: { code: 'INVALID_INPUT', message: notApplicable } }),
+            addAction: () => ({ success: false, error: { code: 'INVALID_INPUT', message: serverMessage } }),
         });
 
         await user.type(screen.getByPlaceholderText(t('cart:promoCode.placeholder')), 'INELIGIBLE');
@@ -198,7 +202,7 @@ describe('PromoCodeForm', () => {
 
         // The server message is rendered in both the inline form error and the toast.
         // Scope to the toast region so the assertion is unambiguous.
-        expect(await findToast(notApplicable)).toBeInTheDocument();
+        expect(await findToast(serverMessage)).toBeInTheDocument();
     });
 
     test('falls back to the generic error toast when the apply response has no message', async () => {
