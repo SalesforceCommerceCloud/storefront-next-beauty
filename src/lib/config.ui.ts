@@ -22,6 +22,11 @@
  * - Shows the category-page QuickFilters "Shop by {label}" header — Dazzle
  *   leads the subcategory chips with a labelled, sparkles-iconed prompt.
  *
+ * Also configures the bonus-product carousel tile: `subtitleVariationAttributeId`
+ * selects which variation attribute supplies the tile subtitle (the value's
+ * display name, e.g. "10 ml, 1 week supply"). Default `size`; merchants can point
+ * it at a custom variation attribute (e.g. `volume`) authored in Business Manager.
+ *
  * This module shadows the canonical `@/lib/config.ui` and the mirror script
  * overlays (overwrites) the canonical file with this one in the flattened
  * artifact. It must therefore be self-contained — no import from the canonical
@@ -37,6 +42,10 @@ interface UIConfig {
             showCategoryLabel: boolean;
         };
     };
+    bonusTile: {
+        /** Variation-attribute id whose selected value name renders as the bonus tile subtitle. */
+        subtitleVariationAttributeId: string;
+    };
 }
 
 export const uiConfig: UIConfig = {
@@ -47,5 +56,8 @@ export const uiConfig: UIConfig = {
         category: {
             showCategoryLabel: true,
         },
+    },
+    bonusTile: {
+        subtitleVariationAttributeId: 'size',
     },
 };

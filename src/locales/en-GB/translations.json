@@ -421,7 +421,13 @@
             "loadError": "Failed to load product details. Please try again.",
             "retry": "Retry",
             "selectUpTo": "Select up to {{count}}",
-            "backToCart": "Back to Cart"
+            "backToCart": "Back to Cart",
+            "ctaPick": "Pick",
+            "ctaAdding": "Adding…",
+            "ctaRemoving": "Removing…",
+            "ctaSelected": "Selected",
+            "maxReachedBadge": "Free",
+            "maxReachedText": "Added to your bag — change any time before checkout."
         },
         "meta": {
             "title": "Cart",

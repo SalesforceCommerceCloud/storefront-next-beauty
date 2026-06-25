@@ -425,6 +425,14 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
     mask: var(--icon-gift) center / contain no-repeat;
 }
 
+/* Once the promotion's max bonus products are selected (the component sets `data-max-reached` on the
+ * <section>), swap the gift callout for the lucide `sparkles` icon — a celebratory cue that the offer is
+ * fulfilled. Only the mask image changes; size/tint inherit from the rule above. */
+[data-slot='bonus-products-rail'] > section[data-max-reached] > h3 > span:first-child::before {
+    -webkit-mask: var(--icon-sparkles) center / contain no-repeat;
+    mask: var(--icon-sparkles) center / contain no-repeat;
+}
+
 /* Cart order summary Card: opt into a 1px border (cosmetic Cards are
  * borderless by default). Color comes from the global `* { border-border }`
  * default (var(--border)), matching the delivery group and bonus rail. */
