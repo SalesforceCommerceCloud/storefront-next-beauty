@@ -11,39 +11,41 @@
         "noFilterOptionsAvailable": "No filter options available."
     },
     "common": {
-        "defaultSiteName": "Storefront Next: Market Street",
+        "defaultSiteName": "Storefront Next: Dazzle",
         "loading": "Loading",
         "loadingMore": "Loading more...",
         "product": "the product",
         "noImageAvailable": "No image available",
         "productGeneric": "Product",
-        "noProductsFound": "No products found",
+        "noProductsFound": "No matches yet. Try a different word.",
         "productCarousel": "Product Carousel",
         "productImageAlt": "Product Image",
         "suggestionImageAlt": "Suggestion Image",
         "hero": {
-            "defaultTitle": "Shop Now",
+            "defaultTitle": "Beauty Reimagined",
             "defaultImageAlt": "Hero Image",
-            "defaultCtaText": "Shop Now"
+            "defaultCtaText": "Discover the Look"
         },
         "previousImage": "Previous image",
         "nextImage": "Next image",
         "productGrid": {
             "loadFailed": "Unable to load additional products."
-        }
+        },
+        "quickCategoryFilters": "Quick category filters",
+        "shopBy": "Shop by"
     },
     "search": {
         "results": "Search Results for",
         "shopperAgent": {
-            "title": "Shop with your Shopper Agent",
-            "description": "I can help you find the perfect piece for your space. Shop with me."
+            "title": "Ask Shopper Agent",
+            "description": "I can help you find the perfect look. Shop with me."
         },
         "suggestions": {
             "didYouMean": "Did you mean",
             "categories": "Categories",
             "products": "Products",
-            "popularSearches": "Popular Searches",
-            "recentSearches": "Recent Searches",
+            "popularSearches": "Popular with the community",
+            "recentSearches": "You looked at",
             "clearRecentSearches": "Clear recent searches",
             "viewAll": "View All"
         }
@@ -135,9 +137,8 @@
         "redirecting": "Signing you in...",
         "otpModalTitle": "Enter Verification Code",
         "otpModalDescription": "We've sent a {{otpLength}}-digit code to {{email}}",
-        "otpRequired": "Verification code is required",
-        "otpInvalidFormat": "Please enter a valid {{otpLength}}-digit code",
         "verifying": "Verifying...",
+        "verify": "Verify",
         "checkoutAsGuest": "Checkout as Guest",
         "resendCode": "Resend Code",
         "resendCodeTimer": "Resend in {{timer}}s",
@@ -270,7 +271,8 @@
             "stockNotAvailable": "Insufficient stock for one or more items in your cart.",
             "checkoutIncomplete": "Some required information is missing. Review your details and try again.",
             "contactInfoFailed": "We couldn't save the contact information. Try again.",
-            "noShippingMethodsForAddress": "We're unable to ship to the address you entered. Enter a different shipping address."
+            "noShippingMethodsForAddress": "We're unable to ship to the address you entered. Enter a different shipping address.",
+            "placeOrderFailed": "Failed to finalize order. Try again."
         },
         "customer": {
             "addressIdRequired": "Address title is required for customer address.",
@@ -413,7 +415,7 @@
             "failedToAdd": "Failed to add bonus product: {{error}}",
             "missingRequiredInfo": "Missing required information",
             "defaultTitle": "Bonus Products Available",
-            "selectionCount": " ({{selected}} of {{max}} selected)",
+            "selectionCount": "{{selected}}/{{max}}",
             "freeBadge": "Free",
             "noSlotError": "No available bonus discount slot",
             "loadError": "Failed to load product details. Please try again.",
@@ -460,8 +462,7 @@
             "lookupFallbackMessage": "Customer lookup failed. Continuing as guest.",
             "saveError": "Failed to save contact information",
             "sessionExpired": "Session expired. Sign in again.",
-            "verificationFailed": "We couldn't verify your information. Please try again.",
-            "verificationRefreshed": "Verification timed out. We've refreshed it - please try again."
+            "verificationFailed": "We couldn't verify your information. Please try again."
         },
         "addressModal": {
             "title": "Add New Address",
@@ -598,7 +599,7 @@
             "billingCountryRequired": "Country is required"
         },
         "expressPayments": {
-            "separator": "Or",
+            "separator": "or continue below",
             "venmoUnavailable": "Venmo is not available on this device.",
             "applePayLabel": "Apple Pay",
             "googlePayLabel": "Google Pay",
@@ -642,6 +643,9 @@
             "confirmationEmailSent": "We've sent a confirmation email to {{email}}",
             "orderNotFound": "Order Not Found",
             "orderNotFoundDescription": "We couldn't find the order you're looking for.",
+            "orderPlacedDetailsUnavailable": "You placed an order",
+            "orderPlacedDetailsUnavailableDescription": "You placed an order, but we can't load the full details right now. Check your email for confirmation. If you don't receive an email, contact Salesforce Customer Support.",
+            "orderNumberLabel": "Order number: {{orderNo}}",
             "orderNumberRequired": "Order number is required",
             "sections": {
                 "orderSummary": "Order Summary",
@@ -751,6 +755,14 @@
         "title": "Account Details",
         "subtitle": "Manage your personal information",
         "myAccount": "My Account",
+        "meta": {
+            "wishlistTitle": "Wishlist",
+            "paymentMethodsTitle": "Payment Methods",
+            "addressesTitle": "Addresses",
+            "orderHistoryTitle": "Order History",
+            "orderDetailsTitle": "Order Details",
+            "storePreferencesTitle": "Store Preferences"
+        },
         "navigation": {
             "overview": "Overview",
             "accountDetails": "Account Details",
@@ -764,12 +776,12 @@
         },
         "storePreferences": {
             "title": "Store Preferences",
-            "subtitle": "Manage your preferred store locations and pickup preferences",
+            "subtitle": "Set the store you shop, and the people who can collect for you.",
             "preferredStore": {
                 "heading": "Preferred Store for Pickup",
                 "description": "Select your preferred store for in-store pickup orders",
                 "changeStore": "Change store",
-                "noStoreSelected": "No store selected. Use the store locator to choose your preferred store for pickup.",
+                "noStoreSelected": "Pick a store to make pickup faster.",
                 "storeHoursTitle": "Store Hours",
                 "error": "Failed to load store details. Please try again later."
             },
@@ -877,8 +889,8 @@
             "pageTitle": "My Wishlist",
             "pageSubtitle": "Your saved items for later",
             "savedItems": "Saved Items",
-            "emptyTitle": "This wishlist is empty",
-            "emptySubtitle": "Start adding items to your wishlist!",
+            "emptyTitle": "Nothing saved yet",
+            "emptySubtitle": "Tap the heart on a product to keep it here.",
             "itemCount_one": "{{count}} item saved",
             "itemCount_other": "{{count}} items saved",
             "empty": "Your wishlist is empty. Start adding items you love!",
@@ -908,7 +920,7 @@
             },
             "noFilterResults": "No items match your filter.",
             "guestEmptySignInPrompt": "Sign in to see saved items from your account.",
-            "guestKeepItemsBanner": "Sign in to keep all your wishlist items.",
+            "guestKeepItemsBanner": "Sign in to keep your saved products with you across devices.",
             "guestKeepItemsBannerCta": "Sign in",
             "mergeSuccess": "Your saved items were added to your account wishlist.",
             "mergePartial": "Some saved items could not be added because they are no longer available."
@@ -1220,8 +1232,8 @@
             }
         },
         "meta": {
-            "title": "Storefront Next: Market Street",
-            "description": "Next gen fashion store"
+            "title": "Storefront Next: Dazzle",
+            "description": "Beauty reimagined — clean, considered cosmetics for every day."
         },
         "featuredProducts": {
             "title": "Featured Products",
@@ -1307,11 +1319,11 @@
             },
             "ourVision": {
                 "title": "Our Vision",
-                "content": "To redefine modern retail through technology, design, and customer experience—creating a commerce environment that feels effortless, inspiring, and human. We don’t chase trends. We build lasting experiences."
+                "content": "Beauty that earns its place on your shelf. Every product starts with one question: would we use it every day?"
             },
             "ourValue": {
                 "title": "Why We Exist",
-                "content": "We exist to remove friction between people and what they love. To make shopping intuitive, fast, and meaningful. To create a brand that evolves with its community."
+                "content": "Honest formulas, real shades, and less guesswork. Beauty that fits the people who wear it."
             },
             "ourMission": {
                 "title": "What We Stand For",
@@ -1320,6 +1332,48 @@
             "ourTeam": {
                 "title": "A Global Brand, A Street-Level Soul",
                 "content": "Market Street was born from the idea that great style shouldn’t feel unreachable. We blend global inspiration with a street-level mindset, connecting culture, performance, and lifestyle into one fluid expression.\nFrom product development to digital experience, everything we do is guided by one principle:\nMake commerce feel natural."
+            },
+            "principles": {
+                "heading": "Our principles"
+            },
+            "standards": {
+                "eyebrow": "Our standards",
+                "title": "What we stand for",
+                "ctaText": "See our ingredients",
+                "ctaLink": "/category/top-seller",
+                "pillars": {
+                    "transparency": {
+                        "title": "Ingredient transparency",
+                        "content": "Every formula lists what is in it and why. No proprietary blends."
+                    },
+                    "performance": {
+                        "title": "Performance you can feel",
+                        "content": "Clean is the floor, not the ceiling. Benchmarked against the best in category."
+                    },
+                    "shade": {
+                        "title": "Shade for everyone",
+                        "content": "Foundations, tints and balms developed across every undertone."
+                    },
+                    "responsibility": {
+                        "title": "Responsibly made",
+                        "content": "Recyclable packaging, refillable formats, suppliers we have met in person."
+                    }
+                }
+            },
+            "community": {
+                "eyebrow": "Join us",
+                "title": "Become part of the Dazzle community",
+                "imageAlt": "Skincare bottles laid out on warm linen.",
+                "ctaText": "Create your account",
+                "ctaLink": "/signup"
+            },
+            "closing": {
+                "eyebrow": "Considered beauty, every day",
+                "title": "Beauty that meets you where you are",
+                "content": "Built for the morning routine that actually happens. Five minutes or fifty, we slot in.",
+                "principle": "Ingredients we would put on our own skin. Shades for the people in our store. Details sweated so getting ready stays easy.",
+                "ctaText": "Explore our formulas",
+                "ctaLink": "/category/newarrivals"
             }
         },
         "contact": {
@@ -1348,6 +1402,14 @@
             "toast": {
                 "success": "Message sent successfully."
             }
+        },
+        "hero": {
+            "eyebrow": "Our story",
+            "headline": "Clean ingredients. Every-shade colour. Beauty that fits your day.",
+            "body": "Built on transparent ingredients, real shades, and routines that fit five-minute mornings or fifty-minute ones. Clean is the floor, not the ceiling.",
+            "imageAlt": "Foundation bottles arranged in a fan on warm marble.",
+            "ctaText": "Shop Skincare",
+            "ctaLink": "/category/newarrivals"
         }
     },
     "countries": {
@@ -1583,24 +1645,24 @@
             "secondaryMessage": "In the meantime, feel free to browse our collection."
         },
         "404": {
-            "title": "Page not found",
-            "message": "We couldn't find the page you're looking for. It may have been moved or the link might be incorrect.",
-            "secondaryMessage": "Don't worry—you can still explore our collection or head back home.",
-            "details": "The requested page could not be found."
+            "title": "This page slipped off the shelf",
+            "message": "We could not find what you were looking for. The link may have moved or the page is no longer here.",
+            "secondaryMessage": "Take a look around. There is plenty more to discover.",
+            "details": "We could not find this page."
         },
         "500": {
-            "title": "Something went wrong",
-            "message": "We're sorry, but something unexpected happened on our end. Our team has been notified and is working to fix it.",
-            "secondaryMessage": "Please try again in a few moments, or browse our shop while we sort things out."
+            "title": "Something is off behind the counter",
+            "message": "An unexpected error happened on our end. Our team has been notified and is sorting it out.",
+            "secondaryMessage": "Try again in a moment, or keep browsing while we tidy up."
         },
-        "defaultTitle": "Something went wrong",
+        "defaultTitle": "Something is off behind the counter",
         "defaultDescription": "An error occurred",
         "defaultDetails": "An unexpected error occurred.",
         "notFoundTitle": "Page not found",
         "notFoundDetails": "The requested page could not be found.",
         "persistsMessage": "If this problem persists, please contact support.",
         "tryAgainMessage": "An unexpected error occurred. Please try again later.",
-        "goToHomepage": "Go to Homepage",
+        "goToHomepage": "Back to shop",
         "allRightsReserved": "All rights reserved.",
         "recommendations": {
             "title": "You might also like"
@@ -1780,6 +1842,7 @@
         "failedToAddProductToCartError": "Failed to add product to cart:",
         "failedToAddProductToWishlistError": "Failed to add product to wishlist:",
         "price": {
+            "unavailable": "Price unavailable",
             "currentPriceFrom": "Current price from {{price}}",
             "currentPrice": "Current price: {{price}}",
             "from": "From {{price}}",

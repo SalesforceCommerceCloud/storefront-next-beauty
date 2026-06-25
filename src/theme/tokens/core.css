@@ -1,80 +1,62 @@
 :root {
-    /* core */
-    --background: #FFFFFF;
-    --foreground: #17171B;
+    /* core — cosmetic palette: warm cream surfaces + sage green primary, byte-aligned with Dazzle */
+    --background: oklch(0.995 0.004 90);
+    --foreground: oklch(0.24 0.02 80);
 
-    --card: #FFFFFF;
-    --card-foreground: #3F3F46;
+    --card: oklch(0.97 0.012 90);
+    --card-foreground: oklch(0.24 0.02 80);
 
-    --popover: #FFFFFF;
-    --popover-foreground: #3F3F46;
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.24 0.02 80);
 
-    --primary: #131315;
-    --primary-foreground: #FFFFFF;
+    --primary: oklch(0.44 0.08 155);
+    --primary-foreground: oklch(0.99 0.006 92);
+    --primary-hover: oklch(0.36 0.065 155);
 
-    --secondary: #F8F8F8;
-    --secondary-foreground: #33373D;
+    /* Dazzle-only token: tertiary green (in-stock pills, shipping confirmed) */
+    --tertiary: oklch(0.55 0.09 155);
+    --tertiary-foreground: oklch(0.99 0.006 92);
 
-    --tertiary: #1CB167;
-    --tertiary-foreground: #FFFFFF;
+    --secondary: oklch(0.95 0.02 92);
+    --secondary-foreground: oklch(0.3 0.03 80);
 
-    --muted: #F9FAFB;
-    --muted-foreground: #35353B;
-    /* not in Figma JSON */
-    --muted-hover: #ebebeb;
+    --muted: oklch(0.955 0.018 88);
+    --muted-foreground: oklch(0.48 0.02 80);
+    --muted-hover: oklch(0.91 0.018 88);
 
-    --accent: #ECECEC;
-    --accent-foreground: #373737;
+    --accent: oklch(0.92 0.02 89);
+    --accent-foreground: oklch(0.31 0.018 80);
 
-    /*
-     * Status colors. Figma's source values (red-500 / green-600 / amber-600 / sky-600)
-     * fail WCAG AA 4.5:1 against white and against their -foreground companions.
-     * We darken each to the next Tailwind shade (-700/-800) so all default pairings
-     * pass AA. Hue is preserved; only luminance changes. Flag for UX whether to
-     * sync these darker values back into Figma.
-     */
-    /* WCAG AA: 6.47:1 on white; 5.30:1 on --destructive-foreground; 5.45:1 on bg-destructive/10 */
-    --destructive: #B91C1C;
-    --destructive-foreground: #FEE2E2;
+    --border: oklch(0.87 0.02 88);
+    --border-subtle: oklch(0.92 0.02 89);
+    --border-primary: oklch(0.87 0.02 88);
+    --input: oklch(0.9 0.018 90);
+    --ring: oklch(0.47 0.07 155);
 
-    /* WCAG AA: 7.13:1 on white; 5.53:1 on --success-foreground */
-    --success: #166534;
-    --success-foreground: #CBEAD7;
+    /* separator colors */
+    --separator: oklch(0.87 0.02 88);
+    --separator-foreground: oklch(0.61 0.02 85);
 
-    /* WCAG AA: 5.02:1 on white; 4.68:1 on --warning-foreground */
-    --warning: #B45309;
-    --warning-foreground: #FEF9C3;
-
-    /* WCAG AA: 5.93:1 on white; 4.86:1 on --info-foreground */
-    --info: #0369A1;
-    --info-foreground: #DBEAFE;
-
-    --border: #9CA3AF;
-    --border-subtle: #D1D5DB;
-    /* not in Figma JSON for light mode (Figma only defines `input` in dark) */
-    --input: #e8e8e8;
-    /* 3.66:1 on #FFFFFF — meets WCAG SC 1.4.11 (3:1 for graphics); use for focus rings only,
-       not as text color on white. */
-    --ring: #3B82F6;
-
-    /* not in Figma JSON */
-    --separator: rgba(0, 0, 0, 0.08);
-    --separator-foreground: #9e9e9e;
-
-    /* not in Figma JSON */
+    /* rating colors */
     --rating: #facc15;
     --rating-foreground: #ffffff;
 
-    /*
-     * The aliases below inherit the WCAG-AA-passing values of their parent tokens.
-     */
-    /* not in Figma JSON: review-verified badge — semantic alias of --success* (5.53:1) */
-    --review-verified-bg: var(--success-foreground);
-    --review-verified-text: var(--success);
+    /* charts */
+    --chart-1: oklch(0.44 0.08 155);
+    --chart-2: oklch(0.38 0.07 155);
+    --chart-3: oklch(0.32 0.06 155);
+    --chart-4: oklch(0.26 0.05 155);
+    --chart-5: oklch(0.2 0.04 155);
 
-    /* not in Figma JSON: selected filter chip — semantic alias of --info* (4.86:1) */
-    --filter-selected: var(--info-foreground);
-    --filter-selected-border: var(--info);
+    /* focus states */
+    --focus: oklch(0.61 0.02 85 / 50%);
+    --destructive-focus: oklch(0.55 0.22 25 / 40%);
+
+    /* inputs background helpers */
+    --bg-input-30: oklch(1 0 0);
+    --bg-input-50: oklch(0.985 0.012 92);
+    --bg-input-80: oklch(0.95 0.02 92);
+    --dark-input: oklch(1 0 0 / 0);
 
     /* generic opacity helpers */
     --opacity-90: 10%;
@@ -82,7 +64,42 @@
     --opacity-50: 50%;
     --opacity-30: 70%;
 
-    [role="radio"]:not([data-labeled]) {
+    /* shape tokens — cosmetic adopts Dazzle's round-everywhere default.
+       Surface rounding (cards, popovers) and badges get scoped overrides
+       in base.css. --ui-radius / --ui-shadow / --ui-border-width bridge
+       into Tailwind's rounded-ui / shadow-ui / border-ui utilities via
+       tailwind.css.
+
+       --ui-border-width: 0 — Dazzle parity. Home / PLP / PDP Cards are
+       borderless by default (Dazzle's home page doesn't even use Card
+       primitives, so visually there's no border anywhere). Pages where
+       Cards sit on white backgrounds and need delineation
+       (account / auth / checkout / order confirmation) get 1px restored
+       via a :where() block in base.css — matches fashion's pattern. */
+    --ui-radius: var(--radius-xl);
+    /* --ui-shadow matches Tailwind v4's stock shadow-sm exactly (rgb(0 0 0 / 0.1)).
+       Dazzle's Card primitive ships with shadow-sm by default and never overrides
+       --shadow-* anywhere in its theme/, so cosmetic uses the same value for
+       pixel parity on every card surface that doesn't explicitly opt out. */
+    --ui-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --ui-border-width: 0;
+
+    /* spacing tokens — vertical rhythm */
+    --ui-vertical-spacing: 2rem; /* additional top spacing for page content areas */
+
+    /* express checkout container colors (PDP) */
+    --express-checkout-bg: #f8f5ed; /* rgb(248, 245, 237) - warm cream background */
+    --express-checkout-border: #d9dbc7; /* rgb(217, 219, 199) - soft sage border */
+
+    /* Lucide `gift` icon (lucide-react@0.544) as a mask data URI. Consumed via
+       `mask: var(--icon-gift)` so the shape can be tinted with background-color
+       (see base.css bonus-products-rail). Standard lucide wrapper: 24x24
+       viewBox, fill none, stroke-width 2, round caps/joins. Stroke is a literal
+       color (not currentColor, which doesn't resolve inside a mask). The shape's
+       alpha is the mask — the stroke color itself is never painted. */
+    --icon-gift: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>');
+
+    [role='radio']:not([data-labeled]) {
         min-width: var(--swatch-pill-size);
         min-height: var(--swatch-pill-size);
     }

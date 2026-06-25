@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { type ReactElement, Suspense } from 'react';
-import { Await, redirect, type ShouldRevalidateFunctionArgs } from 'react-router';
+import { Await, redirect } from 'react-router';
 import type { Route } from './+types/_app.wishlist';
 import { loadWishlistPageData, type WishlistPageData } from '@/lib/api/wishlist.server';
 import { WishlistPageContent, WishlistSkeleton } from '@/components/wishlist/wishlist-page';
@@ -28,21 +28,16 @@ import { hasUsableShopperSession } from '@/middlewares/auth.utils';
 import { buildUrlFromContext } from '@/lib/url.server';
 import { useTranslation } from 'react-i18next';
 import { WishlistPageAnalytics } from '@/analytics/wishlist-page-analytics';
-import { resourceRoutes, routes } from '@/route-paths';
+import { routes } from '@/route-paths';
 
 /**
- * Public guest wishlist route. Registered shoppers with a usable session are
- * redirected to `/account/wishlist` so the account layout stays consistent.
- * Guests — and registered shoppers whose token is no longer usable — render
- * the wishlist content inline; the empty-state CTA prompts sign-in for
- * recovery.
- *
- * Delegates to `loadWishlistPageData` (shared with `/account/wishlist`) for
- * the actual data fetch.
+ * Cosmetic-vertical guest wishlist. Mirrors the canonical loader and error
+ * boundary; restyles only the page wrapper and the guest sign-in banner so
+ * gutters and surface tokens follow the rest of the cosmetic vertical.
  */
 export async function loader({ context }: Route.LoaderArgs): Promise<WishlistPageData> {
     const logger = getLogger(context);
-    logger.debug('Wishlist (guest): loader starting');
+    logger.debug('Wishlist (guest, cosmetic): loader starting');
 
     const session = getAuth(context);
     if (session.userType === 'registered' && hasUsableShopperSession(session)) {
@@ -52,27 +47,14 @@ export async function loader({ context }: Route.LoaderArgs): Promise<WishlistPag
     return loadWishlistPageData(context);
 }
 
-/**
- * Prevent automatic revalidation after wishlist remove actions.
- * Mirrors the registered route — disabled-item state is managed client-side
- * to avoid unnecessary refetches.
- */
-export function shouldRevalidate({ formAction, defaultShouldRevalidate }: ShouldRevalidateFunctionArgs) {
-    if (formAction === resourceRoutes.wishlistRemove) {
-        return false;
-    }
-    return defaultShouldRevalidate;
-}
+// Same data shape as canonical (delegates to `loadWishlistPageData`), so it
+// shares the canonical wishlist revalidation policy (#2060 tightened it to a
+// home-style ambient-mutation allowlist). Re-export rather than re-implement so
+// the cosmetic override doesn't drift from the policy it mirrors.
+export { shouldRevalidate } from '@/lib/routes/revalidation/wishlist';
 
-/**
- * Route-level error boundary for non-auth loader failures (5xx, network).
- * Keeps the wishlist failure scoped to this page instead of escalating to the
- * root error page. Auth errors (401/403) still degrade silently to an empty
- * wishlist via `loadWishlistPageData`. Mirrors the registered `/account/wishlist`
- * route's boundary; `retryHref` points back to this guest entry point.
- */
 export function ErrorBoundary(): ReactElement {
-    return <WishlistLoadError retryHref="/wishlist" />;
+    return <WishlistLoadError retryHref={routes.wishlist} />;
 }
 
 export default function GuestWishlist({
@@ -82,21 +64,25 @@ export default function GuestWishlist({
 }): ReactElement {
     const { t } = useTranslation('account');
     return (
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div data-testid="cosmetic-wishlist-wrapper" className="section-container py-8">
             <WishlistPageAnalytics />
             <SeoMeta title={t('meta.wishlistTitle', { defaultValue: 'Wishlist' })} />
-            <Alert className="mb-5">
+            <Alert className="mb-5 bg-muted/40 border-border">
                 <AlertDescription>
-                    {t('wishlist.guestKeepItemsBanner')}{' '}
+                    {t('wishlist.guestKeepItemsBanner', {
+                        defaultValue: 'Sign in to keep your saved products with you across devices.',
+                    })}{' '}
                     <Link
                         to={`${routes.login}?returnUrl=${routes.wishlist}`}
                         className="font-medium text-primary hover:underline">
-                        {t('wishlist.guestKeepItemsBannerCta')}
+                        {t('wishlist.guestKeepItemsBannerCta', { defaultValue: 'Sign in' })}
                     </Link>
                 </AlertDescription>
             </Alert>
             <Suspense fallback={<WishlistSkeleton />}>
-                <Await resolve={loaderData.productsByProductId}>
+                <Await
+                    resolve={loaderData.productsByProductId}
+                    errorElement={<WishlistLoadError retryHref={routes.wishlist} />}>
                     {(productsByProductId) => (
                         <WishlistPageContent items={loaderData.items} productsByProductId={productsByProductId} />
                     )}

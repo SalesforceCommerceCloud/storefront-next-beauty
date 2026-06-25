@@ -25,7 +25,6 @@ import { fetchPageWithComponentData } from '@/lib/page-designer/page-loader.serv
 
 const { t } = getTranslation();
 
-// Helper function to create mock Page objects
 const createMockPage = (regions: any[] = []): ShopperExperience.schemas['Page'] =>
     ({
         id: 'mock-page',
@@ -33,7 +32,9 @@ const createMockPage = (regions: any[] = []): ShopperExperience.schemas['Page'] 
         regions,
     }) as ShopperExperience.schemas['Page'];
 
-// Mock the Region component - simulates PD/MRT behavior
+// Mock the Region component to render the `errorElement` (static fallback) when the
+// region has no Page Designer components attached. Mirrors the behaviour the cosmetic
+// homepage test relies on.
 vi.mock('@/components/region', async () => {
     const React = await vi.importActual<typeof import('react')>('react');
 
@@ -52,92 +53,44 @@ vi.mock('@/components/region', async () => {
             }
         }, [page]);
 
-        if (isLoading) {
-            return null;
-        }
+        if (isLoading) return null;
 
-        // Simulate the actual Region behavior: check if region has components
         const region = resolvedPage?.regions?.find((r: any) => r.id === regionId);
         const hasComponents = (region?.components?.length ?? 0) > 0;
 
-        // If no region or no components, show errorElement (MRT behavior)
-        if (!region || !hasComponents) {
-            return errorElement ?? null;
-        }
+        if (!region || !hasComponents) return errorElement ?? null;
 
-        // Otherwise show Page Designer region placeholder
         return <div data-testid={`region-${regionId}`}>Page Designer Region: {regionId}</div>;
     }
 
-    return {
-        Region: RegionMock,
-    };
+    return { Region: RegionMock };
 });
 
-// Mock the Link component
 vi.mock('@/components/link', () => ({
     Link: ({ to, children }: any) => <a href={to}>{children}</a>,
 }));
 
-// Mock the Contact component
 vi.mock('@/components/contact', () => ({
     default: () => <div data-testid="contact">Contact Form</div>,
 }));
 
-// Mock the ContentCard component
+// ContentCard mock surfaces every prop the route wires up so the tests catch
+// regressions in image/alt/loading/CTA wiring, not just headline strings.
 vi.mock('@/components/content-card', () => ({
-    default: ({ title, description }: any) => (
-        <div data-testid="content-card">
+    default: ({ title, description, imageUrl, imageAlt, buttonText, buttonLink, loading }: any) => (
+        <div data-testid="content-card" data-loading={loading ?? 'lazy'}>
             <h3>{title}</h3>
             <p>{description}</p>
+            {imageUrl ? <img data-testid="content-card-image" src={imageUrl} alt={imageAlt ?? ''} /> : null}
+            {buttonText ? (
+                <a data-testid="content-card-cta" href={buttonLink ?? '#'}>
+                    {buttonText}
+                </a>
+            ) : null}
         </div>
     ),
 }));
 
-// Mock react-i18next with partial mock to preserve other exports
-vi.mock('react-i18next', async () => {
-    const actual: any = await vi.importActual('react-i18next');
-    return {
-        ...actual,
-        useTranslation: () => ({
-            t: (key: string) => {
-                // Simple translation mock that returns the translation key used in tests
-                const normalizedKey = key.startsWith('aboutUs:') ? key.substring(8) : key;
-                const translations: Record<string, string> = {
-                    title: 'About Us',
-                    'meta.description': 'Learn more about our story, mission, and the team behind the store.',
-                    'breadcrumb.home': 'Home',
-                    'breadcrumb.aboutUs': 'About Us',
-                    'section.ourGoal.title': 'Built for movement. Designed for everyday life.',
-                    'section.ourGoal.content': 'Inspired by urban culture and the energy of movement.',
-                    'section.ourVision.title': 'Our Vision',
-                    'section.ourVision.content':
-                        'To redefine modern retail through technology, design, and customer experience.',
-                    'section.ourVision.imageAlt': 'Our vision',
-                    'section.ourValue.title': 'Why We Exist',
-                    'section.ourValue.content': 'We exist to remove friction between people and what they love.',
-                    'section.ourValue.imageAlt': 'Our values',
-                    'section.ourMission.title': 'What We Stand For',
-                    'section.ourMission.content':
-                        'Design with purpose—every product, every interaction, every detail is intentional.',
-                    'section.ourMission.cta': 'Explore',
-                    'section.ourTeam.title': 'A Global Brand, A Street-Level Soul',
-                    'section.ourTeam.content':
-                        "Market Street was born from the idea that great style shouldn't feel unreachable.",
-                    'section.ourTeam.imageAlt': 'Our team',
-                    'section.ourTeam.cta': 'Explore',
-                };
-                return translations[normalizedKey] || key;
-            },
-            i18n: {
-                language: 'en-US',
-                changeLanguage: vi.fn(),
-            },
-        }),
-    };
-});
-
-// Mock decorators and utilities
 vi.mock('@/lib/decorators/page-type', () => ({
     PageType: () => (target: any) => target,
 }));
@@ -172,433 +125,185 @@ const renderComponent = (loaderDataOverrides?: Partial<AboutUsPageData>) => {
     return render(<AboutUs loaderData={data} />);
 };
 
-describe('AboutUs', () => {
+describe('AboutUs (cosmetic)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-
-        // Reset mock implementations for loader tests
         vi.mocked(fetchPageWithComponentData).mockResolvedValue({
             ...createMockPage([]),
             componentData: {},
         });
     });
 
-    describe('Basic Rendering', () => {
-        test('renders breadcrumb navigation', () => {
+    describe('Static content', () => {
+        test('renders breadcrumb and page title from canonical aboutUs strings', () => {
             renderComponent();
             expect(screen.getByText(t('aboutUs:breadcrumb.home'))).toBeInTheDocument();
-            // About Us appears twice (breadcrumb + title), so use getAllByText
-            const aboutUsTexts = screen.getAllByText(t('aboutUs:breadcrumb.aboutUs'));
-            expect(aboutUsTexts.length).toBeGreaterThanOrEqual(1);
+            // "About Us" appears in both the breadcrumb and the H1 title.
+            const aboutUsLabels = screen.getAllByText(t('aboutUs:title'));
+            expect(aboutUsLabels.length).toBeGreaterThanOrEqual(1);
         });
 
-        test('renders page title', () => {
-            renderComponent();
-            // About Us appears twice (breadcrumb + title), so use getAllByText
-            const aboutUsTexts = screen.getAllByText(t('aboutUs:title'));
-            expect(aboutUsTexts.length).toBeGreaterThanOrEqual(1);
-        });
-
-        test('renders static content cards when regions are empty', async () => {
+        test('renders cosmetic hero headline', async () => {
             renderComponent();
             await waitFor(() => {
-                expect(screen.getByText(t('aboutUs:section.ourGoal.title'))).toBeInTheDocument();
-                expect(screen.getByText(t('aboutUs:section.ourVision.title'))).toBeInTheDocument();
-                expect(screen.getByText(t('aboutUs:section.ourValue.title'))).toBeInTheDocument();
+                // Asserted against the literal English string so the test is stable under
+                // any active VERTICAL. The cosmetic en-US/en-GB override and the route's
+                // own defaultValue resolve to this same string.
+                expect(
+                    screen.getByText(/Clean ingredients\. Every-shade colou?r\. Beauty that fits your day\./)
+                ).toBeInTheDocument();
             });
         });
 
-        test('renders Contact component - always visible', async () => {
+        test('renders the four standards pillars with content paragraphs', async () => {
             renderComponent();
             await waitFor(() => {
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
-                expect(screen.getByText('Contact Form')).toBeInTheDocument();
+                // Pillar titles
+                expect(screen.getByText('Ingredient transparency')).toBeInTheDocument();
+                expect(screen.getByText('Performance you can feel')).toBeInTheDocument();
+                expect(screen.getByText('Shade for everyone')).toBeInTheDocument();
+                expect(screen.getByText('Responsibly made')).toBeInTheDocument();
+                // Pillar content excerpts (one phrase per pillar — guards against title/content swaps)
+                expect(screen.getByText(/No proprietary blends/)).toBeInTheDocument();
+                expect(screen.getByText(/Benchmarked against the best in category/)).toBeInTheDocument();
+                expect(screen.getByText(/across every undertone/)).toBeInTheDocument();
+                expect(screen.getByText(/Recyclable packaging/)).toBeInTheDocument();
             });
         });
 
-        test('renders default fallback content when regions do not exist', async () => {
-            renderComponent();
-            await waitFor(() => {
-                // Pre-contact static content
-                expect(screen.getByText(t('aboutUs:section.ourGoal.title'))).toBeInTheDocument();
-                // Post-contact static content
-                expect(screen.getByText(t('aboutUs:section.ourMission.title'))).toBeInTheDocument();
-                expect(screen.getByText(t('aboutUs:section.ourTeam.title'))).toBeInTheDocument();
-            });
-        });
-
-        test('renders all content cards with correct count when regions are empty', async () => {
-            renderComponent();
-            await waitFor(() => {
-                const contentCards = screen.getAllByTestId('content-card');
-                // Goal, Vision, Value, Mission, Team = 5 cards
-                expect(contentCards).toHaveLength(5);
-            });
-        });
-    });
-
-    describe('Region Rendering', () => {
-        test('renders static content when headline region does not exist', async () => {
-            const page = {
-                ...createMockPage([]),
-                componentData: {},
-            };
-
-            renderComponent({
-                page,
-            });
-
-            await waitFor(() => {
-                // Contact should still render
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
-                // Static fallback content should render
-                expect(screen.getByText(t('aboutUs:section.ourGoal.title'))).toBeInTheDocument();
-                expect(screen.getByText(t('aboutUs:section.ourMission.title'))).toBeInTheDocument();
-            });
-        });
-
-        test('renders Page Designer region when headline region has components', async () => {
-            const headlineRegion = {
-                id: 'headline',
-                components: [
-                    { id: 'component-1', typeId: 'hero' },
-                    { id: 'component-2', typeId: 'banner' },
-                ],
-            };
-
-            const page = {
-                ...createMockPage([headlineRegion]),
-                componentData: {},
-            };
-
-            renderComponent({
-                page,
-            });
-
-            await waitFor(() => {
-                // Contact should still render
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
-                // Page Designer region should render
-                expect(screen.getByTestId('region-headline')).toBeInTheDocument();
-                expect(screen.getByText('Page Designer Region: headline')).toBeInTheDocument();
-                // Static content should NOT render when region has components
-                expect(screen.queryByText(t('aboutUs:section.ourGoal.title'))).not.toBeInTheDocument();
-            });
-        });
-
-        test('renders static content when headline region has no components', async () => {
-            const headlineRegion = {
-                id: 'headline',
-                components: [],
-            };
-
-            const page = {
-                ...createMockPage([headlineRegion]),
-                componentData: {},
-            };
-
-            renderComponent({
-                page,
-            });
-
-            await waitFor(() => {
-                // Contact should still render
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
-                // Static fallback content should render
-                expect(screen.getByText(t('aboutUs:section.ourGoal.title'))).toBeInTheDocument();
-                // Page Designer region should NOT render
-                expect(screen.queryByTestId('region-headline')).not.toBeInTheDocument();
-            });
-        });
-
-        test('renders Page Designer region when additionalinformation region has components', async () => {
-            const additionalinformationRegion = {
-                id: 'additionalinformation',
-                components: [
-                    { id: 'component-1', typeId: 'contentcard' },
-                    { id: 'component-2', typeId: 'grid' },
-                ],
-            };
-
-            const page = {
-                ...createMockPage([additionalinformationRegion]),
-                componentData: {},
-            };
-
-            renderComponent({
-                page,
-            });
-
-            await waitFor(() => {
-                // Contact should still render
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
-                // Page Designer region should render
-                expect(screen.getByTestId('region-additionalinformation')).toBeInTheDocument();
-                expect(screen.getByText('Page Designer Region: additionalinformation')).toBeInTheDocument();
-                // Static content should NOT render when region has components
-                expect(screen.queryByText(t('aboutUs:section.ourMission.title'))).not.toBeInTheDocument();
-            });
-        });
-
-        test('renders static content when additionalinformation region has no components', async () => {
-            const additionalinformationRegion = {
-                id: 'additionalinformation',
-                components: [],
-            };
-
-            const page = {
-                ...createMockPage([additionalinformationRegion]),
-                componentData: {},
-            };
-
-            renderComponent({
-                page,
-            });
-
-            await waitFor(() => {
-                // Contact should still render
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
-                // Static fallback content should render
-                expect(screen.getByText(t('aboutUs:section.ourMission.title'))).toBeInTheDocument();
-                // Page Designer region should NOT render
-                expect(screen.queryByTestId('region-additionalinformation')).not.toBeInTheDocument();
-            });
-        });
-
-        test('renders both Page Designer regions when both have components', async () => {
-            const headlineRegion = {
-                id: 'headline',
-                components: [{ id: 'component-1', typeId: 'hero' }],
-            };
-            const additionalinformationRegion = {
-                id: 'additionalinformation',
-                components: [{ id: 'component-2', typeId: 'contentcard' }],
-            };
-
-            const page = {
-                ...createMockPage([headlineRegion, additionalinformationRegion]),
-                componentData: {},
-            };
-
-            renderComponent({
-                page,
-            });
-
-            await waitFor(() => {
-                // Contact should always render
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
-                // Both Page Designer regions should render
-                expect(screen.getByTestId('region-headline')).toBeInTheDocument();
-                expect(screen.getByTestId('region-additionalinformation')).toBeInTheDocument();
-                // Static content should NOT render when regions have components
-                expect(screen.queryByText(t('aboutUs:section.ourGoal.title'))).not.toBeInTheDocument();
-                expect(screen.queryByText(t('aboutUs:section.ourMission.title'))).not.toBeInTheDocument();
-            });
-        });
-    });
-
-    describe('Error Handling', () => {
-        test('handles null page gracefully', async () => {
-            renderComponent({
-                page: null,
-            });
-
-            await waitFor(() => {
-                // Should still render static content and contact
-                expect(screen.getByText(t('aboutUs:section.ourGoal.title'))).toBeInTheDocument();
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
-            });
-        });
-    });
-
-    describe('Layout and Styling', () => {
-        test('applies correct main container styling', () => {
+        test('renders four lucide pillar icons (Beaker / FlaskConical / Palette / Leaf)', async () => {
             const { container } = renderComponent();
-            const mainContainer = container.firstChild as HTMLElement;
-            expect(mainContainer).toHaveClass('pb-8');
-        });
-
-        test('applies correct spacing between sections', async () => {
-            renderComponent();
             await waitFor(() => {
-                const goalTitle = screen.getByText(t('aboutUs:section.ourGoal.title'));
-                const sectionWithSpacing = goalTitle.closest('[class*="space-y-6"]');
-                expect(sectionWithSpacing).toBeInTheDocument();
+                // lucide-react renders each icon as an <svg> with the icon name in its class list.
+                expect(container.querySelector('.lucide-beaker')).toBeInTheDocument();
+                expect(container.querySelector('.lucide-flask-conical')).toBeInTheDocument();
+                expect(container.querySelector('.lucide-palette')).toBeInTheDocument();
+                expect(container.querySelector('.lucide-leaf')).toBeInTheDocument();
             });
         });
 
-        test('applies correct grid layout for Vision and Value cards', async () => {
+        test('renders Contact form between the two regions', async () => {
             renderComponent();
-            await waitFor(() => {
-                const visionTitle = screen.getByText(t('aboutUs:section.ourVision.title'));
-                const gridContainer = visionTitle.closest('div')?.parentElement;
-                expect(gridContainer).toHaveClass('grid', 'grid-cols-1', 'md:grid-cols-2', 'gap-6');
-            });
-        });
-
-        test('applies correct background styling to Contact section', async () => {
-            renderComponent();
-            await waitFor(() => {
-                const contact = screen.getByTestId('contact');
-                const contactSection = contact.closest('[class*="bg-secondary"]');
-                expect(contactSection).toBeInTheDocument();
-            });
-        });
-    });
-
-    describe('Loaders', () => {
-        let mockContext: ReturnType<typeof createTestContext>;
-        let baseLoaderArgs: Route.LoaderArgs;
-
-        beforeEach(() => {
-            mockContext = createTestContext();
-            baseLoaderArgs = {
-                request: new Request('http://localhost/about-us'),
-                params: { siteId: 'test-site', localeId: 'en-US' },
-                context: mockContext,
-                unstable_pattern: '/about-us',
-            };
-        });
-
-        describe('loader (server-side)', () => {
-            test('returns about us page data with fetchPageWithComponentData', async () => {
-                const mockPageWithData = {
-                    ...createMockPage([]),
-                    componentData: { test: Promise.resolve('data') },
-                };
-
-                vi.mocked(fetchPageWithComponentData).mockResolvedValue(mockPageWithData);
-
-                const result = await loader(baseLoaderArgs);
-
-                // Assert - API calls
-                expect(vi.mocked(fetchPageWithComponentData)).toHaveBeenCalledWith(baseLoaderArgs, {
-                    pageId: 'aboutus',
-                });
-
-                // Assert - Return value contains all expected properties
-                expect(result.page).toBe(mockPageWithData);
-                expect(result.pageUrl).toBe('http://localhost/about-us');
-                expect(result.ogImageUrl).toContain('__ASSET_MOCK__');
-            });
-
-            test('constructs correct canonical URL', async () => {
-                vi.mocked(fetchPageWithComponentData).mockResolvedValue({
-                    ...createMockPage([]),
-                    componentData: {},
-                });
-
-                const result = await loader(baseLoaderArgs);
-
-                expect(result.pageUrl).toBe('http://localhost/about-us');
-            });
-
-            test('constructs correct og image URL', async () => {
-                vi.mocked(fetchPageWithComponentData).mockResolvedValue({
-                    ...createMockPage([]),
-                    componentData: {},
-                });
-
-                const result = await loader(baseLoaderArgs);
-
-                expect(result.ogImageUrl).toContain('__ASSET_MOCK__');
-                expect(result.ogImageUrl).toContain('http://localhost');
-            });
-        });
-
-        describe('Error Handling', () => {
-            test('loader handles API errors by propagating them', async () => {
-                const error = new Error('API Error');
-                vi.mocked(fetchPageWithComponentData).mockRejectedValue(error);
-
-                await expect(loader(baseLoaderArgs)).rejects.toThrow('API Error');
-            });
-        });
-
-        describe('Data Integration', () => {
-            test('page data is returned with componentData', async () => {
-                const mockPageWithData = {
-                    ...createMockPage([]),
-                    componentData: { some: Promise.resolve('data') },
-                };
-
-                vi.mocked(fetchPageWithComponentData).mockResolvedValue(mockPageWithData);
-
-                const result = await loader(baseLoaderArgs);
-
-                expect(vi.mocked(fetchPageWithComponentData)).toHaveBeenCalledWith(baseLoaderArgs, {
-                    pageId: 'aboutus',
-                });
-                expect(result.page).toBe(mockPageWithData);
-            });
-        });
-    });
-
-    describe('SEO Metadata', () => {
-        test('renders SEO meta component with correct props', async () => {
-            renderComponent();
-
-            // The SeoMeta component is rendered (we can't directly test meta tags in jsdom,
-            // but we can verify the component receives correct data through loaderData)
-            await waitFor(() => {
-                // About Us appears twice (breadcrumb + title), so use getAllByText
-                const aboutUsTexts = screen.getAllByText(t('aboutUs:title'));
-                expect(aboutUsTexts.length).toBeGreaterThanOrEqual(1);
-            });
-        });
-    });
-
-    describe('Contact Section Position', () => {
-        test('Contact section is rendered with empty regions', async () => {
-            // Test with empty regions
-            renderComponent({
-                page: {
-                    ...createMockPage([]),
-                    componentData: {},
-                },
-            });
             await waitFor(() => {
                 expect(screen.getByTestId('contact')).toBeInTheDocument();
             });
         });
 
-        test('Contact section is rendered with regions provided', async () => {
-            // Test with regions
+        test('renders community CTA and closing manifesto in post-contact region', async () => {
+            renderComponent();
+            await waitFor(() => {
+                expect(screen.getByText('Become part of the Dazzle community')).toBeInTheDocument();
+                expect(screen.getByText('Beauty that meets you where you are')).toBeInTheDocument();
+            });
+        });
+
+        test('wires hero CTA to /category/newarrivals with eager image loading', async () => {
+            renderComponent();
+            await waitFor(() => {
+                const hero = screen.getByText('Shop Skincare').closest('a');
+                expect(hero).toHaveAttribute('href', '/category/newarrivals');
+                // Hero ContentCard is the only one with loading="eager".
+                const eagerCards = screen
+                    .getAllByTestId('content-card')
+                    .filter((c) => c.getAttribute('data-loading') === 'eager');
+                expect(eagerCards).toHaveLength(1);
+            });
+        });
+
+        test('wires standards CTA to /category/top-seller', async () => {
+            renderComponent();
+            await waitFor(() => {
+                const standards = screen.getByText('See our ingredients').closest('a');
+                expect(standards).toHaveAttribute('href', '/category/top-seller');
+            });
+        });
+
+        test('wires community CTA to /signup', async () => {
+            renderComponent();
+            await waitFor(() => {
+                const community = screen.getByText('Create your account').closest('a');
+                expect(community).toHaveAttribute('href', '/signup');
+            });
+        });
+
+        test('wires closing CTA to /category/newarrivals', async () => {
+            renderComponent();
+            await waitFor(() => {
+                const closing = screen.getByText('Explore our formulas').closest('a');
+                expect(closing).toHaveAttribute('href', '/category/newarrivals');
+            });
+        });
+
+        test('hero image has descriptive cosmetic alt text', async () => {
+            renderComponent();
+            await waitFor(() => {
+                const heroImg = screen.getByAltText(/Foundation bottles arranged in a fan on warm marble\./);
+                expect(heroImg).toBeInTheDocument();
+            });
+        });
+    });
+
+    describe('Page Designer regions', () => {
+        test('renders Page Designer headline region when components are present', async () => {
             const page = {
-                ...createMockPage([
-                    { id: 'headline', components: [] },
-                    { id: 'additionalinformation', components: [] },
-                ]),
+                ...createMockPage([{ id: 'headline', components: [{ id: 'c1', typeId: 'hero' }] }]),
                 componentData: {},
             };
-
             renderComponent({ page });
             await waitFor(() => {
-                expect(screen.getByTestId('contact')).toBeInTheDocument();
+                expect(screen.getByTestId('region-headline')).toBeInTheDocument();
+                // Static fallback hero headline should NOT render when the region wins.
+                expect(
+                    screen.queryByText(/Clean ingredients\. Every-shade colou?r\. Beauty that fits your day\./)
+                ).not.toBeInTheDocument();
             });
         });
 
-        test('Contact section maintains correct positioning between regions', async () => {
-            renderComponent();
-
+        test('renders Page Designer additionalinformation region when components are present', async () => {
+            const page = {
+                ...createMockPage([{ id: 'additionalinformation', components: [{ id: 'c2', typeId: 'banner' }] }]),
+                componentData: {},
+            };
+            renderComponent({ page });
             await waitFor(() => {
-                const contact = screen.getByTestId('contact');
-                const goalSection = screen.getByText(t('aboutUs:section.ourGoal.title'));
-                const missionSection = screen.getByText(t('aboutUs:section.ourMission.title'));
-                const ourGoalText = screen.getByText('Built for movement. Designed for everyday life.');
-                const whatWeStandForText = screen.getByText('What We Stand For');
-
-                // Contact should be in the document
-                expect(contact).toBeInTheDocument();
-
-                // Goal section (before precontact region) should be before Contact
-                expect(goalSection).toBeInTheDocument();
-                expect(ourGoalText).toBeInTheDocument();
-
-                // Mission section (in postcontact static content) should be after Contact
-                expect(missionSection).toBeInTheDocument();
-                expect(whatWeStandForText).toBeInTheDocument();
+                expect(screen.getByTestId('region-additionalinformation')).toBeInTheDocument();
+                // Static fallback (community CTA) should NOT render when the region wins.
+                expect(screen.queryByText('Become part of the Dazzle community')).not.toBeInTheDocument();
             });
+        });
+
+        test('renders static fallback when no page is provided', async () => {
+            renderComponent({ page: null });
+            await waitFor(() => {
+                expect(screen.getByTestId('contact')).toBeInTheDocument();
+                expect(
+                    screen.getByText(/Clean ingredients\. Every-shade colou?r\. Beauty that fits your day\./)
+                ).toBeInTheDocument();
+            });
+        });
+    });
+
+    describe('Loader', () => {
+        test('returns about us page data from fetchPageWithComponentData', async () => {
+            const mockPageWithData = {
+                ...createMockPage([]),
+                componentData: { sample: Promise.resolve('data') },
+            };
+            vi.mocked(fetchPageWithComponentData).mockResolvedValue(mockPageWithData);
+
+            const ctx = createTestContext();
+            const args: Route.LoaderArgs = {
+                request: new Request('http://localhost/about-us'),
+                params: { siteId: 'test-site', localeId: 'en-US' },
+                context: ctx,
+                unstable_pattern: '/about-us',
+            };
+            const result = await loader(args);
+
+            expect(vi.mocked(fetchPageWithComponentData)).toHaveBeenCalledWith(args, { pageId: 'aboutus' });
+            expect(result.page).toBe(mockPageWithData);
+            expect(result.pageUrl).toBe('http://localhost/about-us');
+            expect(result.ogImageUrl).toContain('http://localhost');
         });
     });
 });

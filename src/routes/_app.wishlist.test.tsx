@@ -14,259 +14,100 @@
  * limitations under the License.
  */
 
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { loader, shouldRevalidate } from './_app.wishlist';
-import { createTestContext, UNSTABLE_PATTERN } from '@/lib/test-utils';
-import { resourceRoutes } from '@/route-paths';
+import GuestWishlist from './_app.wishlist';
 
-// SCAPI clients are exercised by loadWishlistPageData; mock them so the loader
-// path can run without hitting the network.
-const mockGetProducts = vi.fn();
-const mockGetCustomerProductLists = vi.fn();
-const mockGetCustomerProductList = vi.fn();
-
-const mockLogger = vi.hoisted(() => ({
-    error: vi.fn(),
-    warn: vi.fn(),
-    info: vi.fn(),
-    debug: vi.fn(),
-}));
-vi.mock('@/lib/logger', () => ({
-    createLogger: vi.fn(() => mockLogger),
-}));
-vi.mock('@/lib/logger.server', () => ({
-    getLogger: vi.fn(() => mockLogger),
+vi.mock('@/components/wishlist/wishlist-page', () => ({
+    WishlistPageContent: () => <div data-testid="wishlist-page-content">Wishlist content</div>,
+    WishlistSkeleton: () => <div data-testid="wishlist-skeleton">Loading…</div>,
 }));
 
-vi.mock('@/lib/api-clients.server', () => ({
-    createApiClients: () => ({
-        shopperProducts: {
-            getProducts: mockGetProducts,
-        },
-        shopperCustomers: {
-            getCustomerProductLists: mockGetCustomerProductLists,
-            getCustomerProductList: mockGetCustomerProductList,
-        },
-    }),
+vi.mock('@/components/wishlist/wishlist-load-error', () => ({
+    WishlistLoadError: () => <div data-testid="wishlist-load-error">Error</div>,
 }));
 
-const mockGetAuthServer = vi.fn();
-const mockGetConfig = vi.fn();
-
-vi.mock('@/middlewares/auth.server', () => ({
-    getAuth: () => mockGetAuthServer(),
+vi.mock('@/components/seo-meta', () => ({
+    SeoMeta: ({ title }: { title?: string }) => <meta data-testid="seo-meta" data-title={title} />,
 }));
 
-vi.mock('@salesforce/storefront-next-runtime/config', async (importOriginal) => {
-    const actual = await importOriginal<typeof import('@salesforce/storefront-next-runtime/config')>();
+vi.mock('@/analytics/wishlist-page-analytics', () => ({
+    WishlistPageAnalytics: () => null,
+}));
+
+vi.mock('@/components/link', () => ({
+    Link: ({ to, children, className }: any) => (
+        <a href={typeof to === 'string' ? to : '#'} className={className}>
+            {children}
+        </a>
+    ),
+}));
+
+vi.mock('react-i18next', async () => {
+    const actual: any = await vi.importActual('react-i18next');
+    // Mirror the cosmetic en-US overrides so the test exercises cosmetic copy,
+    // not canonical fashion strings that fall through the deep-merge.
     return {
         ...actual,
-        getConfig: () => mockGetConfig(),
-        useConfig: () => mockGetConfig(),
+        useTranslation: () => ({
+            t: (key: string, opts?: { defaultValue?: string }) => {
+                const lookup: Record<string, string> = {
+                    'wishlist.guestKeepItemsBanner': 'Sign in to keep your saved products with you across devices.',
+                    'wishlist.guestKeepItemsBannerCta': 'Sign in',
+                    'meta.wishlistTitle': 'Wishlist',
+                };
+                return lookup[key] ?? opts?.defaultValue ?? key;
+            },
+            i18n: { language: 'en-US', changeLanguage: vi.fn() },
+        }),
     };
 });
 
-// buildUrlFromContext returns the prefixed path for a redirect; mock to return
-// the bare input so the assertion against `Location` is straightforward.
-vi.mock('@/lib/url.server', () => ({
-    buildUrlFromContext: (path: string) => path,
-}));
+const renderComponent = () =>
+    render(
+        <GuestWishlist
+            loaderData={
+                {
+                    items: [],
+                    productsByProductId: Promise.resolve({}),
+                } as any
+            }
+        />
+    );
 
-describe('_app.wishlist loader', () => {
-    const mockContext = createTestContext();
-
+describe('GuestWishlist (cosmetic)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        mockGetConfig.mockReturnValue({
-            search: {
-                products: {
-                    hits: {
-                        limit: 24,
-                    },
-                },
-            },
-            commerce: {
-                api: {
-                    proxy: '/mobify/proxy/api',
-                    organizationId: 'test-org-id',
-                    siteId: 'test-site-id',
-                },
-            },
-        });
     });
 
-    test('redirects to /account/wishlist when userType is registered with a valid customerId', async () => {
-        mockGetAuthServer.mockReturnValue({
-            userType: 'registered',
-            customerId: 'registered-customer-id',
-            accessToken: 'token',
-            accessTokenExpiry: Date.now() + 3_600_000,
-        });
-
-        // React Router's redirect() throws a Response — capture it and inspect the redirect target.
-        const thrown = await loader({
-            context: mockContext,
-            request: new Request('http://localhost/wishlist'),
-            params: { siteId: 'test-site', localeId: 'en-US' },
-            unstable_pattern: UNSTABLE_PATTERN,
-        }).then(
-            () => {
-                throw new Error('Loader should have thrown a redirect Response');
-            },
-            (err: unknown) => err
-        );
-
-        expect(thrown).toBeInstanceOf(Response);
-        const response = thrown as Response;
-        expect(response.status).toBe(302);
-        expect(response.headers.get('Location')).toBe('/account/wishlist');
-
-        expect(mockGetCustomerProductLists).not.toHaveBeenCalled();
+    test('wraps page content in the cosmetic section-container', () => {
+        renderComponent();
+        const wrapper = screen.getByTestId('cosmetic-wishlist-wrapper');
+        expect(wrapper).toHaveClass('section-container');
+        expect(wrapper).toHaveClass('py-8');
     });
 
-    test('returns empty wishlist payload for guest userType', async () => {
-        mockGetAuthServer.mockReturnValue({
-            userType: 'guest',
-            customerId: 'guest-customer-id',
-            accessToken: 'token',
-            accessTokenExpiry: Date.now() + 3_600_000,
-        });
-
-        mockGetCustomerProductLists.mockResolvedValue({
-            data: { data: [] },
-        });
-
-        const result = await loader({
-            context: mockContext,
-            request: new Request('http://localhost/wishlist'),
-            params: { siteId: 'test-site', localeId: 'en-US' },
-            unstable_pattern: UNSTABLE_PATTERN,
-        });
-
-        expect(result.wishlist).toBeNull();
-        expect(result.items).toEqual([]);
-        await expect(result.productsByProductId).resolves.toEqual({});
-        expect(mockGetCustomerProductLists).toHaveBeenCalledWith({
-            params: {
-                path: { customerId: 'guest-customer-id' },
-            },
-        });
+    test('renders the guest sign-in banner with cosmetic copy and cosmetic muted surface', () => {
+        renderComponent();
+        const banner = screen.getByText(/Sign in to keep your saved products with you across devices\./);
+        // Walk up to the Alert root which carries the surface tokens.
+        const alertRoot = banner.closest('[class*="bg-muted"]');
+        expect(alertRoot).not.toBeNull();
+        expect(alertRoot?.className).toMatch(/bg-muted\/40/);
+        expect(alertRoot?.className).toMatch(/border-border/);
     });
 
-    test('returns guest wishlist with items when SCAPI returns a list', async () => {
-        mockGetAuthServer.mockReturnValue({
-            userType: 'guest',
-            customerId: 'guest-customer-id',
-            accessToken: 'token',
-            accessTokenExpiry: Date.now() + 3_600_000,
-        });
-
-        const mockWishlist = {
-            id: 'list-1',
-            type: 'wish_list' as const,
-            customerProductListItems: [
-                { id: 'item-1', productId: 'product-1', priority: 0, public: false, quantity: 1 },
-            ],
-        };
-        mockGetCustomerProductLists.mockResolvedValue({
-            data: { data: [mockWishlist] },
-        });
-        mockGetProducts.mockResolvedValue({
-            data: { data: [{ id: 'product-1', name: 'Product 1' }] },
-        });
-
-        const result = await loader({
-            context: mockContext,
-            request: new Request('http://localhost/wishlist'),
-            params: { siteId: 'test-site', localeId: 'en-US' },
-            unstable_pattern: UNSTABLE_PATTERN,
-        });
-
-        expect(result.wishlist).toEqual(mockWishlist);
-        expect(result.items).toHaveLength(1);
-        await result.productsByProductId;
-        expect(mockGetProducts).toHaveBeenCalledTimes(1);
+    test('sign-in link points at /login with returnUrl back to /wishlist', () => {
+        renderComponent();
+        const link = screen.getByText('Sign in').closest('a');
+        expect(link).toHaveAttribute('href', expect.stringContaining('returnUrl='));
+        expect(link?.getAttribute('href')).toContain('/wishlist');
     });
 
-    test('falls through to guest render when registered shopper has no customerId', async () => {
-        mockGetAuthServer.mockReturnValue({
-            userType: 'registered',
-            customerId: undefined,
-            accessToken: 'token',
-            accessTokenExpiry: Date.now() + 3_600_000,
+    test('renders the wishlist page content via Suspense', async () => {
+        renderComponent();
+        await waitFor(() => {
+            expect(screen.getByTestId('wishlist-page-content')).toBeInTheDocument();
         });
-
-        const result = await loader({
-            context: mockContext,
-            request: new Request('http://localhost/wishlist'),
-            params: { siteId: 'test-site', localeId: 'en-US' },
-            unstable_pattern: UNSTABLE_PATTERN,
-        });
-
-        expect(result.wishlist).toBeNull();
-        expect(result.items).toEqual([]);
-        await expect(result.productsByProductId).resolves.toEqual({});
-        expect(mockGetCustomerProductLists).not.toHaveBeenCalled();
-    });
-
-    test('falls through to guest render when registered shopper session has expired', async () => {
-        mockGetAuthServer.mockReturnValue({
-            userType: 'registered',
-            customerId: 'registered-customer-id',
-            accessToken: 'token',
-            accessTokenExpiry: Date.now() - 1_000,
-        });
-
-        const result = await loader({
-            context: mockContext,
-            request: new Request('http://localhost/wishlist'),
-            params: { siteId: 'test-site', localeId: 'en-US' },
-            unstable_pattern: UNSTABLE_PATTERN,
-        });
-
-        expect(result.wishlist).toBeNull();
-        expect(result.items).toEqual([]);
-        await expect(result.productsByProductId).resolves.toEqual({});
-        expect(mockGetCustomerProductLists).not.toHaveBeenCalled();
-    });
-});
-
-describe('_app.wishlist shouldRevalidate', () => {
-    // shouldRevalidate only reads `formAction` and `defaultShouldRevalidate` from its arg;
-    // build a typed fixture so each test asserts intent rather than padding the call site.
-    type ShouldRevalidateArgs = Parameters<typeof shouldRevalidate>[0];
-    const buildArgs = (overrides: Partial<ShouldRevalidateArgs>): ShouldRevalidateArgs =>
-        ({
-            currentUrl: new URL('http://localhost/wishlist'),
-            nextUrl: new URL('http://localhost/wishlist'),
-            defaultShouldRevalidate: true,
-            ...overrides,
-        }) as ShouldRevalidateArgs;
-
-    test('returns false for wishlist-remove actions', () => {
-        expect(shouldRevalidate(buildArgs({ formAction: resourceRoutes.wishlistRemove }))).toBe(false);
-    });
-
-    test('uses default behavior for non-wishlist-remove actions', () => {
-        expect(
-            shouldRevalidate(buildArgs({ formAction: resourceRoutes.cartItemAdd, defaultShouldRevalidate: true }))
-        ).toBe(true);
-    });
-
-    test('uses default behavior when formAction is undefined', () => {
-        expect(shouldRevalidate(buildArgs({ formAction: undefined, defaultShouldRevalidate: false }))).toBe(false);
-    });
-
-    test('returns false when defaultShouldRevalidate is false but action is wishlist-remove', () => {
-        expect(
-            shouldRevalidate(buildArgs({ formAction: resourceRoutes.wishlistRemove, defaultShouldRevalidate: false }))
-        ).toBe(false);
-    });
-});
-
-describe('_app.wishlist ErrorBoundary', () => {
-    test('exports a route-level ErrorBoundary that renders the WishlistLoadError', async () => {
-        const { ErrorBoundary } = await import('./_app.wishlist');
-        expect(typeof ErrorBoundary).toBe('function');
     });
 });

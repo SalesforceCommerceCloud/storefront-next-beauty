@@ -31,7 +31,7 @@ import CategoryBreadcrumbs from '@/components/category-breadcrumbs';
 import { CategoryBreadcrumbsSkeleton } from '@/components/category-breadcrumbs/skeleton';
 import { isProductSet, isProductBundle } from '@/lib/product/product-utils';
 import ProductRecommendations from '@/components/product-recommendations';
-import { EINSTEIN_RECOMMENDERS } from '@/lib/adapters/engagement/einstein-recommenders';
+import { EINSTEIN_RECOMMENDERS } from '@/lib/product/einstein-recommenders';
 import { useTranslation } from 'react-i18next';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { Region } from '@/components/region';
@@ -46,6 +46,8 @@ import { getPublicOrigin } from '@/utils/schema-url';
 import { buildCanonicalUrl } from '@/utils/canonical-url';
 import { getLogger } from '@/lib/logger.server';
 import { UITarget } from '@/targets/ui-target';
+import ProductBottomBar from '../components/product-bottom-bar';
+import ProductViewProvider from '@/providers/product-view';
 // @sfdc-extension-block-start SFDC_EXT_BOPIS
 import { selectedStoreContext } from '@/extensions/store-locator/middlewares/selected-store.server';
 import PickupProvider from '@/extensions/bopis/context/pickup-context';
@@ -111,6 +113,19 @@ import { ShippingDeliveryProvider } from '@/extensions/shipping-delivery/context
     },
 ])
 export class ProductPageMetadata {}
+
+/**
+ * Cosmetic vertical UI configuration: adds extra top padding to the main content area.
+ * The PageConfigManager component (rendered in the cosmetic header) reads this config
+ * and applies data-has-top-padding="true" to the main element.
+ */
+export const handle = {
+    ui: {
+        main: {
+            hasTopPadding: true,
+        },
+    },
+};
 
 export type ProductPageData = {
     product: ShopperProducts.schemas['Product'];
@@ -213,21 +228,33 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
         throw new Response('Product not found', { status: 404 });
     }
 
+    // Fetch the master product once and share it across the category lookup and the
+    // Page Designer page lookup below — variant PDPs derive their primary category from
+    // the master, and both consumers need it. Hoisted so we don't fetch it twice.
+    const masterProductPromise = (() => {
+        if (product.master?.masterId) {
+            return fetchProductById(context, product.master.masterId, {
+                ...(currency ? { currency } : {}),
+            });
+        }
+
+        return null;
+    })();
+
     // Build the deferred category promise. Category is optional context for the
     // breadcrumbs — failures degrade silently via the route-level <Await errorElement={null}>.
     const categoryPromise: Promise<ShopperProducts.schemas['Category'] | undefined> = (async () => {
         if (product.primaryCategoryId) {
             return fetchCategory(context, product.primaryCategoryId, 1);
         }
+
         // For variant products, try to get the master product's category.
-        if (product.master?.masterId) {
-            const masterProduct = await fetchProductById(context, product.master.masterId, {
-                ...(currency ? { currency } : {}),
-            });
-            if (masterProduct?.primaryCategoryId) {
-                return fetchCategory(context, masterProduct.primaryCategoryId, 1);
-            }
+        const masterProduct = await masterProductPromise;
+
+        if (masterProduct?.primaryCategoryId) {
+            return fetchCategory(context, masterProduct.primaryCategoryId, 1);
         }
+
         return undefined;
     })();
 
@@ -255,6 +282,20 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
         }
     );
 
+    // Page Designer PDP lookup. Thread the product's primary category (falling back to
+    // the master product's for variants) into the page fetch so category-scoped PD
+    // content resolves correctly — matches canonical's loader and feeds categoryId into
+    // the SCAPI getPages query (see src/lib/api/page.server.ts).
+    const pagePromise = (async () => {
+        const primaryCategoryId = product.primaryCategoryId ?? (await masterProductPromise)?.primaryCategoryId;
+
+        return fetchPageWithComponentData(args, {
+            aspectType: 'pdp',
+            productId: productLookupId,
+            ...(primaryCategoryId ? { categoryId: primaryCategoryId } : {}),
+        });
+    })();
+
     // @sfdc-extension-block-start SFDC_EXT_RATINGS_REVIEWS
     // Await the summary started earlier (ran in parallel with fetchProductById).
     const reviewsSummary = await reviewsSummaryPromise;
@@ -269,13 +310,7 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
          * Fetch page data from Page Designer API with nested componentData promises.
          * Handle errors gracefully - return page with empty componentData if fetch failed.
          */
-        page: fetchPageWithComponentData(args, {
-            aspectType: 'pdp',
-            productId: productLookupId,
-            // Lets the manifest resolver fall back to a category-level PDP
-            // assignment when no page is assigned to this product directly.
-            ...(product.primaryCategoryId ? { categoryId: product.primaryCategoryId } : {}),
-        }),
+        page: pagePromise,
         pageKey: productId,
         pageUrl,
         productSchema: productSchemaPromise,
@@ -465,20 +500,24 @@ function ProductDetailView({ loaderData }: { loaderData: ProductPageData }) {
                 </Suspense>
 
                 {/* Main Product Content — product is resolved synchronously by the loader */}
-                <ProductContent
-                    product={loaderData.product}
-                    url={loaderData.pageUrl}
-                    // @sfdc-extension-block-start SFDC_EXT_RATINGS_REVIEWS
-                    reviewsSummary={loaderData.reviewsSummary}
-                    reviewsList={loaderData.reviewsList}
-                    writeReviewForm={loaderData.writeReviewForm}
-                    // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
-                    // @sfdc-extension-block-start SFDC_EXT_PRODUCT_CONTENT
-                    returnsWarrantyPromise={loaderData.returnsWarranty}
-                    faqQuestionsPromise={loaderData.faqQuestions}
-                    pdpCollapsiblesPromise={loaderData.pdpCollapsibles}
-                    // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
-                />
+                <ProductViewProvider product={loaderData.product} mode="add">
+                    <ProductContent
+                        product={loaderData.product}
+                        url={loaderData.pageUrl}
+                        // @sfdc-extension-block-start SFDC_EXT_RATINGS_REVIEWS
+                        reviewsSummary={loaderData.reviewsSummary}
+                        reviewsList={loaderData.reviewsList}
+                        writeReviewForm={loaderData.writeReviewForm}
+                        // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
+                        // @sfdc-extension-block-start SFDC_EXT_PRODUCT_CONTENT
+                        returnsWarrantyPromise={loaderData.returnsWarranty}
+                        faqQuestionsPromise={loaderData.faqQuestions}
+                        pdpCollapsiblesPromise={loaderData.pdpCollapsibles}
+                        // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
+                    />
+                    {/* Product Bottom Bar - Shown when main button scrolls out of view */}
+                    <ProductBottomBar product={loaderData.product} />
+                </ProductViewProvider>
 
                 {/* Engagement Content Region - Shows page content or recommendations */}
                 <Region

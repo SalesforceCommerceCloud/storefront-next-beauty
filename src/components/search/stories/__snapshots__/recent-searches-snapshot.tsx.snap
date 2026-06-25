@@ -14,7 +14,7 @@ exports[`RecentSearches stories snapshot > FullyFeatured story renders and match
     <div
       class="text-sm font-semibold text-muted-foreground tracking-wide mb-2"
     >
-      Recent Searches
+      You looked at
     </div>
     <div>
       <button
