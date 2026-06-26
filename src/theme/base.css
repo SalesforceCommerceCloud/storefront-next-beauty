@@ -8,10 +8,10 @@
 
 @layer components {
     /*
-     * Wider editorial column matches Dazzle (Lumiere): content stretches
-     * to 1680px on large monitors with tight side gutters, so cards, grids,
-     * and editorial type get maximum room. Full-bleed surfaces (hero, footer
-     * band, newsletter) opt out by living outside `.section-container`.
+     * Wider editorial column: content stretches to 1680px on large monitors
+     * with tight side gutters, so cards, grids, and editorial type get maximum
+     * room. Full-bleed surfaces (hero, footer band, newsletter) opt out by
+     * living outside `.section-container`.
      */
     .section-container {
         @apply px-4 sm:px-4 lg:px-5 max-w-[1680px] mx-auto;
@@ -73,14 +73,12 @@
     }
 }
 
-/* Cosmetic uses --ui-border-width: 0 (borderless Cards by default) and
- * --ui-shadow: shadow-sm by default. Mirrors Dazzle's behaviour: most
- * Cards in account / auth / checkout / order-confirmation sections sit
- * on white backgrounds with delineation borders and explicitly opt out
- * of shadow. We restore the 1px border here AND drop the shadow so
- * cosmetic matches Dazzle's per-instance `border border-border
- * shadow-none` pattern. :where() keeps specificity low so per-card
- * className overrides (e.g. [--ui-border-width:0px]) still win. */
+/* Cards are borderless by default (--ui-border-width: 0) with --ui-shadow:
+ * shadow-sm. But most Cards in account / auth / checkout / order-confirmation
+ * sections sit on white backgrounds and read better with a delineation border
+ * and no shadow. We restore the 1px border here AND drop the shadow for those
+ * sections. :where() keeps specificity low so per-card className overrides
+ * (e.g. [--ui-border-width:0px]) still win. */
 :where([data-testid='account-layout']) [data-slot='card'],
 :where([data-section='auth']) [data-slot='card'],
 :where([data-section='checkout']) [data-slot='card'],
@@ -91,7 +89,7 @@
 
 /* Surface rounding — softer than the global --ui-radius default so cards,
  * popovers, dialogs, and dropdowns read as editorial paper insets rather
- * than chip-sized corners. Matches Dazzle's `beauty-radius.css`. */
+ * than chip-sized corners. */
 [data-slot='card'],
 [data-slot='popover-content'],
 [data-slot='dialog-content'],
@@ -112,8 +110,7 @@
  * default surface radius (--radius-2xl from the surface block above) leaves
  * the top corners rounded while the bottom flat divider reads square,
  * producing an asymmetric look. Flatten the radius on these specific Cards
- * so the rows match the canonical fashion render (and the flat-divider
- * visual rhythm). */
+ * so the rows read square and match the flat-divider visual rhythm. */
 .order-list-item-card[data-slot='card'] {
     --ui-radius: 0;
 }
@@ -129,18 +126,17 @@
     background-color: var(--bg-input-30);
 }
 
-/* Skeleton placeholders for the rounded card surfaces above mirror their
- * eventual radius (1rem / --radius-2xl) so layout doesn't shift on
- * hydrate. Matches Dazzle's beauty-radius.css `[data-slot='skeleton'].is-card`. */
+/* Skeleton placeholders for the rounded card surfaces above match their
+ * eventual radius (1rem / --radius-2xl) so layout doesn't shift on hydrate. */
 [data-slot='skeleton'].is-card {
     --ui-radius: var(--radius-2xl);
 }
 
 /* Editorial content tiles on the home page (Women / Men / Style For Real
  * Life ContentCards) wrap the canonical Card primitive but should read
- * as flat editorial surfaces — Dazzle builds the equivalent banners from
- * plain <div>s with no Card shape at all. Flatten radius and shadow so
- * the visible result matches. Border is already 0 by default.
+ * as flat editorial surfaces — plain banners with no Card shape at all.
+ * Flatten radius and shadow so the visible result matches. Border is
+ * already 0 by default.
  *
  * IMPORTANT: override --ui-radius / --ui-shadow (the SOURCE tokens
  * defined in core.css), not --radius-ui / --shadow-ui (the Tailwind
@@ -158,10 +154,9 @@
     --ui-shadow: none;
 }
 
-/* Cosmetic vertical: product tile uses the cream --card surface so it
- * stands out a touch warmer than the page background. Shadow inherits
- * the global --ui-shadow default (Tailwind v4 shadow-sm) — matches
- * Dazzle product tiles exactly, no deeper drop. */
+/* Product tile uses the cream --card surface so it stands out a touch
+ * warmer than the page background. Shadow inherits the global --ui-shadow
+ * default (Tailwind v4 shadow-sm) — no deeper drop. */
 .product-card[data-slot='card'] {
     background-color: var(--card);
 }
@@ -177,7 +172,7 @@ main[data-has-top-padding='true'] [data-gallery-thumbs] button {
 }
 
 /* PDP express checkout container: warm cream surface + sage border for
- * brand chrome. Shadow drops to none — Dazzle's express-payments Card is
+ * brand chrome. Shadow drops to none — the express-payments Card is
  * explicitly `shadow-none`. The surface --radius-2xl is inherited from
  * the surface rule above. */
 main[data-has-top-padding='true'] [data-testid='express-payments'] [data-slot='card'] {
@@ -226,7 +221,7 @@ main:not([data-layout='empty']) {
  * transparent → opaque transition does NOT also trigger a layout shift
  * on <main>'s padding. The header chrome alone fades; content stays put.
  *
- * Mirrors Dazzle's _app.tsx pattern (`isHomepage ? undefined : padding`). */
+ * This mirrors the `isHomepage ? undefined : padding` pattern in `_app.tsx`. */
 main[data-hero-bleed='true'] {
     padding-top: 0;
 }
@@ -319,13 +314,13 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
     gap: 0.75rem; /* gap-3 */
 }
 
-/* Category page: quick-filters chips. Dazzle renders these as cream card-surface
- * pills (vs the canonical bordered/outline chip). The canonical QuickFilters
+/* Category page: quick-filters chips render as cream card-surface pills
+ * (rather than a bordered/outline chip). The shared QuickFilters component
  * emits the structure + state hooks (`[data-slot="button"]`, `aria-pressed`);
- * the cosmetic chip *appearance* lives here so the component stays a shared,
- * unforked canonical. Inactive = card surface + accent text; active =
- * primary fill + primary-foreground text. Radius via the `--ui-radius` source
- * token (medium) rather than a hardcoded value — see shape-token rules. */
+ * the chip *appearance* lives here so the component itself stays unforked.
+ * Inactive = card surface + accent text; active = primary fill +
+ * primary-foreground text. Radius via the `--ui-radius` source token
+ * (medium) rather than a hardcoded value — see shape-token rules. */
 [data-slot='quick-filters'] [data-slot='button'] {
     --ui-radius: var(--radius-md);
     gap: 0.375rem; /* gap-1.5 — icon/label spacing inside the chip */

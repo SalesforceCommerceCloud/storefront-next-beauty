@@ -24,7 +24,7 @@ const meta: Meta<typeof Logo> = {
         docs: {
             description: {
                 component:
-                    'Cosmetic-vertical logo override (the "Dazzle Beauty Essentials" inline-SVG wordmark). Replaces the canonical `@/components/logo` via the Vite vertical resolver, so the cosmetic header and error page render this instead of the raster logo. The SVG fills with `currentColor` and carries its own `aria-label`; sizing/color come from the caller via `className`.',
+                    'The "Dazzle Beauty Essentials" inline-SVG wordmark, used in the header and error page. The SVG fills with `currentColor` and carries its own `aria-label`; sizing and color come from the caller via `className`.',
             },
         },
     },

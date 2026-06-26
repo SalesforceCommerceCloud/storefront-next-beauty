@@ -49,11 +49,10 @@ export function PageConfigManager() {
             return;
         }
 
-        // Matches Dazzle's beauty header (~80px ≈ header height). With a
-        // tighter threshold the scroll-flip can fire while the user
-        // perceives themselves still "at top", and the transition starts
-        // colliding with their scroll velocity. 80px gives the header
-        // its own height of room to settle before transitioning.
+        // ~80px ≈ header height. With a tighter threshold the scroll-flip can
+        // fire while the user perceives themselves still "at top", and the
+        // transition starts colliding with their scroll velocity. 80px gives
+        // the header its own height of room to settle before transitioning.
         const SCROLL_THRESHOLD = 80;
         let ticking = false;
         let rafId: number | null = null;

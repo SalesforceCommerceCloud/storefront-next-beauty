@@ -1,15 +1,13 @@
 /*
- * Cosmetic header + footer chrome — mirrors Dazzle's beauty-header.css.
+ * Header + footer chrome tokens.
  *
- * The only structural difference from Dazzle: Dazzle drives the transparent
- * state off `data-on-hero` (set on the <header> by the header component);
- * cosmetic uses `data-page-at-top` (set by PageConfigManager). The token
- * values, scopes, and cascade are otherwise identical.
+ * The transparent header state is driven off `data-page-at-top` (set by
+ * PageConfigManager).
  *
- * The 4 NET-NEW tokens here (--header-foreground-transparent,
+ * Four tokens here (--header-foreground-transparent,
  * --header-menu-hover-foreground-transparent, --header-logo-color,
  * --footer-logo-color) exist exclusively to support the transparent
- * header variant — they are not part of the canonical chrome contract.
+ * header variant.
  */
 :root {
     /* header & navigation */
@@ -89,8 +87,7 @@ html[data-mega-menu-open='true'] {
 /*
  * Mega-menu viewport surface + text pins.
  *
- * Unlike Dazzle (where the viewport resolves cream "for free"), our
- * viewport is a DOM descendant of <header data-page-at-top='true'>, so
+ * The viewport is a DOM descendant of <header data-page-at-top='true'>, so
  * when the page is at the top it would inherit the transparent
  * --header-background / cream --header-menu-foreground from the header
  * subtree and render as a see-through panel with cream-on-cream

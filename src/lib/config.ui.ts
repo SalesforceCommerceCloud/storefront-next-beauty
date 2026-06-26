@@ -15,23 +15,17 @@
  */
 
 /**
- * Cosmetic (Dazzle) per-page UI overrides:
- * - Hides the cart recommendation carousels — Dazzle's cart is a focused
+ * Dazzle per-page UI overrides:
+ * - Hides the cart recommendation carousels — the cart is a focused
  *   checkout-intent page with no below-the-fold cross-sell — which also skips
  *   the two Einstein recommendation fetches in the cart loader.
- * - Shows the category-page QuickFilters "Shop by {label}" header — Dazzle
- *   leads the subcategory chips with a labelled, sparkles-iconed prompt.
+ * - Shows the category-page QuickFilters "Shop by {label}" header — the
+ *   subcategory chips lead with a labelled, sparkles-iconed prompt.
  *
  * Also configures the bonus-product carousel tile: `subtitleVariationAttributeId`
  * selects which variation attribute supplies the tile subtitle (the value's
  * display name, e.g. "10 ml, 1 week supply"). Default `size`; merchants can point
  * it at a custom variation attribute (e.g. `volume`) authored in Business Manager.
- *
- * This module shadows the canonical `@/lib/config.ui` and the mirror script
- * overlays (overwrites) the canonical file with this one in the flattened
- * artifact. It must therefore be self-contained — no import from the canonical
- * module (it won't exist post-flatten) — so the `UIConfig` shape is declared
- * inline here. Same self-contained pattern as the `@/lib/fonts` override.
  */
 interface UIConfig {
     pages: {

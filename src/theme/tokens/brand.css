@@ -1,5 +1,5 @@
 :root {
-    /* brand primary (e.g. Write a Review button) — sage, matches Dazzle */
+    /* brand primary (e.g. Write a Review button) — sage */
     --brand-primary: oklch(0.44 0.08 155);
     --brand-primary-hover: oklch(0.36 0.065 155);
 

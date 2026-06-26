@@ -1,5 +1,5 @@
 :root {
-    /* core — cosmetic palette: warm cream surfaces + sage green primary, byte-aligned with Dazzle */
+    /* core — cosmetic palette: warm cream surfaces + sage green primary */
     --background: oklch(0.995 0.004 90);
     --foreground: oklch(0.24 0.02 80);
 
@@ -64,23 +64,19 @@
     --opacity-50: 50%;
     --opacity-30: 70%;
 
-    /* shape tokens — cosmetic adopts Dazzle's round-everywhere default.
-       Surface rounding (cards, popovers) and badges get scoped overrides
-       in base.css. --ui-radius / --ui-shadow / --ui-border-width bridge
-       into Tailwind's rounded-ui / shadow-ui / border-ui utilities via
-       tailwind.css.
+    /* shape tokens — round-everywhere default. Surface rounding (cards,
+       popovers) and badges get scoped overrides in base.css. --ui-radius /
+       --ui-shadow / --ui-border-width bridge into Tailwind's rounded-ui /
+       shadow-ui / border-ui utilities via tailwind.css.
 
-       --ui-border-width: 0 — Dazzle parity. Home / PLP / PDP Cards are
-       borderless by default (Dazzle's home page doesn't even use Card
-       primitives, so visually there's no border anywhere). Pages where
-       Cards sit on white backgrounds and need delineation
-       (account / auth / checkout / order confirmation) get 1px restored
-       via a :where() block in base.css — matches fashion's pattern. */
+       --ui-border-width: 0 — Home / PLP / PDP Cards are borderless by default
+       (the home page doesn't even use Card primitives, so visually there's no
+       border anywhere). Pages where Cards sit on white backgrounds and need
+       delineation (account / auth / checkout / order confirmation) get 1px
+       restored via a :where() block in base.css. */
     --ui-radius: var(--radius-xl);
-    /* --ui-shadow matches Tailwind v4's stock shadow-sm exactly (rgb(0 0 0 / 0.1)).
-       Dazzle's Card primitive ships with shadow-sm by default and never overrides
-       --shadow-* anywhere in its theme/, so cosmetic uses the same value for
-       pixel parity on every card surface that doesn't explicitly opt out. */
+    /* --ui-shadow matches Tailwind v4's stock shadow-sm exactly (rgb(0 0 0 / 0.1)),
+       applied on every card surface that doesn't explicitly opt out. */
     --ui-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --ui-border-width: 0;
 

@@ -1,11 +1,11 @@
 /*
- * Sidebar tokens — paper-white surfaces with sage accents (Dazzle Beauty parity).
+ * Sidebar tokens — paper-white surfaces with sage accents.
  *
- * Account left-nav (rendered via the canonical account-navigation/nav-item.tsx
- * which consumes bg-sidebar-accent / text-sidebar-foreground / etc.) and any
- * future filter drawers inherit these values so they read as a continuous
- * extension of the cream / paper design language. Without this file, the
- * sidebar falls through to canonical defaults (blue), which clashes.
+ * Account left-nav (rendered via account-navigation/nav-item.tsx, which
+ * consumes bg-sidebar-accent / text-sidebar-foreground / etc.) and any future
+ * filter drawers inherit these values so they read as a continuous extension
+ * of the cream / paper design language. Without this file, the sidebar falls
+ * back to the default blue, which clashes.
  */
 :root {
     --sidebar: oklch(0.985 0.012 92);
