@@ -443,9 +443,10 @@ describe('HomePage', () => {
             mockContext = createTestContext();
             baseLoaderArgs = {
                 request: new Request('http://localhost/'),
+                url: new URL('http://localhost/'),
                 params: {},
                 context: mockContext,
-                unstable_pattern: '/',
+                pattern: '/',
             };
         });
 

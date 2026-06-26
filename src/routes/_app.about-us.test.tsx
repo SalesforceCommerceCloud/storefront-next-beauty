@@ -294,9 +294,10 @@ describe('AboutUs (cosmetic)', () => {
             const ctx = createTestContext();
             const args: Route.LoaderArgs = {
                 request: new Request('http://localhost/about-us'),
+                url: new URL('http://localhost/about-us'),
                 params: { siteId: 'test-site', localeId: 'en-US' },
                 context: ctx,
-                unstable_pattern: '/about-us',
+                pattern: '/about-us',
             };
             const result = await loader(args);
 

@@ -119,7 +119,7 @@ describe('Checkout Route SSR', () => {
 
             const mockRequest = new Request('http://localhost/checkout');
             const mockContext = { set: vi.fn(), get: vi.fn() } as any;
-            const args = createLoaderArgs(mockRequest, mockContext, { unstable_pattern: '/checkout' });
+            const args = createLoaderArgs(mockRequest, mockContext, { pattern: '/checkout' });
 
             const result = await mockLoader(args);
 
@@ -132,7 +132,7 @@ describe('Checkout Route SSR', () => {
 
             const mockRequest = new Request('http://localhost/checkout');
             const mockContext = { set: vi.fn(), get: vi.fn() } as any;
-            const args = createLoaderArgs(mockRequest, mockContext, { unstable_pattern: '/checkout' });
+            const args = createLoaderArgs(mockRequest, mockContext, { pattern: '/checkout' });
 
             try {
                 await mockLoader(args);
@@ -196,7 +196,7 @@ describe('Checkout Route SSR', () => {
 
             const mockRequest = new Request('http://localhost/checkout');
             const mockContext = { set: vi.fn(), get: vi.fn() } as any;
-            const args = createLoaderArgs(mockRequest, mockContext, { unstable_pattern: '/checkout' });
+            const args = createLoaderArgs(mockRequest, mockContext, { pattern: '/checkout' });
 
             const result = await mockLoader(args);
 
@@ -241,7 +241,7 @@ describe('Checkout Route SSR', () => {
 
             const mockRequest = new Request('http://localhost/checkout');
             const mockContext = { set: vi.fn(), get: vi.fn() } as any;
-            const args = createLoaderArgs(mockRequest, mockContext, { unstable_pattern: '/checkout' });
+            const args = createLoaderArgs(mockRequest, mockContext, { pattern: '/checkout' });
 
             try {
                 await mockLoader(args);
@@ -261,7 +261,7 @@ describe('Checkout Route SSR', () => {
             malformedRequest.headers.set('Cookie', 'malformed-cookie-data');
 
             const mockContext = { set: vi.fn(), get: vi.fn() } as any;
-            const args = createLoaderArgs(malformedRequest, mockContext, { unstable_pattern: '/checkout' });
+            const args = createLoaderArgs(malformedRequest, mockContext, { pattern: '/checkout' });
 
             const result = await mockLoader(args);
             expect(result).toEqual(mockResult);

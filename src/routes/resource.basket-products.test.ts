@@ -93,7 +93,7 @@ describe('resource.basket-products', () => {
 
     const getLoaderArgs = () =>
         createLoaderArgs(new Request(`http://localhost${resourceRoutes.basketProducts}`), mockContext, {
-            unstable_pattern: resourceRoutes.basketProducts,
+            pattern: resourceRoutes.basketProducts,
         });
 
     describe('shouldRevalidate', () => {
