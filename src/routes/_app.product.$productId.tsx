@@ -18,6 +18,7 @@ import { Await, useRouteLoaderData } from 'react-router';
 import type { loader as rootLoader } from '@/root';
 import type { Route } from './+types/_app.product.$productId';
 import { type ShopperProducts } from '@/scapi';
+import { shouldRevalidate as shouldRevalidateProduct } from '@/lib/revalidation/routes/product';
 import { fetchProductById } from '@/lib/api/products.server';
 import { fetchCategory } from '@/lib/api/categories.server';
 import { fetchWishlistInitialState } from '@/lib/wishlist/fetch-initial-state.server';
@@ -339,45 +340,13 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
     };
 }
 
-/**
- * Prevent loader from re-running on variant parameter changes to avoid skeleton
- * https://reactrouter.com/start/data/route-object#shouldrevalidate
- * we don't want the page to show skeleton when loading variant product after first initial load
- */
-export function shouldRevalidate({
-    currentUrl,
-    nextUrl,
-    defaultShouldRevalidate,
-}: {
-    currentUrl: string;
-    nextUrl: string;
-    defaultShouldRevalidate: boolean;
-}) {
-    const currentUrlObj = new URL(currentUrl);
-    const nextUrlObj = new URL(nextUrl);
-
-    // Revalidate if pathname changes (different product)
-    if (currentUrlObj.pathname !== nextUrlObj.pathname) {
-        return true;
-    }
-
-    // Revalidate if pid parameter changes (different variant product)
-    const currentPid = currentUrlObj.searchParams.get('pid');
-    const nextPid = nextUrlObj.searchParams.get('pid');
-    if (currentPid !== nextPid) {
-        return true;
-    }
-
-    // If defaultShouldRevalidate is true (e.g., from explicit revalidator.revalidate() call),
-    // allow it to proceed even if URL hasn't changed
-    // This allows store changes to trigger revalidation
-    if (defaultShouldRevalidate) {
-        return true;
-    }
-
-    // Don't revalidate for other search parameter changes (color, size, etc.)
-    return false;
-}
+// Re-export the shared product revalidation policy (same as the canonical route).
+// Gates both the navigation axis (revalidate on a different product/`pid`, skip
+// client-only color/size param changes so the PDP doesn't flash a skeleton) and the
+// action axis (skip the loader re-run after cart/wishlist/account mutations the loader
+// never reads). Kept identical to canonical so cosmetic stays in lockstep — see
+// @/lib/revalidation/routes/product for the documented, unit-tested policy.
+export const shouldRevalidate = shouldRevalidateProduct;
 
 function ProductContent({
     product,
