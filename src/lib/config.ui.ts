@@ -19,6 +19,10 @@
  * - Hides the cart recommendation carousels — the cart is a focused
  *   checkout-intent page with no below-the-fold cross-sell — which also skips
  *   the two Einstein recommendation fetches in the cart loader.
+ * - Pares the cart line item (default variant) down to a minimal tile: hides the
+ *   variation-attributes row, the strikethrough list price, the "Saved $X" promo
+ *   badge, and the "Bonus Product" title badge, leaving image, title, current
+ *   price, quantity, and the CTAs.
  * - Shows the category-page QuickFilters "Shop by {label}" header — the
  *   subcategory chips lead with a labelled, sparkles-iconed prompt.
  *
@@ -31,6 +35,10 @@ interface UIConfig {
     pages: {
         cart: {
             showRecommendations: boolean;
+            showLineItemVariantAttributes: boolean;
+            showLineItemListPrice: boolean;
+            showLineItemPromoBadge: boolean;
+            showLineItemBonusBadge: boolean;
         };
         category: {
             showCategoryLabel: boolean;
@@ -46,6 +54,10 @@ export const uiConfig: UIConfig = {
     pages: {
         cart: {
             showRecommendations: false,
+            showLineItemVariantAttributes: false,
+            showLineItemListPrice: false,
+            showLineItemPromoBadge: false,
+            showLineItemBonusBadge: false,
         },
         category: {
             showCategoryLabel: true,
