@@ -21,7 +21,7 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -98,7 +98,7 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -160,7 +160,7 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -246,7 +246,7 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -319,7 +319,7 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -411,7 +411,7 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -471,7 +471,7 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -563,7 +563,7 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -623,7 +623,7 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -715,7 +715,7 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -775,7 +775,7 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <div
@@ -865,7 +865,7 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -925,7 +925,7 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -1024,7 +1024,7 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -1086,7 +1086,7 @@ exports[`ProductItem stories snapshot > SummaryVariant story renders and matches
       class="flex items-center justify-center"
     >
       <div
-        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden w-16"
+        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui w-16"
         data-slot="product-item-image"
       >
         <img
@@ -1180,7 +1180,7 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -1281,7 +1281,7 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -1354,7 +1354,7 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -1446,7 +1446,7 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"

@@ -1,7 +1,10 @@
-/* Store locator uses square, high-contrast radio styling (market-street template specific). */
+/* Store locator radio: high-contrast fill, rounded to the global --ui-radius so
+ * the control matches the rest of the storefront's rounded surfaces.
+ * (The `square-radio` class names are styling hooks only, kept stable to avoid
+ * churning the consuming components and snapshots.) */
 .store-locator-square-radio-group [data-slot='radio-group-item'].store-locator-square-radio {
     position: relative;
-    border-radius: 0;
+    border-radius: var(--ui-radius);
     background-color: var(--background);
     color: var(--foreground);
     border-color: var(--muted-foreground);
@@ -25,6 +28,7 @@
     left: 50%;
     width: 0.5rem;
     height: 0.5rem;
+    border-radius: 50%;
     transform: translate(-50%, -50%);
     background-color: currentColor;
 }

@@ -147,7 +147,7 @@ exports[`CartContent stories snapshot > CartWithItems story renders and matches 
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -394,7 +394,7 @@ exports[`CartContent stories snapshot > CartWithItems story renders and matches 
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -1027,7 +1027,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -1252,7 +1252,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -1401,7 +1401,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -1648,7 +1648,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -1743,7 +1743,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -1997,7 +1997,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -2614,7 +2614,7 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -2861,7 +2861,7 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -2956,7 +2956,7 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -3203,7 +3203,7 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -3327,7 +3327,8 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                     class="flex justify-between items-center gap-2"
                   >
                     <span
-                      class="inline-flex w-fit max-w-full border-0 bg-muted px-2 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words"
+                      class="inline-flex w-fit max-w-full border-0 bg-muted px-2 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words rounded-ui"
+                      data-slot="badge"
                     >
                       $5 Off Tops
                     </span>
@@ -3341,7 +3342,8 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                     class="flex justify-between items-center gap-2"
                   >
                     <span
-                      class="inline-flex w-fit max-w-full border-0 bg-muted px-2 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words"
+                      class="inline-flex w-fit max-w-full border-0 bg-muted px-2 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words rounded-ui"
+                      data-slot="badge"
                     >
                       10% Off Accessories
                     </span>
@@ -4245,7 +4247,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                       class="flex-shrink-0 flex items-start justify-center"
                     >
                       <div
-                        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                         data-slot="product-item-image"
                       >
                         <img
@@ -4470,7 +4472,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                 Quantity
                               </label>
                               <div
-                                class="inline-flex items-center border border-input"
+                                class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                               >
                                 <button
                                   aria-label="Decrement Quantity for the product"
@@ -4619,7 +4621,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                       class="flex-shrink-0 flex items-start justify-center"
                     >
                       <div
-                        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                         data-slot="product-item-image"
                       >
                         <img
@@ -4866,7 +4868,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                 Quantity
                               </label>
                               <div
-                                class="inline-flex items-center border border-input"
+                                class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                               >
                                 <button
                                   aria-label="Decrement Quantity for the product"
@@ -4961,7 +4963,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                       class="flex-shrink-0 flex items-start justify-center"
                     >
                       <div
-                        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                         data-slot="product-item-image"
                       >
                         <img
@@ -5215,7 +5217,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                 Quantity
                               </label>
                               <div
-                                class="inline-flex items-center border border-input"
+                                class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                               >
                                 <button
                                   aria-label="Decrement Quantity for the product"
@@ -5334,7 +5336,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                       class="flex-shrink-0 flex items-start justify-center"
                     >
                       <div
-                        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                         data-slot="product-item-image"
                       >
                         <img
@@ -5510,7 +5512,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                 Quantity
                               </label>
                               <div
-                                class="inline-flex items-center border border-input"
+                                class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                               >
                                 <button
                                   aria-label="Decrement Quantity for the product"
@@ -5703,7 +5705,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -5950,7 +5952,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -6045,7 +6047,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -6221,7 +6223,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -6280,7 +6282,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -6456,7 +6458,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -6544,7 +6546,8 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                     class="flex justify-between items-center gap-2"
                   >
                     <span
-                      class="inline-flex w-fit max-w-full border-0 bg-muted px-2 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words"
+                      class="inline-flex w-fit max-w-full border-0 bg-muted px-2 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words rounded-ui"
+                      data-slot="badge"
                     >
                       Buy one Classic Fit Shirt, get 2 free ties!
                     </span>
@@ -7113,7 +7116,7 @@ exports[`CartContent stories snapshot > WithErrorBanner story renders and matche
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -7367,7 +7370,7 @@ exports[`CartContent stories snapshot > WithErrorBanner story renders and matche
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"
@@ -7490,7 +7493,8 @@ exports[`CartContent stories snapshot > WithErrorBanner story renders and matche
                     class="flex justify-between items-center gap-2"
                   >
                     <span
-                      class="inline-flex w-fit max-w-full border-0 bg-muted px-2 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words"
+                      class="inline-flex w-fit max-w-full border-0 bg-muted px-2 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words rounded-ui"
+                      data-slot="badge"
                     >
                       10% Off Order
                     </span>
@@ -8068,7 +8072,7 @@ exports[`CartContent stories snapshot > WithGiftLine story renders and matches s
                         class="flex-shrink-0 flex items-start justify-center"
                       >
                         <div
-                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+                          class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
                           data-slot="product-item-image"
                         >
                           <img
@@ -8322,7 +8326,7 @@ exports[`CartContent stories snapshot > WithGiftLine story renders and matches s
                                   Quantity
                                 </label>
                                 <div
-                                  class="inline-flex items-center border border-input"
+                                  class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                                 >
                                   <button
                                     aria-label="Decrement Quantity for the product"

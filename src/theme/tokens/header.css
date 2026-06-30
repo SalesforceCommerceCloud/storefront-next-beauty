@@ -122,7 +122,6 @@ header [data-slot='navigation-menu-viewport'] {
  * flip regardless of which Radix primitive it is. */
 header [data-slot='navigation-menu-trigger'],
 header [data-slot='navigation-menu-link'] {
-    --ui-radius: var(--radius-md);
     transition:
         background-color 300ms ease-out,
         color 300ms ease-out;

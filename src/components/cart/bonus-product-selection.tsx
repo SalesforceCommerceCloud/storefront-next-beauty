@@ -226,7 +226,7 @@ export default function BonusProductSelection({
             // (same condition as the FREE banner below, so they flip together and neither flickers on a
             // failed in-flight add).
             data-max-reached={isMaxReached ? '' : undefined}
-            className="w-full overflow-hidden border border-border bg-[var(--bg-input-30)] p-4">
+            className="w-full overflow-hidden rounded-ui border border-border bg-[var(--bg-input-30)] p-4">
             <h3 className="text-base leading-6 text-card-foreground font-sans pb-3">
                 <span className="font-semibold">{titleText}</span>
                 {/* Keep the count span mounted even at max (render empty) so the cosmetic base.css
@@ -443,10 +443,10 @@ function BonusProductTile({
     return (
         <article
             data-slot="bonus-product-tile"
-            className="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-xl border border-border bg-background p-2"
+            className="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
             aria-label="Bonus bundle product card">
             {/* Image with overlays */}
-            <div className="relative aspect-square w-full overflow-hidden rounded-md bg-muted">
+            <div className="relative aspect-square w-full overflow-hidden rounded-ui bg-muted">
                 {item.imageUrl ? (
                     <img
                         src={toImageUrl({ src: item.imageUrl, config }) ?? item.imageUrl}

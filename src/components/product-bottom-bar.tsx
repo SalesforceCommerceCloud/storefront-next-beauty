@@ -86,7 +86,7 @@ export default function ProductBottomBar({ product }: ProductBottomBarProps): Re
                         <DynamicImage
                             src={primaryImage.src}
                             alt={primaryImage.alt || product.name}
-                            className="hidden md:block h-12 w-12 rounded-md object-cover border border-border"
+                            className="hidden md:block h-12 w-12 rounded-ui object-cover border border-border"
                             widths={[48]}
                             loading="lazy"
                         />
