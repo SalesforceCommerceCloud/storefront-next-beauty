@@ -39,10 +39,18 @@ vi.mock('@/components/toast', () => ({
     }),
 }));
 
-// Mock useConfig — still needed because `toImageUrl` reads it for DIS URL transforms.
+// Mock useConfig — `toImageUrl` reads it for DIS URL transforms and the tile reads `global.badges`
+// for the top-left product badge.
 vi.mock('@salesforce/storefront-next-runtime/config', async (importOriginal) => ({
     ...(await importOriginal<Record<string, unknown>>()),
-    useConfig: () => ({}),
+    useConfig: () => ({
+        global: {
+            badges: [
+                { propertyName: 'c_isSale', label: 'Sale', color: 'orange', priority: 1 },
+                { propertyName: 'c_isNew', label: 'New', color: 'green', priority: 2 },
+            ],
+        },
+    }),
 }));
 
 // Mock product-utils
@@ -56,6 +64,7 @@ vi.mock('@/lib/product/product-utils', async () => {
 
 import { composeStories } from '@storybook/react-vite';
 
+// Relative import so the snapshot renders the cosmetic OVERRIDE's stories, not the canonical ones.
 import * as BonusProductSelectionStories from './bonus-product-selection.stories';
 import { render, cleanup } from '@testing-library/react';
 import { AllProvidersWrapper } from '@/test-utils/context-provider';
@@ -66,12 +75,12 @@ afterEach(() => {
     cleanup();
 });
 
-describe('BonusProductSelection stories snapshot', () => {
+describe('Cosmetic BonusProductSelection stories snapshot', () => {
     for (const [storyName, Story] of Object.entries(composed)) {
         test(`${storyName} story renders and matches snapshot`, () => {
-            // `BonusProductSelection` reads `useSite()` — wrap the render so the
-            // story inherits `SiteProvider` here even when the global decorator
-            // stack doesn't propagate through `composeStories` in this harness.
+            // `BonusProductSelection` reads `useSite()` — wrap the render so the story inherits
+            // `SiteProvider` here even when the global decorator stack doesn't propagate through
+            // `composeStories` in this harness.
             const { container } = render(
                 <AllProvidersWrapper>
                     <Story />

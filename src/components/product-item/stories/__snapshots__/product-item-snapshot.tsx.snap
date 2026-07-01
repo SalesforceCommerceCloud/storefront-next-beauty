@@ -21,7 +21,7 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -46,14 +46,6 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
                 <div
                   class="mb-2 md:mb-4 flex items-start gap-2 min-w-0"
                 >
-                  <span
-                    aria-label="This item is a free bonus product"
-                    class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90"
-                    data-slot="badge"
-                    role="status"
-                  >
-                    Bonus Product
-                  </span>
                   <h2
                     class="text-left text-xl font-semibold leading-7 tracking-[-0.5px] text-card-foreground min-w-0 flex-1"
                   >
@@ -66,17 +58,6 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
                       Men's Classic Deer Gloves
                     </a>
                   </h2>
-                </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
                 </div>
               </div>
               <div
@@ -117,7 +98,7 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -179,7 +160,7 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -204,14 +185,6 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
                 <div
                   class="mb-2 md:mb-4 flex items-start gap-2 min-w-0"
                 >
-                  <span
-                    aria-label="This item is a free bonus product"
-                    class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90"
-                    data-slot="badge"
-                    role="status"
-                  >
-                    Bonus Product
-                  </span>
                   <h2
                     class="text-left text-xl font-semibold leading-7 tracking-[-0.5px] text-card-foreground min-w-0 flex-1"
                   >
@@ -224,17 +197,6 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
                       Choice Bonus Gift
                     </a>
                   </h2>
-                </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
                 </div>
                 <div
                   class="mt-2"
@@ -284,7 +246,7 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -357,7 +319,7 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -395,17 +357,6 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
                     </a>
                   </h2>
                 </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
-                </div>
               </div>
               <div
                 class="flex min-w-0 flex-shrink-0 flex-col items-end gap-2 md:gap-4 md:row-span-2"
@@ -442,7 +393,6 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
                            
                           Current price: £99.99
                         </span>
-                         
                       </div>
                     </div>
                   </div>
@@ -461,7 +411,7 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -521,7 +471,7 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -559,17 +509,6 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
                     </a>
                   </h2>
                 </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
-                </div>
               </div>
               <div
                 class="flex min-w-0 flex-shrink-0 flex-col items-end gap-2 md:gap-4 md:row-span-2"
@@ -606,34 +545,8 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
                            
                           Current price: £79.99
                         </span>
-                         
-                        <span
-                          aria-label="List price: £99.99"
-                          class="text-xl font-normal leading-[120%] tracking-[-0.6px] text-card-foreground text-right line-through relative"
-                        >
-                          £99.99
-                        </span>
-                        <span
-                          aria-atomic="true"
-                          aria-live="polite"
-                          class="sr-only"
-                        >
-                          Men's Classic Deer Gloves
-                           
-                          List price: £99.99
-                        </span>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    class="flex w-full justify-end"
-                  >
-                    <span
-                      class="inline-flex items-center justify-center rounded-full w-fit shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 h-auto min-h-0 border-0 bg-muted px-1.5 py-0.5 text-xs font-semibold leading-4 text-secondary-foreground whitespace-normal break-words"
-                      data-slot="badge"
-                    >
-                      Saved £20.00
-                    </span>
                   </div>
                 </div>
                 <div
@@ -650,7 +563,7 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -710,7 +623,7 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -748,17 +661,6 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
                     </a>
                   </h2>
                 </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
-                </div>
               </div>
               <div
                 class="flex min-w-0 flex-shrink-0 flex-col items-end gap-2 md:gap-4 md:row-span-2"
@@ -795,7 +697,6 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
                            
                           Current price: £99.99
                         </span>
-                         
                       </div>
                     </div>
                   </div>
@@ -814,7 +715,7 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -874,7 +775,7 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <div
@@ -909,17 +810,6 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
                       Men's Classic Deer Gloves
                     </a>
                   </h2>
-                </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
                 </div>
               </div>
               <div
@@ -957,7 +847,6 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
                            
                           Current price: £99.99
                         </span>
-                         
                       </div>
                     </div>
                   </div>
@@ -976,7 +865,7 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -1036,7 +925,7 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -1074,17 +963,6 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
                     </a>
                   </h2>
                 </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
-                </div>
               </div>
               <div
                 class="flex min-w-0 flex-shrink-0 flex-col items-end gap-2 md:gap-4 md:row-span-2"
@@ -1121,7 +999,6 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
                            
                           Current price: £299.97
                         </span>
-                         
                       </div>
                     </div>
                     <div
@@ -1147,7 +1024,7 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -1209,7 +1086,7 @@ exports[`ProductItem stories snapshot > SummaryVariant story renders and matches
       class="flex items-center justify-center"
     >
       <div
-        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden w-16"
+        class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui w-16"
         data-slot="product-item-image"
       >
         <img
@@ -1303,7 +1180,7 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -1340,17 +1217,6 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
                       Men's Classic Deer Gloves
                     </a>
                   </h2>
-                </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
                 </div>
                 <div
                   class="mt-2"
@@ -1397,7 +1263,6 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
                            
                           Current price: £99.99
                         </span>
-                         
                       </div>
                     </div>
                   </div>
@@ -1416,7 +1281,7 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
@@ -1489,7 +1354,7 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
             class="flex-shrink-0 flex items-start justify-center"
           >
             <div
-              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden md:w-32 w-16"
+              class="bg-muted flex-shrink-0 flex items-center justify-center aspect-square overflow-hidden rounded-ui md:w-32 w-16"
               data-slot="product-item-image"
             >
               <img
@@ -1527,17 +1392,6 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
                     </a>
                   </h2>
                 </div>
-                <div>
-                  <div
-                    class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
-                  >
-                    <div>
-                      Size
-                      : 
-                      L
-                    </div>
-                  </div>
-                </div>
               </div>
               <div
                 class="flex min-w-0 flex-shrink-0 flex-col items-end gap-2 md:gap-4 md:row-span-2"
@@ -1574,7 +1428,6 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
                            
                           Current price: £99.99
                         </span>
-                         
                       </div>
                     </div>
                   </div>
@@ -1593,7 +1446,7 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
                       Quantity
                     </label>
                     <div
-                      class="inline-flex items-center border border-input"
+                      class="inline-flex items-center border border-input rounded-ui overflow-hidden"
                     >
                       <button
                         aria-label="Decrement Quantity for the product"

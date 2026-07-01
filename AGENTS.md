@@ -56,10 +56,6 @@ pnpm test src/components/foo     # Single file/dir
 pnpm storybook:test --type=snapshot     # Snapshot tests
 pnpm storybook:test --type=interaction  # Interaction tests
 pnpm storybook:test --type=a11y         # A11y tests
-
-# UITargets
-pnpm dev:ui-targets        # Visual overlay showing targets
-pnpm smoke-test:generate   # Sync target-config.json (additive)
 ```
 
 ### Less common command variants
@@ -211,27 +207,6 @@ import { Link } from '@/components/link';
 
 Overlay components hidden on initial render **must** use `React.lazy()` with deferred mounting — only mount the `<Suspense>` subtree after the first user interaction. See [Lazy Loading for Overlays](./docs/README-PERFORMANCE.md#lazy-loading-for-overlays-modals-drawers-dialogs) for the pattern, anti-patterns, and rationale.
 
-### Multi-vertical (canonical + per-vertical overlays)
-
-This package is a single canonical template with per-vertical overlays under `src/verticals/${VERTICAL}/`. Four rules keep the canonical/overlay split working — see [docs/README-MULTI-VERTICAL.md](./docs/README-MULTI-VERTICAL.md) for the index, with detailed sub-docs in [docs/multi-vertical/](./docs/multi-vertical/) covering authoring rules, shape tokens, vite resolver, mirror process, CI diagnostics, adding a vertical, and sync from main.
-
-The short version:
-
-1. **Canonical code must NEVER import from a specific vertical.** No `@/verticals/<name>/...` from `src/components/`, `src/routes/`, `src/lib/`, etc. Boundary lint blocks it; mirror typecheck breaks if it slips through.
-2. **Don't change canonical to fix a vertical.** Tweaks to `src/components/header/index.tsx` ship to fashion *and* cosmetic. If a change is brand-specific, move it into `src/verticals/${VERTICAL}/components/...`.
-3. **Vertical-overridable consumers must import via `@/...`, not relative.** The Vite resolver (`vite-plugins/vertical-resolvers.ts`) checks `src/verticals/${VERTICAL}/<spec>` first, then canonical. Sibling-relative imports (`./legal-links`) bypass the resolver and pin canonical even when `VERTICAL=cosmetic`. Routes are unaffected (the SDK walks `src/verticals/${VERTICAL}/routes/` directly).
-4. **Don't widen `tsconfig.json`'s `exclude` to silence a vertical.** That cascades into ESLint `projectService` parse errors. For non-default vertical typecheck issues, run `pnpm typecheck:cosmetic` (uses auto-generated `tsconfig.cosmetic.json`).
-
-```typescript
-// Correct — vertical override resolves in dev mode
-import LegalLinks from '@/components/footer/legal-links';
-
-// Wrong — bypasses the alias chain, dev mode always uses canonical
-import LegalLinks from './legal-links';
-```
-
-Before pushing a vertical-touching PR, use `/mvt-pre-pr-check`. Other MVT skills: `/mvt-add-overlay` (create a component override), `/mvt-add-vertical` (scaffold new vertical), `/mvt-shape-audit` (check for token anti-patterns), `/mvt-sync-from-main` (pull main changes), `/mvt-mirror-diff` (preview mirror output), `/mvt-visual-regression` (pixel-diff comparison).
-
 ### Styling
 
 - Use Tailwind utility classes
@@ -247,7 +222,7 @@ Shape is token-driven. `rounded-ui` and `shadow-ui` apply to 19 primitives (Card
 
 **Always override the SOURCE tokens (`--ui-radius`, `--ui-shadow`, `--ui-border-width`), never the bridge variables (`--radius-ui`, `--shadow-ui`).**
 
-The bridge variables are inlined at compile time by Tailwind's `@theme inline { --radius-ui: var(--ui-radius); }`, so `.rounded-ui` actually compiles to `border-radius: var(--ui-radius)` directly. Writing to `--radius-ui` at runtime has no effect — the bridge name doesn't survive into the served CSS. Only `--ui-radius` / `--ui-shadow` / `--ui-border-width` are real runtime variables. See [docs/multi-vertical/README-SHAPE-TOKENS.md](./docs/multi-vertical/README-SHAPE-TOKENS.md) for the full mechanism.
+The bridge variables are inlined at compile time by Tailwind's `@theme inline { --radius-ui: var(--ui-radius); }`, so `.rounded-ui` actually compiles to `border-radius: var(--ui-radius)` directly. Writing to `--radius-ui` at runtime has no effect — the bridge name doesn't survive into the served CSS. Only `--ui-radius` / `--ui-shadow` / `--ui-border-width` are real runtime variables. See [docs/README-SHAPE-TOKENS.md](./docs/README-SHAPE-TOKENS.md) for the full mechanism.
 
 **Never** add explicit shape classes to components that already use these token utilities.
 
@@ -309,7 +284,6 @@ Three strategies — see [docs/README-TESTS.md](./docs/README-TESTS.md) for patt
 The docs below are where architectural detail lives — consult them for tasks in the relevant area.
 
 **Architecture & patterns:**
-- [docs/README-MULTI-VERTICAL.md](./docs/README-MULTI-VERTICAL.md) — Multi-vertical index (links to sub-docs: authoring rules, shape tokens, vite resolver, mirror process, CI diagnostics, adding a vertical, sync from main)
 - [docs/README-DATA.md](./docs/README-DATA.md) — Data fetching: loaders, actions, fetchers, middlewares, cookies/sessions
 - [docs/README-REVALIDATION.md](./docs/README-REVALIDATION.md) — Revalidation control: when loaders re-run after actions, the scale cost of the default, and gating with `shouldRevalidate`
 - [docs/README-SUSPENSE.md](./docs/README-SUSPENSE.md) — Loading states and Suspense patterns
@@ -329,6 +303,7 @@ The docs below are where architectural detail lives — consult them for tasks i
 
 **UI & frontend:**
 - [docs/README-UI-STYLING.md](./docs/README-UI-STYLING.md) — Tailwind, shadcn, design tokens
+- [docs/README-SHAPE-TOKENS.md](./docs/README-SHAPE-TOKENS.md) — Shape tokens: source vs bridge variables, scoped overrides for Card/Button/Input shape
 - [docs/README-PERFORMANCE.md](./docs/README-PERFORMANCE.md) — Performance entry point: web fonts, third-party scripts, bundles, client-side transform anti-patterns; links to all other performance guides
 - [docs/README-IMAGES.md](./docs/README-IMAGES.md) — DIS integration, `<DynamicImage>`, alt text
 - [docs/README-SEO.md](./docs/README-SEO.md) — Page titles, meta tags, canonical URLs

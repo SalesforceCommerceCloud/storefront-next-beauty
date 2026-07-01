@@ -370,7 +370,7 @@
                 "minLength": "Promo must be at least 2 characters long."
             },
             "errors": {
-                "invalidCode": "Invalid coupon code",
+                "invalidCode": "Coupon code '{{code}}' is invalid.",
                 "expiredCode": "This promo code has expired.",
                 "alreadyApplied": "This promo code is already applied.",
                 "notApplicable": "This promo code isn't applicable to your cart",
@@ -421,7 +421,13 @@
             "loadError": "Failed to load product details. Please try again.",
             "retry": "Retry",
             "selectUpTo": "Select up to {{count}}",
-            "backToCart": "Back to Cart"
+            "backToCart": "Back to Cart",
+            "ctaPick": "Pick",
+            "ctaAdding": "Adding…",
+            "ctaRemoving": "Removing…",
+            "ctaSelected": "Selected",
+            "maxReachedBadge": "Free",
+            "maxReachedText": "Added to your bag — change any time before checkout."
         },
         "meta": {
             "title": "Cart",
@@ -1207,28 +1213,28 @@
     "home": {
         "hero": {
             "slide1": {
-                "title": "The New Season",
-                "subtitle": "A new collection shaped by contrast, proportion, and modern attitude. Introducing key pieces for the season ahead.",
-                "ctaText": "Discover the Collection",
-                "imageAlt": "Women's Slacks Jackets and Purses"
+                "title": "The New Edit",
+                "subtitle": "A fresh drop of clean formulas and every-shade colour. Essentials for the season ahead, ready when you are.",
+                "ctaText": "Shop the Edit",
+                "imageAlt": "Foundation droppers fanned across warm marble."
             },
             "slide2": {
-                "title": "The Modern Wardrobe",
-                "subtitle": "Elevated silhouettes, refined textures, and a bold approach to everyday dressing. Designed to move with you.",
-                "ctaText": "Shop the Look",
-                "imageAlt": "Women's White Linen Dress"
+                "title": "The Daily Ritual",
+                "subtitle": "Considered skincare for the morning that actually happens. Five minutes or fifty, we slot in.",
+                "ctaText": "Shop Skincare",
+                "imageAlt": "Serum bottles beside fresh eucalyptus."
             },
             "slide3": {
-                "title": "After Hours",
-                "subtitle": "Statement pieces and refined layers designed for nights out, late moments, and everything in between.",
-                "ctaText": "Explore the Collection",
-                "imageAlt": "Women's Black Suit"
+                "title": "The Essentials",
+                "subtitle": "The shelf that does the work — cleansers, serums, and balms built to layer.",
+                "ctaText": "Shop the Essentials",
+                "imageAlt": "A lineup of skincare bottles and jars on linen."
             },
             "slide4": {
                 "title": "New Perspectives",
-                "subtitle": "A curated drop of standout pieces that redefine contemporary fashion. Confident. Expressive. Uncompromising.",
-                "ctaText": "Shop Now",
-                "imageAlt": "Women's Grey Dress"
+                "subtitle": "Honest formulas, real shades, beauty that fits.",
+                "ctaText": "Discover the Look",
+                "imageAlt": "Rich cream lifted from a spoon."
             }
         },
         "meta": {
@@ -1249,19 +1255,19 @@
         "featuredContent": {
             "women": {
                 "title": "Women",
-                "description": "Discover our curated collection of sophisticated footwear designed for the modern woman.",
+                "description": "Everyday skincare and colour, considered for real routines.",
                 "ctaText": "EXPLORE COLLECTION",
-                "imageAlt": "Women's Collection"
+                "imageAlt": "Skincare and colour essentials on a warm tan surface."
             },
             "men": {
                 "title": "Men",
-                "description": "Timeless craftsmanship meets contemporary style in our men's footwear collection.",
+                "description": "Grooming and skincare that keeps it simple — clean formulas, no fuss.",
                 "ctaText": "EXPLORE COLLECTION",
-                "imageAlt": "Men's Collection"
+                "imageAlt": "Grooming and skincare essentials."
             },
             "styleForRealLife": {
                 "title": "Style for Real Life",
-                "description": "At Market Street, we believe fashion should be effortless, authentic, and accessible. Our collections are designed for the modern individual who values quality, versatility, and timeless style.\n\nDiscover pieces that move with you, adapt to your life, and become the foundation of a wardrobe that works—every day, everywhere."
+                "description": "Formulas that perform from five-minute mornings to fifty-minute routines. Clean is the floor, not the ceiling. Built for the people who actually wear it."
             }
         }
     },

@@ -226,6 +226,46 @@ describe('CartContent', () => {
         expect(container.querySelector('[data-slot="bonus-products-rail"]')).toBeInTheDocument();
     });
 
+    test('sources the bonus rail title callout from the trigger product when the promotions map lacks it', async () => {
+        // Unselected state: a choice-of-bonus promo has no priceAdjustment yet, so `fetchPromotionsForBasket`
+        // omits it from the promotions map. The callout must instead come from the trigger product's
+        // productPromotions (expanded at load), so the rail title shows the real callout — not the generic
+        // "Bonus Products Available" fallback.
+        const basketWithBonus = {
+            ...mockBasket,
+            bonusDiscountLineItems: [
+                {
+                    id: 'bdli-1',
+                    promotionId: 'promo-bonus',
+                    maxBonusItems: 1,
+                    bonusProducts: [{ productId: 'bonus-1', productName: 'Free Bonus' }],
+                },
+            ],
+        } as any;
+
+        // Trigger product carries the promo callout via productPromotions; promotions map intentionally omits it.
+        const productsWithCallout = {
+            ...mockProductMap,
+            'item-1': {
+                id: 'product-1',
+                name: 'Product 1',
+                variants: [{} as any],
+                productPromotions: [{ promotionId: 'promo-bonus', calloutMsg: "Buy one men's suit, get 2 free ties" }],
+            },
+        };
+
+        renderCartContent({
+            basket: basketWithBonus,
+            productsByItemId: productsWithCallout,
+            bonusProductsById: { 'bonus-1': { id: 'bonus-1', name: 'Free Bonus' } as any },
+            promotions: {} as any, // promo absent from the map (unselected state)
+        });
+
+        // Lazy fashion carousel resolves async; the title renders the sourced callout, not the fallback.
+        expect(await screen.findByText("Buy one men's suit, get 2 free ties")).toBeInTheDocument();
+        expect(screen.queryByText(t('cart:bonusProducts.defaultTitle'))).not.toBeInTheDocument();
+    });
+
     test('renders empty cart when basket is undefined', () => {
         renderCartContent({
             basket: undefined,
@@ -943,10 +983,11 @@ describe('CartContent', () => {
                 bonusProductsById: { 'bonus-shirt': variantBonusProduct } as any,
             });
 
-            // The Select button lives inside the lazily-loaded BonusProductSelection carousel,
-            // and one renders per BLI. Wait for the chunk to mount, then click any one — the
-            // capacity is keyed on promotionId, not the clicked BLI.
-            const selectButtons = await screen.findAllByRole('button', { name: /^Select$/ });
+            // The add CTA lives inside the lazily-loaded BonusProductSelection carousel, and one renders per
+            // BLI. The label is vertical-specific — canonical "Select", cosmetic "Pick" — so match both so
+            // this canonical test passes in the flattened cosmetic mirror too. Wait for the chunk to mount,
+            // then click any one — capacity is keyed on promotionId, not the clicked BLI.
+            const selectButtons = await screen.findAllByRole('button', { name: /^(Select|Pick)$/ });
             fireEvent.click(selectButtons[0]);
 
             // Modal mounts via Suspense after `selectedBonusProduct` is set.
@@ -985,7 +1026,8 @@ describe('CartContent', () => {
                 bonusProductsById: { 'bonus-shirt': variantBonusProduct } as any,
             });
 
-            const selectButton = await screen.findByRole('button', { name: /^Select$/ });
+            // Vertical-specific label (canonical "Select" / cosmetic "Pick") — match both.
+            const selectButton = await screen.findByRole('button', { name: /^(Select|Pick)$/ });
             fireEvent.click(selectButton);
 
             await screen.findByTestId('bonus-product-modal-stub');

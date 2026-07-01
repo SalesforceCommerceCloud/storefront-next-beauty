@@ -157,19 +157,6 @@ exports[`Header stories snapshot > Default story renders and matches snapshot 1`
             <div
               class="hidden lg:flex items-center h-full"
             />
-            <div
-              aria-hidden="true"
-              class="lg:hidden absolute left-0 right-0 top-full bg-header-background text-header-foreground shadow-lg z-40 max-h-[70vh] overflow-y-auto hidden"
-            >
-              <nav
-                aria-label="Mobile navigation menu"
-                class="px-4 py-4"
-              >
-                <ul
-                  class="space-y-1"
-                />
-              </nav>
-            </div>
           </div>
           <div
             class="hidden lg:flex items-center"
@@ -209,19 +196,6 @@ exports[`Header stories snapshot > Default story renders and matches snapshot 1`
             <div
               class="hidden lg:flex items-center h-full"
             />
-            <div
-              aria-hidden="true"
-              class="lg:hidden absolute left-0 right-0 top-full bg-header-background text-header-foreground shadow-lg z-40 max-h-[70vh] overflow-y-auto hidden"
-            >
-              <nav
-                aria-label="Mobile navigation menu"
-                class="px-4 py-4"
-              >
-                <ul
-                  class="space-y-1"
-                />
-              </nav>
-            </div>
           </div>
         </div>
         <a
@@ -555,19 +529,6 @@ exports[`Header stories snapshot > MobileView story renders and matches snapshot
               <div
                 class="hidden lg:flex items-center h-full"
               />
-              <div
-                aria-hidden="true"
-                class="lg:hidden absolute left-0 right-0 top-full bg-header-background text-header-foreground shadow-lg z-40 max-h-[70vh] overflow-y-auto hidden"
-              >
-                <nav
-                  aria-label="Mobile navigation menu"
-                  class="px-4 py-4"
-                >
-                  <ul
-                    class="space-y-1"
-                  />
-                </nav>
-              </div>
             </div>
             <div
               class="hidden lg:flex items-center"
@@ -607,19 +568,6 @@ exports[`Header stories snapshot > MobileView story renders and matches snapshot
               <div
                 class="hidden lg:flex items-center h-full"
               />
-              <div
-                aria-hidden="true"
-                class="lg:hidden absolute left-0 right-0 top-full bg-header-background text-header-foreground shadow-lg z-40 max-h-[70vh] overflow-y-auto hidden"
-              >
-                <nav
-                  aria-label="Mobile navigation menu"
-                  class="px-4 py-4"
-                >
-                  <ul
-                    class="space-y-1"
-                  />
-                </nav>
-              </div>
             </div>
           </div>
           <a
@@ -947,19 +895,6 @@ exports[`Header stories snapshot > WithAnnouncementBanner story renders and matc
             <div
               class="hidden lg:flex items-center h-full"
             />
-            <div
-              aria-hidden="true"
-              class="lg:hidden absolute left-0 right-0 top-full bg-header-background text-header-foreground shadow-lg z-40 max-h-[70vh] overflow-y-auto hidden"
-            >
-              <nav
-                aria-label="Mobile navigation menu"
-                class="px-4 py-4"
-              >
-                <ul
-                  class="space-y-1"
-                />
-              </nav>
-            </div>
           </div>
           <div
             class="hidden lg:flex items-center"
@@ -999,19 +934,6 @@ exports[`Header stories snapshot > WithAnnouncementBanner story renders and matc
             <div
               class="hidden lg:flex items-center h-full"
             />
-            <div
-              aria-hidden="true"
-              class="lg:hidden absolute left-0 right-0 top-full bg-header-background text-header-foreground shadow-lg z-40 max-h-[70vh] overflow-y-auto hidden"
-            >
-              <nav
-                aria-label="Mobile navigation menu"
-                class="px-4 py-4"
-              >
-                <ul
-                  class="space-y-1"
-                />
-              </nav>
-            </div>
           </div>
         </div>
         <a

@@ -903,8 +903,9 @@ describe('root.tsx', () => {
             const result = loader({
                 context,
                 request: new Request('http://localhost'),
+                url: new URL('http://localhost'),
                 params: {},
-                unstable_pattern: '/',
+                pattern: '/',
             }) as any;
 
             expect(result).toHaveProperty('clientAuth');
@@ -944,8 +945,9 @@ describe('root.tsx', () => {
             const result = loader({
                 context,
                 request: new Request('http://localhost'),
+                url: new URL('http://localhost'),
                 params: {},
-                unstable_pattern: '/',
+                pattern: '/',
             }) as any;
 
             // clientAuth should contain only non-sensitive fields
@@ -965,7 +967,13 @@ describe('root.tsx', () => {
             delete global.window;
 
             expect(() => {
-                loader({ context, request: new Request('http://localhost'), params: {}, unstable_pattern: '/' });
+                loader({
+                    context,
+                    request: new Request('http://localhost'),
+                    params: {},
+                    pattern: '/',
+                    url: new URL('http://localhost'),
+                });
             }).toThrow('i18next data not found in context. Ensure i18next middleware runs before loaders.');
 
             global.window = savedWindow;
@@ -993,8 +1001,9 @@ describe('root.tsx', () => {
             const result = loader({
                 context,
                 request: new Request('http://localhost?mode=EDIT'),
+                url: new URL('http://localhost?mode=EDIT'),
                 params: {},
-                unstable_pattern: '/',
+                pattern: '/',
             }) as any;
 
             expect(result.pageDesignerMode).toBe('EDIT');
@@ -1022,8 +1031,9 @@ describe('root.tsx', () => {
             const result = loader({
                 context,
                 request: new Request('http://localhost?mode=PREVIEW'),
+                url: new URL('http://localhost?mode=PREVIEW'),
                 params: {},
-                unstable_pattern: '/',
+                pattern: '/',
             }) as any;
 
             expect(result.pageDesignerMode).toBe('PREVIEW');
@@ -1051,8 +1061,9 @@ describe('root.tsx', () => {
             const result = loader({
                 context,
                 request: new Request('http://localhost'),
+                url: new URL('http://localhost'),
                 params: {},
-                unstable_pattern: '/',
+                pattern: '/',
             }) as any;
 
             expect(result.pageDesignerMode).toBeUndefined();
@@ -1074,11 +1085,11 @@ describe('root.tsx', () => {
     });
 
     describe('shouldRevalidate export', () => {
-        // The policy itself is covered by src/lib/routes/revalidation/root.test.ts. Here we only
+        // The policy itself is covered by src/lib/revalidation/routes/root.test.ts. Here we only
         // assert root wires up that exact function, so the behavior isn't re-tested at the route.
         it('re-exports the shared root revalidation policy', async () => {
             const { shouldRevalidate } = await import('./root');
-            const { shouldRevalidate: shouldRevalidateRoot } = await import('@/lib/routes/revalidation/root');
+            const { shouldRevalidate: shouldRevalidateRoot } = await import('@/lib/revalidation/routes/root');
             expect(shouldRevalidate).toBe(shouldRevalidateRoot);
         });
     });

@@ -16,6 +16,7 @@
 
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { action } from './action.promo-code-add';
+import { ApiError } from '@/scapi';
 import { getBasket, updateBasketResource } from '@/middlewares/basket.server';
 import { createApiClients } from '@/lib/api-clients.server';
 
@@ -30,11 +31,15 @@ const { createContext: reactCreateContext, actualReactRouter } = vi.hoisted(() =
 });
 
 vi.mock('@/lib/api-clients.server');
-// `t` echoes the key so message assertions read as `cart:promoCode.errors.*`.
-// Spied so we can assert the action passes the request `context` through —
-// bare `getTranslation()` returns the uninitialized module-global instance and
-// shopper-facing keys resolve to a generic fallback (W-23127951 follow-up).
-const getTranslationMock = vi.fn((_context?: unknown) => ({ t: (key: string) => key }));
+// `t` echoes the key so message assertions read as `cart:promoCode.errors.*`,
+// and is a stable spy so tests can assert the action interpolates the shopper's
+// own code (the `{{code}}` arg) without coupling to the localized template text.
+// `getTranslationMock` is spied too, so we can assert the action passes the
+// request `context` through — bare `getTranslation()` returns the uninitialized
+// module-global instance and shopper-facing keys resolve to a generic fallback
+// (W-23127951 follow-up).
+const tMock = vi.fn((key: string, _options?: Record<string, unknown>) => key);
+const getTranslationMock = vi.fn((_context?: unknown) => ({ t: tMock }));
 vi.mock('@salesforce/storefront-next-runtime/i18n', () => ({
     getTranslation: (context?: unknown) => getTranslationMock(context),
 }));
@@ -71,7 +76,7 @@ describe('action.promo-code-add', () => {
             createActionArgs(
                 createFormDataRequest(`http://localhost${resourceRoutes.promoCodeAdd}`, 'POST', { promoCode: code }),
                 {} as any,
-                { unstable_pattern: resourceRoutes.promoCodeAdd }
+                { pattern: resourceRoutes.promoCodeAdd }
             )
         );
 
@@ -109,7 +114,7 @@ describe('action.promo-code-add', () => {
         expect(result.data.success).toBe(true);
     });
 
-    test('fails with "not applicable" when the coupon is valid but no cart item qualifies', async () => {
+    test('fails generically when the coupon is valid but no cart item qualifies', async () => {
         // SCAPI returns HTTP 200 and parks the coupon on the basket, but no discount applies.
         mockClients.shopperBasketsV2.addCouponToBasket.mockResolvedValue({
             data: {
@@ -125,7 +130,14 @@ describe('action.promo-code-add', () => {
         expectStatus(result, 400);
         expect(result.data.success).toBe(false);
         expect(result.data.error?.code).toBe('INVALID_INPUT');
-        expect(result.data.error?.message).toBe('cart:promoCode.errors.notApplicable');
+        // A valid-but-ineligible code must return the SAME message as an unknown
+        // code — whether SCAPI parks it (this test) or throws a 4xx (see the
+        // SCAPI-throws test below) — so the form can't be used to enumerate which
+        // coupon codes exist.
+        expect(result.data.error?.message).toBe('cart:promoCode.errors.invalidCode');
+        // The shopper's own submitted code is interpolated into the message
+        // (the `{{code}}` placeholder), not SCAPI's raw detail.
+        expect(tMock).toHaveBeenCalledWith('cart:promoCode.errors.invalidCode', { code: 'PRODUCT' });
         // The basket is NOT committed as a success.
         expect(updateBasketResource).not.toHaveBeenCalled();
         // Translations must resolve against the request-scoped i18next instance,
@@ -133,7 +145,7 @@ describe('action.promo-code-add', () => {
         expect(getTranslationMock).toHaveBeenCalledWith(expect.anything());
     });
 
-    test('fails with "invalid code" for an unknown coupon', async () => {
+    test('fails with the same message for a parked unknown coupon (no enumeration oracle)', async () => {
         mockClients.shopperBasketsV2.addCouponToBasket.mockResolvedValue({
             data: {
                 basketId: 'test-basket-123',
@@ -144,7 +156,62 @@ describe('action.promo-code-add', () => {
         const result = await submit('BOGUS');
 
         expectStatus(result, 400);
+        expect(result.data.error?.code).toBe('INVALID_INPUT');
         expect(result.data.error?.message).toBe('cart:promoCode.errors.invalidCode');
+    });
+
+    test('fails with the same message when SCAPI throws a 4xx for the code (no enumeration oracle)', async () => {
+        // SCAPI doesn't park every bad code — for an unknown code it can throw a
+        // 400 whose `detail` names the code verbatim. The action must convert
+        // that into the SAME invalidCode message a parked ineligible code returns,
+        // interpolating the shopper's OWN submitted code — never SCAPI's raw
+        // `detail` — so the two paths are indistinguishable.
+        const apiError = new ApiError({
+            status: 400,
+            statusText: 'Bad Request',
+            headers: new Headers(),
+            body: {
+                type: 'https://api.commercecloud.salesforce.com/documentation/error/v1/errors/coupon-code-invalid',
+                title: 'Coupon Code Invalid',
+                detail: "Coupon code 'BOGUS' is invalid.",
+            },
+            rawBody: JSON.stringify({ detail: "Coupon code 'BOGUS' is invalid." }),
+            url: 'https://example.com/baskets/test-basket-123/coupons',
+            method: 'POST',
+        });
+        mockClients.shopperBasketsV2.addCouponToBasket.mockRejectedValue(apiError);
+
+        const result = await submit('BOGUS');
+
+        expectStatus(result, 400);
+        expect(result.data.success).toBe(false);
+        expect(result.data.error?.code).toBe('INVALID_INPUT');
+        expect(result.data.error?.message).toBe('cart:promoCode.errors.invalidCode');
+        // The message is built from the localized template + the shopper's own
+        // code, NOT from SCAPI's raw `detail`.
+        expect(tMock).toHaveBeenCalledWith('cart:promoCode.errors.invalidCode', { code: 'BOGUS' });
+        expect(updateBasketResource).not.toHaveBeenCalled();
+    });
+
+    test('lets a SCAPI 5xx propagate (still surfaced as a server error)', async () => {
+        // A server-side fault is NOT a coupon-rejection oracle concern — it must
+        // not be masked as an invalid-code 400. The basket-action wrapper maps it
+        // to a 500.
+        const apiError = new ApiError({
+            status: 500,
+            statusText: 'Internal Server Error',
+            headers: new Headers(),
+            body: { type: '', title: 'Internal Server Error', detail: 'boom' },
+            rawBody: JSON.stringify({ detail: 'boom' }),
+            url: 'https://example.com/baskets/test-basket-123/coupons',
+            method: 'POST',
+        });
+        mockClients.shopperBasketsV2.addCouponToBasket.mockRejectedValue(apiError);
+
+        const result = await submit('SAVE10');
+
+        expectStatus(result, 500);
+        expect(result.data.success).toBe(false);
     });
 
     test('fails with a 410 (not a 500) for an expired coupon', async () => {
@@ -206,7 +273,7 @@ describe('action.promo-code-add', () => {
         const result = await submit('PRODUCT');
 
         expect(result.data.success).toBe(false);
-        expect(result.data.error?.message).toBe('cart:promoCode.errors.notApplicable');
+        expect(result.data.error?.message).toBe('cart:promoCode.errors.invalidCode');
     });
 
     test('rejects an empty promo code before calling SCAPI', async () => {
