@@ -1,5 +1,5 @@
 :root {
-    /* core — cosmetic palette: warm cream surfaces + sage green primary, byte-aligned with Dazzle */
+    /* core — cosmetic palette: warm cream surfaces + sage green primary */
     --background: oklch(0.995 0.004 90);
     --foreground: oklch(0.24 0.02 80);
 
@@ -64,23 +64,19 @@
     --opacity-50: 50%;
     --opacity-30: 70%;
 
-    /* shape tokens — cosmetic adopts Dazzle's round-everywhere default.
-       Surface rounding (cards, popovers) and badges get scoped overrides
-       in base.css. --ui-radius / --ui-shadow / --ui-border-width bridge
-       into Tailwind's rounded-ui / shadow-ui / border-ui utilities via
-       tailwind.css.
+    /* shape tokens — round-everywhere default. Surface rounding (cards,
+       popovers) and badges get scoped overrides in base.css. --ui-radius /
+       --ui-shadow / --ui-border-width bridge into Tailwind's rounded-ui /
+       shadow-ui / border-ui utilities via tailwind.css.
 
-       --ui-border-width: 0 — Dazzle parity. Home / PLP / PDP Cards are
-       borderless by default (Dazzle's home page doesn't even use Card
-       primitives, so visually there's no border anywhere). Pages where
-       Cards sit on white backgrounds and need delineation
-       (account / auth / checkout / order confirmation) get 1px restored
-       via a :where() block in base.css — matches fashion's pattern. */
+       --ui-border-width: 0 — Home / PLP / PDP Cards are borderless by default
+       (the home page doesn't even use Card primitives, so visually there's no
+       border anywhere). Pages where Cards sit on white backgrounds and need
+       delineation (account / auth / checkout / order confirmation) get 1px
+       restored via a :where() block in base.css. */
     --ui-radius: var(--radius-xl);
-    /* --ui-shadow matches Tailwind v4's stock shadow-sm exactly (rgb(0 0 0 / 0.1)).
-       Dazzle's Card primitive ships with shadow-sm by default and never overrides
-       --shadow-* anywhere in its theme/, so cosmetic uses the same value for
-       pixel parity on every card surface that doesn't explicitly opt out. */
+    /* --ui-shadow matches Tailwind v4's stock shadow-sm exactly (rgb(0 0 0 / 0.1)),
+       applied on every card surface that doesn't explicitly opt out. */
     --ui-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --ui-border-width: 0;
 
@@ -98,6 +94,11 @@
        color (not currentColor, which doesn't resolve inside a mask). The shape's
        alpha is the mask — the stroke color itself is never painted. */
     --icon-gift: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>');
+
+    /* Lucide `sparkles` icon (lucide-react@0.544) as a mask data URI. Same wrapper/mask conventions as
+       `--icon-gift`. Used to swap the bonus-panel title callout once the promotion's max is reached
+       (see base.css `section[data-max-reached]`). Bump the path data if the dependency changes. */
+    --icon-sparkles: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>');
 
     [role='radio']:not([data-labeled]) {
         min-width: var(--swatch-pill-size);

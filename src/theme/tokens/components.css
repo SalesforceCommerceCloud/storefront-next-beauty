@@ -15,7 +15,7 @@
     --product-badge-promo-bg: var(--primary);
     --product-badge-promo-foreground: var(--info-foreground);
 
-    /* footer — near-white surface with deep brown text (Dazzle Beauty parity) */
+    /* footer — near-white surface with deep brown text */
     --footer-background: oklch(0.99 0.006 92);
     --footer-foreground: oklch(0.24 0.02 80);
 

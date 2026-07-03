@@ -3,7 +3,7 @@
     background: var(--primary);
     color: var(--primary-foreground);
     border-color: var(--primary);
-    border-radius: 0;
+    border-radius: var(--ui-radius);
     padding: 0.625rem 2.5rem 0.625rem 1rem;
     display: flex;
     align-items: center;

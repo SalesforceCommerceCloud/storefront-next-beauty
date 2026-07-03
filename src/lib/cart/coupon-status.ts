@@ -24,7 +24,9 @@ type CouponItem = NonNullable<ShopperBasketsV2.schemas['Basket']['couponItems']>
  * `addCouponToBasket` returns HTTP 200 and adds a coupon item even when the
  * code is valid but no promotion in the cart qualifies — it signals the real
  * outcome via `couponItems[].statusCode`, NOT via an error. Only `applied`
- * (a regular qualifying promotion) and `adhoc` (a CSR-issued ad-hoc coupon)
+ * (a campaign promotion qualified) and `adhoc` (a coupon applied via a custom,
+ * non-campaign price adjustment — SCAPI reports `adhoc` for coupon line items
+ * not based on a campaign, i.e. `CouponLineItem.isBasedOnCampaign() === false`)
  * represent a coupon that took effect; every other status is a coupon that was
  * recognized but produced no price adjustment.
  *
@@ -66,12 +68,20 @@ export const getCouponStatusError = (statusCode: CouponItem['statusCode']): Coup
         case 'adhoc':
             return null;
         case 'no_applicable_promotion':
-            return { code: ErrorCode.INVALID_INPUT, messageKey: 'cart:promoCode.errors.notApplicable' };
-        case 'no_active_promotion':
-            return { code: ErrorCode.EXPIRED, messageKey: 'cart:promoCode.errors.expiredCode' };
         case 'coupon_code_unknown':
         case 'coupon_disabled':
+            // Deliberately one message (and one 400) for all three: a code
+            // that's valid-but-ineligible, unknown, or disabled. Telling a
+            // shopper "not applicable to your cart" only for a *real* code turns
+            // the form into an oracle — an attacker can enumerate live coupon
+            // codes by which message comes back. Keep the response identical so
+            // a guessed code reveals nothing about whether it exists. This is the
+            // same key the action returns when SCAPI throws a 4xx outright for a
+            // code it rejects (it parks ineligible codes but throws on others),
+            // so both rejection paths look identical to the shopper.
             return { code: ErrorCode.INVALID_INPUT, messageKey: 'cart:promoCode.errors.invalidCode' };
+        case 'no_active_promotion':
+            return { code: ErrorCode.EXPIRED, messageKey: 'cart:promoCode.errors.expiredCode' };
         case 'coupon_already_in_basket':
         case 'coupon_code_already_in_basket':
             return { code: ErrorCode.CONFLICT, messageKey: 'cart:promoCode.errors.alreadyApplied' };

@@ -43,10 +43,9 @@ import { Component } from '@/lib/decorators/component';
 import { RegionDefinition } from '@/lib/decorators';
 import { PageConfigManager } from '../page-config-manager';
 
-// Page Designer metadata for the embedded Layout.header component. Mirrors the
-// canonical header's HeaderMetadata so the cosmetic override is a drop-in
-// replacement in the flattened mirror (the Layout.header registry entry and the
-// header.index.test.tsx HeaderMetadata assertions both resolve against it).
+// Page Designer metadata for the embedded Layout.header component. Declares the
+// HeaderMetadata shape the header registry entry and the
+// header.index.test.tsx HeaderMetadata assertions resolve against.
 @Component('header', {
     name: 'Header',
     group: 'Layout',
@@ -175,8 +174,7 @@ export default function Header({
     // change reads as a single coherent fade rather than several
     // independent property snaps. (Cosmetic's logo is an inline SVG
     // recolored via `color`, not `filter` — so unlike the canonical
-    // raster-logo header there's no `filter` to animate here.) Matches
-    // Dazzle's header behaviour.
+    // raster-logo header there's no `filter` to animate here.)
     return (
         <header
             ref={headerRef}

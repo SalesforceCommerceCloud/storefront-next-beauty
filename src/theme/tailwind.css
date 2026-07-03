@@ -1,8 +1,8 @@
 @theme inline {
     /* Font families — Lora is self-hosted; Sen is intentionally NOT shipped
-       to keep cosmetic to a single brand font. The fallback chain matches
-       Dazzle's structure (system fonts after Lora) so that when Lora is
-       still loading the rendered text uses a similar editorial cadence. */
+       to keep cosmetic to a single brand font. The fallback chain puts
+       system fonts after Lora so that when Lora is still loading the
+       rendered text uses a similar editorial cadence. */
     --font-sans: 'Lora', -apple-system, 'system-ui', 'Helvetica Neue', Arial, sans-serif;
     --font-serif: 'Lora', Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
     --font-mono: 'Courier New', monospace;
@@ -126,7 +126,7 @@
     --color-filter-selected: var(--filter-selected);
     --color-filter-selected-border: var(--filter-selected-border);
 
-    /* -- market street brand colors -- */
+    /* -- brand colors -- */
     --color-brand-black: var(--brand-black);
     --color-brand-black-off: var(--brand-black-off);
     --color-brand-black-charcoal: var(--brand-black-charcoal);

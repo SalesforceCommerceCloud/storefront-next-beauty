@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type React from 'react';
 import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ShopperBasketsV2, ShopperProducts } from '@/scapi';
-// eslint-disable-next-line import/no-namespace -- vi.spyOn requires namespace import
-import * as ReactRouter from 'react-router';
-import { createMemoryRouter, RouterProvider } from 'react-router';
+import { type ActionFunctionArgs, createMemoryRouter, RouterProvider } from 'react-router';
 
+// Relative import so the test exercises the cosmetic OVERRIDE, not the canonical component.
 import BonusProductSelection from './bonus-product-selection';
 import { getTranslation } from '@salesforce/storefront-next-runtime/i18n';
 import { SiteProvider } from '@salesforce/storefront-next-runtime/site-context';
 import { mockLocale, mockSiteObject } from '@/test-utils/config';
-import { resourceRoutes } from '@/route-paths';
 
 const mockSite = mockSiteObject;
 
@@ -34,7 +31,9 @@ const mockSite = mockSiteObject;
 // Mocks
 // ============================================================================
 
-// Mock i18next
+// Real translations via the SDK helper. Cosmetic-only CTA keys (ctaPick/ctaAdding/ctaSelected) are
+// referenced with the default-value t() form in the component, so the rendered labels are the English
+// defaults ("Pick"/"Adding…"/"Selected") regardless of which vertical's resources are loaded.
 vi.mock('react-i18next', () => ({
     useTranslation: () => {
         const { t } = getTranslation();
@@ -42,135 +41,151 @@ vi.mock('react-i18next', () => ({
     },
 }));
 
-// Mock useFetcher from react-router - will be spied on in beforeEach
-const mockSubmit = vi.fn();
-const mockFetcher = {
-    state: 'idle' as 'idle' | 'loading' | 'submitting',
-    data: null as any,
-    submit: mockSubmit,
-    load: vi.fn(),
-    Form: vi.fn(),
-};
-
-// Mock useToast
 const mockAddToast = vi.fn();
 vi.mock('@/components/toast', () => ({
     useToast: vi.fn(() => ({ addToast: mockAddToast })),
 }));
 
-// Mock bonus-product-utils
-// Default: all slots filled (for existing tests)
-vi.mock('@/lib/cart/bonus-product-utils', () => ({
-    getBonusProductCountsForPromotion: vi.fn(() => ({
-        selectedBonusItems: 3,
-        maxBonusItems: 3,
-    })),
-}));
-
-// Mock product-utils
 const mockRequiresVariantSelection = vi.fn();
 const mockGetPrimaryProductImageUrl = vi.fn();
 const mockIsRuleBasedPromotion = vi.fn();
 vi.mock('@/lib/product/product-utils', () => ({
-    requiresVariantSelection: (product: any) => mockRequiresVariantSelection(product),
-    getPrimaryProductImageUrl: (product: any) => mockGetPrimaryProductImageUrl(product),
-    isRuleBasedPromotion: (bonusItem: any) => mockIsRuleBasedPromotion(bonusItem),
+    requiresVariantSelection: (product: unknown) => mockRequiresVariantSelection(product),
+    getPrimaryProductImageUrl: (product: unknown) => mockGetPrimaryProductImageUrl(product),
+    isRuleBasedPromotion: (bonusItem: unknown) => mockIsRuleBasedPromotion(bonusItem),
 }));
 
-// Mock useConfig — still needed because `toImageUrl` reads it for DIS URL transforms.
+// `config.global.badges` drives the top-left tile badge; provide the Sale/New set (mirrors mockConfig).
 vi.mock('@salesforce/storefront-next-runtime/config', () => ({
-    useConfig: vi.fn(() => ({})),
-}));
-
-// Rule-based bonus product hits arrive as a deferred `ruleBasedBonusProductsPromise`
-// keyed by `promotionId`. Tests construct an already-resolved promise via `ruleBasedPromise()`.
-const ruleBasedPromise = (hits: any[], promotionId = 'promo-1'): Promise<Record<string, any[]>> =>
-    Promise.resolve({ [promotionId]: hits });
-
-// Mock carousel components
-vi.mock('@/components/ui/carousel', () => ({
-    Carousel: ({ children }: { children: React.ReactNode }) => (
-        <div role="region" aria-roledescription="carousel">
-            {children}
-        </div>
-    ),
-    CarouselContent: ({ children }: { children: React.ReactNode }) => (
-        <div data-testid="carousel-content">{children}</div>
-    ),
-    CarouselItem: ({ children }: { children: React.ReactNode }) => <div data-testid="carousel-item">{children}</div>,
-    CarouselPrevious: (props: React.ComponentProps<'button'>) => <button aria-label="Previous slide" {...props} />,
-    CarouselNext: (props: React.ComponentProps<'button'>) => <button aria-label="Next slide" {...props} />,
+    useConfig: vi.fn(() => ({
+        global: {
+            badges: [
+                { propertyName: 'c_isSale', label: 'Sale', color: 'orange', priority: 1 },
+                { propertyName: 'c_isNew', label: 'New', color: 'green', priority: 2 },
+            ],
+        },
+    })),
 }));
 
 // ============================================================================
-// Test Data Factories
+// Fixtures
 // ============================================================================
 
-function createMockProduct(
-    overrides: Partial<ShopperProducts.schemas['Product']> = {}
-): ShopperProducts.schemas['Product'] {
-    return {
-        id: 'product-1',
-        name: 'Test Product',
-        imageGroups: [
-            {
-                viewType: 'large',
-                images: [{ link: 'https://example.com/image.jpg', alt: 'Product Image' }],
-            },
-        ],
-        ...overrides,
-    };
-}
+const PRODUCT_NAMES = ['Navy Tie', 'Red Tie', 'Black Tie'];
 
-function createMockBonusDiscountLineItem(
-    overrides: Partial<ShopperBasketsV2.schemas['BonusDiscountLineItem']> = {}
-): ShopperBasketsV2.schemas['BonusDiscountLineItem'] {
-    return {
+function buildFixture({
+    count = 3,
+    selectedIndices = [],
+    maxBonusItems,
+    subtitleByIndex = {},
+    shortDescriptionByIndex = {},
+    mismatchedSubtitleIndices = [],
+    saleIndices = [],
+}: {
+    count?: number;
+    selectedIndices?: number[];
+    maxBonusItems?: number;
+    /** index → variation value display name (rendered as the subtitle via a `size` attribute). */
+    subtitleByIndex?: Record<number, string>;
+    /** index → product.shortDescription (subtitle fallback). */
+    shortDescriptionByIndex?: Record<number, string>;
+    /** indices whose size attribute has a value list but variationValues points at a NON-matching value. */
+    mismatchedSubtitleIndices?: number[];
+    saleIndices?: number[];
+} = {}) {
+    const safe = Math.max(1, Math.min(count, PRODUCT_NAMES.length));
+    const bonusProducts = Array.from({ length: safe }, (_, i) => ({
+        productId: `product-${i + 1}`,
+        productName: PRODUCT_NAMES[i],
+    }));
+    const bonusDiscountLineItem: ShopperBasketsV2.schemas['BonusDiscountLineItem'] = {
         id: 'bdli-1',
         promotionId: 'promo-1',
-        maxBonusItems: 3,
-        bonusProducts: [
-            { productId: 'product-1', productName: 'Test Product 1' },
-            { productId: 'product-2', productName: 'Test Product 2' },
-        ],
-        ...overrides,
+        maxBonusItems: maxBonusItems ?? safe,
+        bonusProducts,
     };
-}
-
-function createMockBasket(
-    overrides: Partial<ShopperBasketsV2.schemas['Basket']> = {}
-): ShopperBasketsV2.schemas['Basket'] {
-    return {
+    const bonusProductsById: Record<string, ShopperProducts.schemas['Product']> = Object.fromEntries(
+        bonusProducts.map((p, i) => [
+            p.productId,
+            {
+                id: p.productId,
+                name: p.productName,
+                imageGroups: [],
+                ...(subtitleByIndex[i]
+                    ? {
+                          variationAttributes: [
+                              { id: 'size', name: 'Size', values: [{ value: '010', name: subtitleByIndex[i] }] },
+                          ],
+                          variationValues: { size: '010' },
+                      }
+                    : {}),
+                ...(mismatchedSubtitleIndices.includes(i)
+                    ? {
+                          // variationValues points at '999', which is NOT in the values list → no match.
+                          variationAttributes: [
+                              { id: 'size', name: 'Size', values: [{ value: '010', name: '10 ml' }] },
+                          ],
+                          variationValues: { size: '999' },
+                      }
+                    : {}),
+                ...(shortDescriptionByIndex[i] ? { shortDescription: shortDescriptionByIndex[i] } : {}),
+                ...(saleIndices.includes(i) ? { representedProduct: { id: p.productId, c_isSale: true } } : {}),
+            } satisfies ShopperProducts.schemas['Product'],
+        ])
+    );
+    const productItems: NonNullable<ShopperBasketsV2.schemas['Basket']['productItems']> = selectedIndices.map((i) => ({
+        itemId: `bonus-item-${i + 1}`,
+        productId: `product-${i + 1}`,
+        productName: PRODUCT_NAMES[i],
+        quantity: 1,
+        bonusProductLineItem: true,
+        bonusDiscountLineItemId: 'bdli-1',
+    }));
+    const basket: ShopperBasketsV2.schemas['Basket'] = {
         basketId: 'basket-1',
-        productItems: [],
-        bonusDiscountLineItems: [],
-        ...overrides,
+        productItems,
+        bonusDiscountLineItems: [bonusDiscountLineItem],
     };
-}
-
-function createMockBonusProductsById(): Record<string, ShopperProducts.schemas['Product']> {
-    return {
-        'product-1': createMockProduct({ id: 'product-1', name: 'Test Product 1' }),
-        'product-2': createMockProduct({ id: 'product-2', name: 'Test Product 2' }),
-    };
+    return { bonusDiscountLineItem, bonusProductsById, basket };
 }
 
 // ============================================================================
-// Default Props Helper
+// Controllable stub actions
 // ============================================================================
 
-function getDefaultProps() {
-    return {
-        bonusDiscountLineItem: createMockBonusDiscountLineItem(),
-        bonusProductsById: createMockBonusProductsById(),
-        basket: createMockBasket(),
-        promotionName: 'Buy one get one free',
-        onProductSelect: vi.fn(),
-    };
+function deferred<T>() {
+    let resolve!: (value: T) => void;
+    const promise = new Promise<T>((r) => {
+        resolve = r;
+    });
+    return { promise, resolve };
 }
 
-// Helper to render with router context
-function renderWithRouter(ui: React.ReactElement) {
+let capturedAddBodies: string[];
+let capturedRemoveItemIds: string[];
+let addGate: ReturnType<typeof deferred<void>> | null;
+let removeGate: ReturnType<typeof deferred<void>> | null;
+let addResult: unknown;
+let removeResult: unknown;
+let onProductSelectSpy: ReturnType<
+    typeof vi.fn<(productId: string, productName: string, requiresModal: boolean) => void>
+>;
+
+async function addAction({ request }: ActionFunctionArgs) {
+    const fd = await request.formData();
+    capturedAddBodies.push(String(fd.get('bonusItems')));
+    if (addGate) await addGate.promise;
+    return addResult;
+}
+
+async function removeAction({ request }: ActionFunctionArgs) {
+    const fd = await request.formData();
+    capturedRemoveItemIds.push(String(fd.get('itemId')));
+    if (removeGate) await removeGate.promise;
+    return removeResult;
+}
+
+function renderSelection(props: ReturnType<typeof buildFixture>, promotion?: { name?: string; calloutMsg?: string }) {
     const router = createMemoryRouter(
         [
             {
@@ -181,754 +196,313 @@ function renderWithRouter(ui: React.ReactElement) {
                         locale={mockLocale}
                         language={mockSiteObject.defaultLocale}
                         currency={mockSiteObject.defaultCurrency}>
-                        {ui}
+                        <BonusProductSelection
+                            bonusDiscountLineItem={props.bonusDiscountLineItem}
+                            bonusProductsById={props.bonusProductsById}
+                            basket={props.basket}
+                            promotionName="Bonus ties"
+                            promotion={promotion}
+                            onProductSelect={onProductSelectSpy}
+                        />
                     </SiteProvider>
                 ),
             },
+            { path: '/action/bonus-product-add', action: addAction },
+            { path: '/action/cart-item-remove', action: removeAction },
         ],
-        {
-            initialEntries: ['/'],
-        }
+        { initialEntries: ['/'] }
     );
     return render(<RouterProvider router={router} />);
+}
+
+/** Find a tile's card element by the product name rendered in it. */
+function cardForProduct(name: string): HTMLElement {
+    return screen.getByText(name).closest('[data-slot="bonus-product-tile"]') as HTMLElement;
+}
+
+/** Find a tile's toggle button by the product name rendered in the same card. */
+function buttonForProduct(name: string): HTMLElement {
+    return within(cardForProduct(name)).getByRole('button');
 }
 
 // ============================================================================
 // Tests
 // ============================================================================
 
-describe('BonusProductSelection', () => {
+describe('Cosmetic BonusProductSelection — 3-state toggle', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        mockFetcher.state = 'idle';
-        mockFetcher.data = null;
+        capturedAddBodies = [];
+        capturedRemoveItemIds = [];
+        addGate = null;
+        removeGate = null;
+        addResult = { basketId: 'basket-1' };
+        removeResult = { basketId: 'basket-1' };
+        onProductSelectSpy = vi.fn<(productId: string, productName: string, requiresModal: boolean) => void>();
         mockRequiresVariantSelection.mockReturnValue(false);
-        mockGetPrimaryProductImageUrl.mockReturnValue('https://example.com/image.jpg');
-        mockIsRuleBasedPromotion.mockReturnValue(false); // Default to list-based
-        // Use vi.spyOn for useFetcher hook
-        vi.spyOn(ReactRouter, 'useFetcher').mockReturnValue(mockFetcher as any);
+        mockGetPrimaryProductImageUrl.mockReturnValue('');
+        mockIsRuleBasedPromotion.mockReturnValue(false);
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
     });
 
-    // ========================================================================
-    // 1. Carousel Rendering Tests
-    // ========================================================================
+    // ------------------------------------------------------------------------
+    // Tile layout: image overlays + title/subtitle, no Free badge / price
+    // ------------------------------------------------------------------------
 
-    describe('Carousel Rendering', () => {
-        test('renders carousel with correct products, images, names, and "Free" badge', async () => {
-            const props = getDefaultProps();
-            renderWithRouter(<BonusProductSelection {...props} />);
+    test('does not render a Free badge or a strikethrough price', async () => {
+        renderSelection(buildFixture({ count: 2 }));
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
 
-            await waitFor(() => {
-                // Check carousel renders
-                const carousel = screen.getByRole('region', { name: '' });
-                expect(carousel).toHaveAttribute('aria-roledescription', 'carousel');
-
-                // Check products render (2 carousel items)
-                const carouselItems = screen.getAllByTestId('carousel-item');
-                expect(carouselItems).toHaveLength(2);
-
-                // Check product names display
-                expect(screen.getByText('Test Product 1')).toBeInTheDocument();
-                expect(screen.getByText('Test Product 2')).toBeInTheDocument();
-
-                // Check "Free" badges (one per product)
-                const badges = screen.getAllByText('Free');
-                expect(badges).toHaveLength(2);
-
-                // Check Select buttons render
-                const selectButtons = screen.getAllByRole('button', { name: /select/i });
-                expect(selectButtons).toHaveLength(2);
-            });
-        });
-
-        test('does not render products when bonusProducts array is empty', () => {
-            const props = getDefaultProps();
-            props.bonusDiscountLineItem = createMockBonusDiscountLineItem({ bonusProducts: [] });
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            // Should not have carousel items
-            const carouselItems = screen.queryAllByTestId('carousel-item');
-            expect(carouselItems).toHaveLength(0);
-        });
-
-        test('displays "No image available" placeholder when product has no image', async () => {
-            mockGetPrimaryProductImageUrl.mockReturnValue(undefined);
-            const props = getDefaultProps();
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            await waitFor(() => {
-                const placeholders = screen.getAllByText('No image available');
-                expect(placeholders).toHaveLength(2);
-            });
-        });
-
-        test('displays promotion title with selection count from API', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 1,
-                maxBonusItems: 3,
-            });
-
-            const props = getDefaultProps();
-            props.promotionName = 'Summer Sale Bonus';
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            // Check title with count (mocked as 1 of 3). Derive the suffix from the resolved
-            // translation rather than hardcoding the canonical wording — verticals (e.g. cosmetic)
-            // override `selectionCount` to a compact "1/3" form via their locale overlay.
-            const { t } = getTranslation();
-            const countText = t('cart:bonusProducts.selectionCount', { selected: 1, max: 3 }).trim();
-            expect(screen.getByText('Summer Sale Bonus')).toBeInTheDocument();
-            expect(screen.getByText((content) => content.includes(countText))).toBeInTheDocument();
-        });
-
-        test('displays fallback title when promotionName is not provided', () => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { promotionName, ...propsWithoutPromoName } = getDefaultProps();
-
-            renderWithRouter(<BonusProductSelection {...propsWithoutPromoName} />);
-
-            expect(screen.getByText('Bonus Products Available')).toBeInTheDocument();
-        });
-
-        test('carousel items are left-aligned with justify-start class', async () => {
-            const props = getDefaultProps();
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            await waitFor(() => {
-                const carouselContent = screen.getByTestId('carousel-content');
-                // Check that justify-start class is applied (via className prop)
-                expect(carouselContent).toBeInTheDocument();
-            });
-        });
+        expect(screen.queryByText(/free/i)).not.toBeInTheDocument();
+        // No line-through price node anywhere in the rendered tiles.
+        expect(document.querySelector('.line-through')).toBeNull();
     });
 
-    // ========================================================================
-    // 2. Product Selection Flow Tests
-    // ========================================================================
+    test('renders the subtitle verbatim from the configured size variation value name', async () => {
+        renderSelection(buildFixture({ count: 2, subtitleByIndex: { 0: '10 ml, 1 week supply' } }));
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
 
-    describe('Product Selection Flow', () => {
-        test('variants add directly to cart; masters open modal', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
-
-            const props = getDefaultProps();
-            const user = userEvent.setup();
-
-            // Add a variant and a master product
-            props.bonusDiscountLineItem = createMockBonusDiscountLineItem({
-                bonusProducts: [
-                    { productId: 'variant-1', productName: 'Variant Product' },
-                    { productId: 'master-1', productName: 'Master Product' },
-                ],
-            });
-            props.bonusProductsById = {
-                'variant-1': createMockProduct({
-                    id: 'variant-1',
-                    name: 'Variant Product',
-                    type: { variant: true },
-                }),
-                'master-1': createMockProduct({
-                    id: 'master-1',
-                    name: 'Master Product',
-                    type: { master: true },
-                    variants: [{ productId: 'var-1' }, { productId: 'var-2' }],
-                }),
-            };
-
-            // Mock requiresVariantSelection to return false for variant, true for master
-            mockRequiresVariantSelection.mockImplementation((product: any) => {
-                return product.type?.master === true;
-            });
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            const selectButtons = await screen.findAllByRole('button', { name: /select/i });
-
-            // Click variant product (first button)
-            await user.click(selectButtons[0]);
-
-            // Variant should add directly to cart
-            expect(mockSubmit).toHaveBeenCalledWith(expect.any(FormData), {
-                method: 'POST',
-                action: resourceRoutes.bonusProductAdd,
-            });
-            expect(props.onProductSelect).not.toHaveBeenCalled();
-
-            // Reset mocks
-            mockSubmit.mockClear();
-            props.onProductSelect.mockClear();
-
-            // Click master product (second button)
-            await user.click(selectButtons[1]);
-
-            // Master should open modal
-            expect(props.onProductSelect).toHaveBeenCalledWith('master-1', 'Master Product', true);
-            expect(mockSubmit).not.toHaveBeenCalled();
-        });
-
-        test('opens modal when clicking Select on a variant product', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
-
-            mockRequiresVariantSelection.mockReturnValue(true);
-            const props = getDefaultProps();
-            const user = userEvent.setup();
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            const selectButtons = await screen.findAllByRole('button', { name: /select/i });
-            await user.click(selectButtons[0]);
-
-            // Should call onProductSelect with requiresModal=true
-            expect(props.onProductSelect).toHaveBeenCalledWith('product-1', 'Test Product 1', true);
-
-            // Should NOT submit to fetcher (modal handles it)
-            expect(mockSubmit).not.toHaveBeenCalled();
-        });
-
-        test('adds directly to cart when clicking Select on a standard product', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
-
-            mockRequiresVariantSelection.mockReturnValue(false);
-            const props = getDefaultProps();
-            const user = userEvent.setup();
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            const selectButtons = await screen.findAllByRole('button', { name: /select/i });
-            await user.click(selectButtons[0]);
-
-            // Should NOT call onProductSelect (direct add)
-            expect(props.onProductSelect).not.toHaveBeenCalled();
-
-            // Should submit to fetcher
-            expect(mockSubmit).toHaveBeenCalledWith(expect.any(FormData), {
-                method: 'POST',
-                action: resourceRoutes.bonusProductAdd,
-            });
-
-            // Verify FormData contains correct bonusItems
-            const submittedFormData = mockSubmit.mock.calls[0][0] as FormData;
-            const bonusItems = JSON.parse(submittedFormData.get('bonusItems') as string);
-            expect(bonusItems).toEqual([
-                {
-                    productId: 'product-1',
-                    quantity: 1,
-                    bonusDiscountLineItemId: 'bdli-1',
-                    promotionId: 'promo-1',
-                },
-            ]);
-        });
-
-        test('does not show toast after successful direct add', async () => {
-            mockRequiresVariantSelection.mockReturnValue(false);
-            // Set up fetcher with success state before render
-            mockFetcher.state = 'idle';
-            mockFetcher.data = { success: true };
-
-            const props = getDefaultProps();
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            await waitFor(() => {
-                expect(mockAddToast).not.toHaveBeenCalled();
-            });
-        });
-
-        test('shows error toast after failed direct add', async () => {
-            const { t } = getTranslation();
-            mockRequiresVariantSelection.mockReturnValue(false);
-            // Set up fetcher with error state before render
-            mockFetcher.state = 'idle';
-            mockFetcher.data = { success: false, error: 'Out of stock' };
-
-            const props = getDefaultProps();
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            await waitFor(() => {
-                expect(mockAddToast).toHaveBeenCalledWith(
-                    t('product:bonusProducts.failedToAdd', { error: 'Out of stock' }),
-                    'error'
-                );
-            });
-        });
-
-        test('button is disabled during submission and when max items reached', async () => {
-            const props = getDefaultProps();
-
-            // Mock max items reached
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 3,
-                maxBonusItems: 3,
-            });
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            // Check buttons are disabled when max reached
-            const selectButtons = await screen.findAllByRole('button', { name: /select/i });
-            selectButtons.forEach((button) => {
-                expect(button).toBeDisabled();
-            });
-        });
-
-        test('button shows "Adding..." during submission', async () => {
-            mockFetcher.state = 'submitting';
-            const props = getDefaultProps();
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            await waitFor(() => {
-                const addingButtons = screen.getAllByRole('button', { name: /adding\.\.\./i });
-                expect(addingButtons.length).toBeGreaterThan(0);
-            });
-        });
-
-        test('shows error and does not submit when bonusDiscountLineItem.id is missing', async () => {
-            const { t } = getTranslation();
-            mockRequiresVariantSelection.mockReturnValue(false);
-
-            // Mock counts to ensure button is not disabled
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
-
-            const props = getDefaultProps();
-            props.bonusDiscountLineItem = createMockBonusDiscountLineItem({ id: '' });
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            const selectButtons = await screen.findAllByRole('button', { name: /select/i });
-            fireEvent.click(selectButtons[0]);
-
-            // Should show error toast
-            await waitFor(() => {
-                expect(mockAddToast).toHaveBeenCalledWith(
-                    t('product:bonusProducts.failedToAdd', {
-                        error: t('product:bonusProducts.missingRequiredInfo'),
-                    }),
-                    'error'
-                );
-            });
-
-            // Should NOT submit to fetcher
-            expect(mockSubmit).not.toHaveBeenCalled();
-        });
-
-        test('shows error and does not submit when promotionId is missing', async () => {
-            const { t } = getTranslation();
-            mockRequiresVariantSelection.mockReturnValue(false);
-
-            // Mock counts to ensure button is not disabled
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
-
-            const props = getDefaultProps();
-            props.bonusDiscountLineItem = createMockBonusDiscountLineItem({ promotionId: '' });
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            const selectButtons = await screen.findAllByRole('button', { name: /select/i });
-            fireEvent.click(selectButtons[0]);
-
-            // Should show error toast
-            await waitFor(() => {
-                expect(mockAddToast).toHaveBeenCalledWith(
-                    t('product:bonusProducts.failedToAdd', {
-                        error: t('product:bonusProducts.missingRequiredInfo'),
-                    }),
-                    'error'
-                );
-            });
-
-            // Should NOT submit to fetcher
-            expect(mockSubmit).not.toHaveBeenCalled();
-        });
+        expect(within(cardForProduct('Navy Tie')).getByText('10 ml, 1 week supply')).toBeInTheDocument();
+        // The product without a size attribute or shortDescription shows no subtitle.
+        expect(within(cardForProduct('Red Tie')).queryByText(/supply|ml/i)).not.toBeInTheDocument();
     });
 
-    // ========================================================================
-    // 3. Edge Cases & Graceful Handling
-    // ========================================================================
+    test('falls back to shortDescription when there is no size variation value', async () => {
+        renderSelection(buildFixture({ count: 1, shortDescriptionByIndex: { 0: 'Silky, breathable knit' } }));
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
 
-    describe('Edge Cases', () => {
-        test('handles missing product in bonusProductsById gracefully', async () => {
-            const props = getDefaultProps();
-            // Remove product-2 from the map
-            delete props.bonusProductsById['product-2'];
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            await waitFor(() => {
-                // Should only render 1 product card (product-1)
-                const carouselItems = screen.getAllByTestId('carousel-item');
-                expect(carouselItems).toHaveLength(1);
-
-                // Only product-1 name should be visible
-                expect(screen.getByText('Test Product 1')).toBeInTheDocument();
-                expect(screen.queryByText('Test Product 2')).not.toBeInTheDocument();
-            });
-        });
-
-        test('uses product name from bonusProductsById when productName is missing', async () => {
-            const props = getDefaultProps();
-            // Remove productName from bonusProducts
-            props.bonusDiscountLineItem = createMockBonusDiscountLineItem({
-                bonusProducts: [
-                    { productId: 'product-1' }, // No productName
-                ],
-            });
-            // Ensure bonusProductsById has the name
-            props.bonusProductsById = {
-                'product-1': createMockProduct({ id: 'product-1', name: 'Name From Product Data' }),
-            };
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            await waitFor(() => {
-                expect(screen.getByText('Name From Product Data')).toBeInTheDocument();
-            });
-        });
-
-        test('falls back to "Product" when both productName sources are missing', async () => {
-            const props = getDefaultProps();
-            // Remove productName from bonusProducts
-            props.bonusDiscountLineItem = createMockBonusDiscountLineItem({
-                bonusProducts: [{ productId: 'product-1' }],
-            });
-            // Ensure bonusProductsById has no name
-            props.bonusProductsById = {
-                'product-1': createMockProduct({ id: 'product-1', name: undefined }),
-            };
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            await waitFor(() => {
-                expect(screen.getByText('Product')).toBeInTheDocument();
-            });
-        });
+        expect(within(cardForProduct('Navy Tie')).getByText('Silky, breathable knit')).toBeInTheDocument();
     });
 
-    // ========================================================================
-    // 4. Rule-Based and Combined Products Tests
-    // ========================================================================
+    test('a recorded-but-unmatched size selection does NOT fall back to the first value name', async () => {
+        // variationValues.size='999' has no matching value (values only has '010'/'10 ml'). The subtitle must
+        // NOT show the wrong "10 ml"; it should fall through to shortDescription instead.
+        renderSelection(
+            buildFixture({ count: 1, mismatchedSubtitleIndices: [0], shortDescriptionByIndex: { 0: 'Silky knit' } })
+        );
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
 
-    describe('Rule-Based and Combined Products', () => {
-        test('renders rule-based products when promotion is rule-based', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
+        const card = cardForProduct('Navy Tie');
+        expect(within(card).queryByText('10 ml')).not.toBeInTheDocument();
+        expect(within(card).getByText('Silky knit')).toBeInTheDocument();
+    });
 
-            mockIsRuleBasedPromotion.mockReturnValue(true);
+    test('shows the round checkmark badge only on the selected tile', async () => {
+        renderSelection(buildFixture({ count: 2, selectedIndices: [0], maxBonusItems: 2 }));
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
 
-            const props = {
-                ...getDefaultProps(),
-                bonusDiscountLineItem: createMockBonusDiscountLineItem({
-                    bonusProducts: [], // Empty list-based products
-                }),
-                ruleBasedBonusProductsPromise: ruleBasedPromise([
-                    {
-                        productId: 'rule-product-1',
-                        id: 'rule-product-1',
-                        productName: 'Rule Based Product 1',
-                        image: { disBaseLink: 'https://example.com/rule1.jpg' },
-                    },
-                    {
-                        productId: 'rule-product-2',
-                        id: 'rule-product-2',
-                        productName: 'Rule Based Product 2',
-                        image: { link: 'https://example.com/rule2.jpg' },
-                    },
-                ]),
-            };
+        expect(within(cardForProduct('Navy Tie')).getByTestId('bonus-selected-check')).toBeInTheDocument();
+        expect(within(cardForProduct('Red Tie')).queryByTestId('bonus-selected-check')).not.toBeInTheDocument();
+    });
 
-            renderWithRouter(<BonusProductSelection {...props} />);
+    test('renders the top-left secondary badge when getProductBadges yields one, absent otherwise', async () => {
+        renderSelection(buildFixture({ count: 2, saleIndices: [0] }));
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
 
-            await waitFor(() => {
-                expect(screen.getByText('Rule Based Product 1')).toBeInTheDocument();
-                expect(screen.getByText('Rule Based Product 2')).toBeInTheDocument();
+        expect(within(cardForProduct('Navy Tie')).getByText(/^sale$/i)).toBeInTheDocument();
+        expect(within(cardForProduct('Red Tie')).queryByText(/^sale$/i)).not.toBeInTheDocument();
+    });
 
-                const carouselItems = screen.getAllByTestId('carousel-item');
-                expect(carouselItems).toHaveLength(2);
-            });
+    test('shows the max-reached notice only when the basket-confirmed count hits max', async () => {
+        // Below max: notice absent.
+        const { container, unmount } = renderSelection(
+            buildFixture({ count: 3, selectedIndices: [0], maxBonusItems: 3 })
+        );
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        expect(container.querySelector('[data-slot="bonus-max-reached"]')).toBeNull();
+        // The section's max-reached hook (drives the gift→sparkles icon swap in CSS) is also absent below max.
+        expect(container.querySelector('section[data-max-reached]')).toBeNull();
+        unmount();
+
+        // At max (1 of 1 selected): notice present with the FREE badge, and the section carries the hook.
+        const { container: maxContainer } = renderSelection(
+            buildFixture({ count: 3, selectedIndices: [0], maxBonusItems: 1 })
+        );
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        const notice = maxContainer.querySelector('[data-slot="bonus-max-reached"]') as HTMLElement;
+        expect(notice).toBeTruthy();
+        expect(within(notice).getByText(/^free$/i)).toBeInTheDocument();
+        expect(maxContainer.querySelector('section[data-max-reached]')).toBeTruthy();
+    });
+
+    test('title uses the promotion calloutMsg, never the name (which can be the promotion id)', async () => {
+        // Both present → title shows the shopper-facing calloutMsg, NOT the admin/id-ish name.
+        const { unmount } = renderSelection(buildFixture({ count: 2 }), {
+            name: 'ChoiceOfBonusProdect-ProductLevel',
+            calloutMsg: "Buy one men's suit, get 2 free ties",
         });
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        expect(screen.getByText("Buy one men's suit, get 2 free ties")).toBeInTheDocument();
+        expect(screen.queryByText('ChoiceOfBonusProdect-ProductLevel')).not.toBeInTheDocument();
+        unmount();
 
-        test('combines list-based and rule-based products when both exist', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 5,
-            });
-
-            mockIsRuleBasedPromotion.mockReturnValue(true);
-
-            const props = {
-                ...getDefaultProps(),
-                ruleBasedBonusProductsPromise: ruleBasedPromise([
-                    {
-                        productId: 'rule-product-1',
-                        id: 'rule-product-1',
-                        productName: 'Rule Product 1',
-                        image: { disBaseLink: 'https://example.com/rule1.jpg' },
-                    },
-                    {
-                        productId: 'rule-product-2',
-                        id: 'rule-product-2',
-                        productName: 'Rule Product 2',
-                        image: { link: 'https://example.com/rule2.jpg' },
-                    },
-                ]),
-            };
-            // Keep the list-based products from default props (product-1, product-2)
-
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            // Should show all 4 products (2 list-based + 2 rule-based)
-            await waitFor(() => {
-                // List-based products
-                expect(screen.getByText('Test Product 1')).toBeInTheDocument();
-                expect(screen.getByText('Test Product 2')).toBeInTheDocument();
-
-                // Rule-based products
-                expect(screen.getByText('Rule Product 1')).toBeInTheDocument();
-                expect(screen.getByText('Rule Product 2')).toBeInTheDocument();
-
-                const carouselItems = screen.getAllByTestId('carousel-item');
-                expect(carouselItems).toHaveLength(4);
-            });
+        // calloutMsg can contain HTML → tags stripped.
+        const { unmount: unmount2 } = renderSelection(buildFixture({ count: 2 }), {
+            calloutMsg: '<strong>2 free ties</strong>',
         });
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        expect(screen.getByText('2 free ties')).toBeInTheDocument();
+        unmount2();
+    });
 
-        test('deduplicates products appearing in both list-based and rule-based', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 5,
-            });
+    test('empties the selection count once max is reached (span kept for stable title sizing)', async () => {
+        // The count span is always mounted (so cosmetic base.css `:first-child`/`:last-child` title sizing
+        // stays stable); only its text clears at max. Count text format is vertical-specific, so assert on
+        // the second span's textContent rather than matching a string.
+        const countSpan = (c: HTMLElement) => (c.querySelector('h3') as HTMLElement).querySelectorAll('span')[1];
 
-            mockIsRuleBasedPromotion.mockReturnValue(true);
+        // Below max → count span has text.
+        const { container, unmount } = renderSelection(
+            buildFixture({ count: 3, selectedIndices: [0], maxBonusItems: 3 })
+        );
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        expect(countSpan(container).textContent?.trim()).not.toBe('');
+        unmount();
 
-            const props = {
-                ...getDefaultProps(),
-                // Rule-based products include product-1 which is also in list-based
-                ruleBasedBonusProductsPromise: ruleBasedPromise([
-                    {
-                        productId: 'product-1', // DUPLICATE with list-based
-                        id: 'product-1',
-                        productName: 'Rule Version of Product 1',
-                        image: { disBaseLink: 'https://example.com/rule1.jpg' },
-                    },
-                    {
-                        productId: 'rule-product-unique',
-                        id: 'rule-product-unique',
-                        productName: 'Unique Rule Product',
-                        image: { link: 'https://example.com/unique.jpg' },
-                    },
-                ]),
-            };
-            // Default props have product-1 and product-2
+        // At max → count span is empty (but still present).
+        const { container: c2 } = renderSelection(buildFixture({ count: 3, selectedIndices: [0], maxBonusItems: 1 }));
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        expect(countSpan(c2)).toBeTruthy();
+        expect(countSpan(c2).textContent?.trim()).toBe('');
+    });
 
-            renderWithRouter(<BonusProductSelection {...props} />);
-
-            // Should show only 3 unique products (product-1 deduplicated)
-            await waitFor(() => {
-                const carouselItems = screen.getAllByTestId('carousel-item');
-                expect(carouselItems).toHaveLength(3);
-
-                // product-1 should appear only once (list-based version takes precedence)
-                expect(screen.getByText('Test Product 1')).toBeInTheDocument();
-                expect(screen.queryByText('Rule Version of Product 1')).not.toBeInTheDocument();
-
-                // Other products should be present
-                expect(screen.getByText('Test Product 2')).toBeInTheDocument();
-                expect(screen.getByText('Unique Rule Product')).toBeInTheDocument();
-            });
+    test('max-reached notice shows the static confirmation text (not the callout)', async () => {
+        const { container } = renderSelection(buildFixture({ count: 3, selectedIndices: [0], maxBonusItems: 1 }), {
+            name: 'ChoiceOfBonusProdect-ProductLevel',
+            calloutMsg: "Buy one men's suit, get 2 free ties",
         });
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        const notice = container.querySelector('[data-slot="bonus-max-reached"]') as HTMLElement;
+        expect(within(notice).getByText(/added to your bag/i)).toBeInTheDocument();
+        // The callout is the title, not the notice text.
+        expect(within(notice).queryByText(/2 free ties/i)).not.toBeInTheDocument();
+    });
 
-        test('handles empty rule-based products gracefully', async () => {
-            mockIsRuleBasedPromotion.mockReturnValue(true);
+    // ------------------------------------------------------------------------
+    // Toggle behaviour (unchanged)
+    // ------------------------------------------------------------------------
 
-            const props = {
-                ...getDefaultProps(),
-                bonusDiscountLineItem: createMockBonusDiscountLineItem({
-                    bonusProducts: [], // Also empty list-based
-                }),
-                ruleBasedBonusProductsPromise: ruleBasedPromise([]),
-            };
+    test('renders Pick on unselected tiles and Selected on the in-basket tile', async () => {
+        renderSelection(buildFixture({ count: 3, selectedIndices: [0], maxBonusItems: 3 }));
 
-            renderWithRouter(<BonusProductSelection {...props} />);
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
 
-            // Should render without crashing, but no products
-            await waitFor(() => {
-                const carouselItems = screen.queryAllByTestId('carousel-item');
-                expect(carouselItems).toHaveLength(0);
-            });
-        });
+        const selected = buttonForProduct('Navy Tie');
+        expect(selected).toHaveTextContent(/selected/i);
+        expect(selected).toHaveAttribute('aria-pressed', 'true');
+        expect(selected).toHaveAttribute('data-state', 'selected');
 
-        test('uses disBaseLink for rule-based product images when available', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
+        expect(buttonForProduct('Red Tie')).toHaveTextContent(/pick/i);
+        expect(buttonForProduct('Black Tie')).toHaveTextContent(/pick/i);
+    });
 
-            mockIsRuleBasedPromotion.mockReturnValue(true);
+    test('per-tile pending: only the clicked tile shows Adding… while others stay Pick', async () => {
+        addGate = deferred<void>(); // keep the add in flight
+        renderSelection(buildFixture({ count: 3, maxBonusItems: 3 }));
 
-            const props = {
-                ...getDefaultProps(),
-                bonusDiscountLineItem: createMockBonusDiscountLineItem({ bonusProducts: [] }),
-                ruleBasedBonusProductsPromise: ruleBasedPromise([
-                    {
-                        productId: 'rule-product-1',
-                        id: 'rule-product-1',
-                        productName: 'Rule Product with disBaseLink',
-                        image: {
-                            disBaseLink: 'https://example.com/disbased.jpg',
-                            link: 'https://example.com/regular.jpg',
-                        },
-                    },
-                ]),
-            };
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        await userEvent.click(buttonForProduct('Navy Tie'));
 
-            renderWithRouter(<BonusProductSelection {...props} />);
+        await waitFor(() => expect(buttonForProduct('Navy Tie')).toHaveTextContent(/adding/i));
+        expect(buttonForProduct('Navy Tie')).toBeDisabled();
+        // Other tiles are untouched (max is 3, so no optimistic-max disabling here).
+        expect(buttonForProduct('Red Tie')).toHaveTextContent(/pick/i);
+        expect(buttonForProduct('Red Tie')).toBeEnabled();
+        expect(buttonForProduct('Black Tie')).toHaveTextContent(/pick/i);
 
-            await waitFor(() => {
-                const image = screen.getByRole<HTMLImageElement>('img', { name: 'Rule Product with disBaseLink' });
-                expect(image.src).toContain('disbased.jpg');
-            });
-        });
+        addGate.resolve();
+    });
 
-        test('falls back to link for rule-based product images when disBaseLink is not available', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
+    test('selected tile stays enabled at max while unselected tiles disable', async () => {
+        renderSelection(buildFixture({ count: 3, selectedIndices: [0], maxBonusItems: 1 }));
 
-            mockIsRuleBasedPromotion.mockReturnValue(true);
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
 
-            const props = {
-                ...getDefaultProps(),
-                bonusDiscountLineItem: createMockBonusDiscountLineItem({ bonusProducts: [] }),
-                ruleBasedBonusProductsPromise: ruleBasedPromise([
-                    {
-                        productId: 'rule-product-1',
-                        id: 'rule-product-1',
-                        productName: 'Rule Product with link only',
-                        image: {
-                            link: 'https://example.com/fallback.jpg',
-                        },
-                    },
-                ]),
-            };
+        expect(buttonForProduct('Navy Tie')).toBeEnabled(); // selected → can toggle off
+        expect(buttonForProduct('Red Tie')).toBeDisabled(); // unselected + max reached
+        expect(buttonForProduct('Black Tie')).toBeDisabled();
+    });
 
-            renderWithRouter(<BonusProductSelection {...props} />);
+    test('optimistic max: an in-flight add disables the remaining unselected tiles immediately', async () => {
+        addGate = deferred<void>(); // keep the add in flight so pendingAdds stays populated
+        renderSelection(buildFixture({ count: 3, maxBonusItems: 1 }));
 
-            await waitFor(() => {
-                const image = screen.getByRole<HTMLImageElement>('img', { name: 'Rule Product with link only' });
-                expect(image.src).toContain('fallback.jpg');
-            });
-        });
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        // Before any click, all tiles are pickable.
+        expect(buttonForProduct('Red Tie')).toBeEnabled();
 
-        test('handles rule-based products with missing image gracefully', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
+        await userEvent.click(buttonForProduct('Navy Tie'));
 
-            mockIsRuleBasedPromotion.mockReturnValue(true);
+        // The in-flight add counts toward max (1), so the others disable before the basket revalidates.
+        await waitFor(() => expect(buttonForProduct('Red Tie')).toBeDisabled());
+        expect(buttonForProduct('Black Tie')).toBeDisabled();
 
-            const props = {
-                ...getDefaultProps(),
-                bonusDiscountLineItem: createMockBonusDiscountLineItem({ bonusProducts: [] }),
-                ruleBasedBonusProductsPromise: ruleBasedPromise([
-                    {
-                        productId: 'rule-product-1',
-                        id: 'rule-product-1',
-                        productName: 'Rule Product without image',
-                        // No image property
-                    },
-                ]),
-            };
+        addGate.resolve();
+    });
 
-            renderWithRouter(<BonusProductSelection {...props} />);
+    test('toggle-off submits the basket itemId to cart-item-remove', async () => {
+        renderSelection(buildFixture({ count: 2, selectedIndices: [0], maxBonusItems: 2 }));
 
-            await waitFor(() => {
-                expect(screen.getByText('Rule Product without image')).toBeInTheDocument();
-                expect(screen.getByText('No image available')).toBeInTheDocument();
-            });
-        });
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        await userEvent.click(buttonForProduct('Navy Tie')); // the Selected tile
 
-        test('filters out rule-based products with missing productId and id', async () => {
-            // Override mock to have slots available
-            const { getBonusProductCountsForPromotion } = await import('@/lib/cart/bonus-product-utils');
-            vi.mocked(getBonusProductCountsForPromotion).mockReturnValue({
-                selectedBonusItems: 0,
-                maxBonusItems: 3,
-            });
+        await waitFor(() => expect(capturedRemoveItemIds).toContain('bonus-item-1'));
+        expect(capturedAddBodies).toHaveLength(0);
+    });
 
-            mockIsRuleBasedPromotion.mockReturnValue(true);
+    test('removing a selected tile shows "Removing…" (not "Adding…") while in flight', async () => {
+        removeGate = deferred<void>(); // hold the remove in flight
+        renderSelection(buildFixture({ count: 2, selectedIndices: [0], maxBonusItems: 2 }));
 
-            const props = {
-                ...getDefaultProps(),
-                bonusDiscountLineItem: createMockBonusDiscountLineItem({ bonusProducts: [] }),
-                ruleBasedBonusProductsPromise: ruleBasedPromise([
-                    {
-                        productName: 'Invalid Product - No ID',
-                        image: { link: 'https://example.com/image.jpg' },
-                        // Missing both productId and id
-                    },
-                    {
-                        productId: 'valid-product',
-                        id: 'valid-product',
-                        productName: 'Valid Product',
-                        image: { link: 'https://example.com/valid.jpg' },
-                    },
-                ]),
-            };
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        await userEvent.click(buttonForProduct('Navy Tie')); // Selected → remove
 
-            renderWithRouter(<BonusProductSelection {...props} />);
+        await waitFor(() => expect(buttonForProduct('Navy Tie')).toHaveTextContent(/removing/i));
+        expect(buttonForProduct('Navy Tie')).not.toHaveTextContent(/adding/i);
 
-            await waitFor(() => {
-                // Should only show the valid product
-                const carouselItems = screen.getAllByTestId('carousel-item');
-                expect(carouselItems).toHaveLength(1);
-                expect(screen.getByText('Valid Product')).toBeInTheDocument();
-                expect(screen.queryByText('Invalid Product - No ID')).not.toBeInTheDocument();
-            });
-        });
+        removeGate.resolve();
+    });
+
+    test('a successful remove (bare basket, no success field) does not toast', async () => {
+        removeResult = { basketId: 'basket-1' }; // bare basket — no `success` key
+        renderSelection(buildFixture({ count: 2, selectedIndices: [0], maxBonusItems: 2 }));
+
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        await userEvent.click(buttonForProduct('Navy Tie'));
+
+        // Wait for the remove to settle (button returns to Selected — basket prop is static).
+        await waitFor(() => expect(capturedRemoveItemIds).toHaveLength(1));
+        await waitFor(() => expect(buttonForProduct('Navy Tie')).toHaveTextContent(/selected/i));
+        expect(mockAddToast).not.toHaveBeenCalled();
+    });
+
+    test('a failed add ({ success: false }) toasts and the tile falls back to Pick', async () => {
+        addResult = { success: false, error: { message: 'Over max' } };
+        renderSelection(buildFixture({ count: 2, maxBonusItems: 5 }));
+
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        await userEvent.click(buttonForProduct('Navy Tie'));
+
+        // The test i18n harness returns raw keys (no `{{error}}` interpolation), so assert on the toast
+        // severity rather than the message text — the behaviour under test is "failed add → error toast".
+        await waitFor(() => expect(mockAddToast).toHaveBeenCalledTimes(1));
+        expect(mockAddToast).toHaveBeenCalledWith(expect.any(String), 'error');
+        // Basket is unchanged, so the tile resolves back to Pick (no manual rollback needed).
+        await waitFor(() => expect(buttonForProduct('Navy Tie')).toHaveTextContent(/pick/i));
+    });
+
+    test('variant-requiring product opens the modal instead of submitting', async () => {
+        mockRequiresVariantSelection.mockReturnValue(true);
+        renderSelection(buildFixture({ count: 2, maxBonusItems: 2 }));
+
+        await waitFor(() => expect(screen.getByText('Navy Tie')).toBeInTheDocument());
+        await userEvent.click(buttonForProduct('Navy Tie'));
+
+        expect(onProductSelectSpy).toHaveBeenCalledWith('product-1', 'Navy Tie', true);
+        expect(capturedAddBodies).toHaveLength(0);
+        expect(capturedRemoveItemIds).toHaveLength(0);
     });
 });

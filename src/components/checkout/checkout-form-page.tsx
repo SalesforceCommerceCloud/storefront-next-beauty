@@ -37,7 +37,8 @@ import { UITarget } from '@/targets/ui-target';
 import { PaymentSubmissionRefProvider } from './payment-submission-context';
 import { clearCheckoutCorrelationId, getOrCreateCheckoutCorrelationId } from '@/lib/checkout/correlation';
 import { Spinner } from '@/components/spinner';
-import { getCheckoutDisplayError } from './utils/checkout-display-error';
+import { getCheckoutDisplayError, isUnauthorizedError } from './utils/checkout-display-error';
+import { SessionExpiredBanner } from './components/session-expired-banner';
 import { CHECKOUT_STEPS, type CheckoutStep } from './utils/checkout-context-types';
 import { handlePickupContinueAction, hasAnyValidShippingMethod } from './utils/checkout-utils';
 import { isAddressEmpty } from '@/lib/address/address-utils';
@@ -689,9 +690,24 @@ export default function CheckoutFormPage({
         if (error) showToast?.(error, 'error');
     }, [paymentFetcher.state, paymentFetcher.data, showToast, tAny]);
 
-    // Place the order once payment succeeds; reset ref on failure so we never place order without valid payment
+    // Place the order once the payment fetcher we kicked off resolves; reset on failure so we
+    // never place an order without valid payment.
+    //
+    // A fetcher reads `idle` both before its submission starts and after it completes, so the
+    // raw `state === 'idle'` check cannot tell "payment not submitted yet" from "payment done".
+    // We must only react to the transition INTO idle (the fetcher was in flight and just
+    // finished). Acting on the pre-submission idle tick — which now occurs because React Router
+    // defers fetcher state updates, letting an unrelated render run while the fetcher is still
+    // idle — would misread "not started" as "payment failed" and silently cancel place order.
+    const previousPaymentFetcherStateRef = useRef(paymentFetcher.state);
     useEffect(() => {
-        if (!paymentSubmissionRef.current.shouldPlaceOrderAfterPayment || paymentFetcher.state !== 'idle') return;
+        const previousState = previousPaymentFetcherStateRef.current;
+        previousPaymentFetcherStateRef.current = paymentFetcher.state;
+
+        if (!paymentSubmissionRef.current.shouldPlaceOrderAfterPayment) return;
+        const paymentJustResolved = paymentFetcher.state === 'idle' && previousState !== 'idle';
+        if (!paymentJustResolved) return;
+
         if (paymentFetcher.data?.success) {
             paymentSubmissionRef.current.shouldPlaceOrderAfterPayment = false;
             submitPlaceOrder();
@@ -829,6 +845,13 @@ export default function CheckoutFormPage({
         step >= STEPS.PAYMENT && (editingStep === null || editingStep === STEPS.PAYMENT) && !shippingBlocked;
     const isEstimate = cart ? isOrderTotalEstimated(cart) : true;
 
+    const showSessionExpiredBanner =
+        isUnauthorizedError(contactFetcher.data) ||
+        isUnauthorizedError(shippingAddressFetcher.data) ||
+        isUnauthorizedError(shippingOptionsFetcher.data) ||
+        isUnauthorizedError(paymentFetcher.data) ||
+        isUnauthorizedError(placeOrderFetcher.data);
+
     return (
         <div data-section="checkout" className="bg-background">
             <UITarget targetId="sfcc.checkout.page.before" />
@@ -836,6 +859,11 @@ export default function CheckoutFormPage({
                 <Typography variant="h2" as="h1" className="mb-8">
                     {t('pageTitle')}
                 </Typography>
+                {showSessionExpiredBanner && (
+                    <div className="mb-6">
+                        <SessionExpiredBanner returnUrl={routes.checkout} />
+                    </div>
+                )}
                 {/* Mobile Order Summary + My Cart */}
                 <div className="md:hidden mb-6 border border-border">
                     <Suspense fallback={<OrderSummarySkeleton />}>
@@ -949,6 +977,7 @@ export default function CheckoutFormPage({
                                         onRegisteredUserChoseGuest={handleRegisteredUserChoseGuest}
                                         onPasswordlessOtpVerified={handlePasswordlessOtpVerifiedAtContact}
                                         suppressRegisteredEmailLoginHints={hideCreateAccountAfterSkippedPasswordlessOtp}
+                                        emailVerificationEnabled={emailVerificationEnabled}
                                         {...contactInfoState}
                                     />
                                 )}

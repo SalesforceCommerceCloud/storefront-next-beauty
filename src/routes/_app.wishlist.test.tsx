@@ -45,8 +45,8 @@ vi.mock('@/components/link', () => ({
 
 vi.mock('react-i18next', async () => {
     const actual: any = await vi.importActual('react-i18next');
-    // Mirror the cosmetic en-US overrides so the test exercises cosmetic copy,
-    // not canonical fashion strings that fall through the deep-merge.
+    // Use the cosmetic en-US override strings so the test exercises this
+    // brand's copy rather than the default fallback strings.
     return {
         ...actual,
         useTranslation: () => ({

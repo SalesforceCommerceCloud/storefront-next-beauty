@@ -51,7 +51,7 @@ export async function loader({ context }: Route.LoaderArgs): Promise<WishlistPag
 // shares the canonical wishlist revalidation policy (#2060 tightened it to a
 // home-style ambient-mutation allowlist). Re-export rather than re-implement so
 // the cosmetic override doesn't drift from the policy it mirrors.
-export { shouldRevalidate } from '@/lib/routes/revalidation/wishlist';
+export { shouldRevalidate } from '@/lib/revalidation/routes/wishlist';
 
 export function ErrorBoundary(): ReactElement {
     return <WishlistLoadError retryHref={routes.wishlist} />;

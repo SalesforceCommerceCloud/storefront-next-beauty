@@ -124,9 +124,8 @@ import StoreLocatorProvider from '@/extensions/store-locator/providers/store-loc
 // @sfdc-extension-block-end SFDC_EXT_STORE_LOCATOR
 import { type Maintenance, maintenanceContext } from '@/lib/maintenance';
 
-// Layout Components - logo for error page. Imported via `@/...` so the Vite
-// vertical resolver swaps in the active vertical's logo override (e.g. cosmetic's
-// inline-SVG wordmark) instead of the canonical raster asset.
+// Layout Components - logo for error page. Imported via `@/...` so different
+// logo implementations (raster, inline-SVG, etc.) can be provided per brand.
 import Logo from '@/components/logo';
 
 export const links: Route.LinksFunction = () => {
@@ -184,7 +183,7 @@ const i18nextOnClient =
           })
         : undefined;
 
-export { shouldRevalidate } from '@/lib/routes/revalidation/root';
+export { shouldRevalidate } from '@/lib/revalidation/routes/root';
 
 export const loader = ({
     context,
@@ -370,8 +369,6 @@ export function Layout({ children }: PropsWithChildren) {
                 <AppToaster />
                 <ScrollRestoration nonce={nonce} />
                 <Scripts nonce={nonce} />
-                {/* Dev-only overlay: mounts outside the React tree to avoid interfering with app state/context. Zero production overhead — tree-shaken by Vite when PROD=true. */}
-                <UITargetDevModeInit />
             </body>
         </html>
     );
@@ -771,29 +768,5 @@ function BackNavigationRevalidator() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    return null;
-}
-
-/**
- * Initialize UITarget dev mode overlay (DEV ONLY - zero production overhead)
- * Lazy-loads the overlay when VITE_UI_TARGET_DEV_MODE=true
- */
-function UITargetDevModeInit() {
-    useEffect(() => {
-        // Only runs in browser
-        if (typeof window === 'undefined') return;
-
-        // Only in development
-        if (import.meta.env.PROD) return;
-
-        // Only if enabled
-        if (import.meta.env.VITE_UI_TARGET_DEV_MODE !== 'true') return;
-
-        // Lazy load the overlay
-        void import('@/lib/ui-target-dev-mode').then(({ initUITargetDevMode }) => {
-            void initUITargetDevMode();
-        });
-    }, []);
-
     return null;
 }

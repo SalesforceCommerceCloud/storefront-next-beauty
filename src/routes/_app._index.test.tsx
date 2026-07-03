@@ -176,18 +176,17 @@ vi.mock('react-i18next', async () => {
                     'categoryGrid.title': 'Style for Real Life',
                     'categoryGrid.shopNowButton': 'Shop Now',
                     'featuredContent.women.title': 'Women',
-                    'featuredContent.women.description':
-                        'Discover our curated collection of sophisticated footwear designed for the modern woman.',
+                    'featuredContent.women.description': 'Everyday skincare and color, considered for real routines.',
                     'featuredContent.women.imageAlt': "Women's Collection",
                     'featuredContent.women.ctaText': 'EXPLORE COLLECTION',
                     'featuredContent.men.title': 'Men',
                     'featuredContent.men.description':
-                        "Timeless craftsmanship meets contemporary style in our men's footwear collection.",
+                        'Grooming and skincare that keeps it simple — clean formulas, no fuss.',
                     'featuredContent.men.imageAlt': "Men's Collection",
                     'featuredContent.men.ctaText': 'EXPLORE COLLECTION',
                     'featuredContent.styleForRealLife.title': 'Style for Real Life',
                     'featuredContent.styleForRealLife.description':
-                        'At Market Street, we believe fashion should be effortless, authentic, and accessible. Our collections are designed for the modern individual who values quality, versatility, and timeless style.\n\nDiscover pieces that move with you, adapt to your life, and become the foundation of a wardrobe that works—every day, everywhere.',
+                        'Formulas that perform from five-minute mornings to fifty-minute routines. Clean is the floor, not the ceiling. Built for the people who actually wear it.',
                 };
                 return translations[normalizedKey] || key;
             },
@@ -353,23 +352,25 @@ describe('HomePage', () => {
     });
 
     describe('Featured Content Cards Section', () => {
+        // Assert against the mocked copy the component renders (see the
+        // react-i18next mock above), not getTranslation()'s base bundle.
         const contentCardTests = [
             {
                 description: 'renders women content card',
-                titleKey: 'home:featuredContent.women.title',
-                contentKey: 'home:featuredContent.women.description',
+                title: 'Women',
+                content: 'Everyday skincare and color, considered for real routines.',
             },
             {
                 description: 'renders men content card',
-                titleKey: 'home:featuredContent.men.title',
-                contentKey: 'home:featuredContent.men.description',
+                title: 'Men',
+                content: 'Grooming and skincare that keeps it simple — clean formulas, no fuss.',
             },
         ];
 
-        test.each(contentCardTests)('$description', ({ titleKey, contentKey }) => {
+        test.each(contentCardTests)('$description', ({ title, content }) => {
             renderComponent();
-            expect(screen.getByText(t(titleKey))).toBeInTheDocument();
-            expect(screen.getByText(t(contentKey))).toBeInTheDocument();
+            expect(screen.getByText(title)).toBeInTheDocument();
+            expect(screen.getByText(content)).toBeInTheDocument();
         });
 
         test('renders all content cards with correct count', () => {
@@ -443,9 +444,10 @@ describe('HomePage', () => {
             mockContext = createTestContext();
             baseLoaderArgs = {
                 request: new Request('http://localhost/'),
+                url: new URL('http://localhost/'),
                 params: {},
                 context: mockContext,
-                unstable_pattern: '/',
+                pattern: '/',
             };
         });
 
