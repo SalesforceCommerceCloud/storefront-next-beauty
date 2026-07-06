@@ -21,7 +21,7 @@ import { MemoryRouter } from 'react-router';
 import { ApiError, type ShopperExperience, type ShopperProducts, type ShopperSearch } from '@/scapi';
 import { NormalizedApiError } from '@/lib/api/normalized-api-error';
 import CategoryPage, { loader, ProductListingPageMetadata, shouldRevalidate } from './_app.category.$categoryId';
-import { shouldRevalidate as sharedShouldRevalidate } from '@/lib/routes/revalidation/category';
+import { shouldRevalidate as sharedShouldRevalidate } from '@/lib/revalidation/routes/category';
 import { createTestContext } from '@/lib/test-utils';
 import { fetchCategory } from '@/lib/api/categories.server';
 import { fetchSearchProducts } from '@/lib/api/search.server';
@@ -206,9 +206,7 @@ vi.mock('@/utils/category-schema', () => ({
 }));
 
 vi.mock('@/lib/wishlist/fetch-initial-state.server', () => ({
-    fetchWishlistInitialState: vi.fn(() =>
-        Promise.resolve({ customerId: null, listId: null, itemsByProductId: new Map() })
-    ),
+    fetchWishlistInitialState: vi.fn(() => Promise.resolve({ customerId: null, productIds: new Set() })),
 }));
 
 // Mock analytics with controllable mock functions
@@ -273,9 +271,10 @@ describe('CategoryPage', () => {
 
     const createLoaderArgs = (url: string, overrides?: { params?: Record<string, string> }): Route.LoaderArgs => ({
         request: new Request(url),
+        url: new URL(url),
         context: mockContext,
         params: { siteId: 'test-site', localeId: 'en-US', categoryId: 'electronics', ...overrides?.params },
-        unstable_pattern: '/category/:categoryId',
+        pattern: '/category/:categoryId',
     });
 
     beforeEach(() => {
@@ -799,8 +798,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -854,8 +852,7 @@ describe('CategoryPage', () => {
                 }),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -903,8 +900,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -936,8 +932,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -969,8 +964,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1001,8 +995,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1047,8 +1040,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1080,8 +1072,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1120,8 +1111,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1158,8 +1148,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1197,8 +1186,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1238,8 +1226,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1277,8 +1264,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1318,8 +1304,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1358,8 +1343,7 @@ describe('CategoryPage', () => {
                 }),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1396,8 +1380,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1435,8 +1418,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1479,8 +1461,7 @@ describe('CategoryPage', () => {
                 categorySchema: Promise.resolve(null),
                 wishlistInitialState: Promise.resolve({
                     customerId: null,
-                    listId: null,
-                    itemsByProductId: new Map(),
+                    productIds: new Set(),
                 }),
             };
 
@@ -1501,7 +1482,7 @@ describe('CategoryPage', () => {
 });
 
 describe('CategoryPage shouldRevalidate', () => {
-    // The revalidation policy itself is covered by src/lib/routes/revalidation/category.test.ts. Here we
+    // The revalidation policy itself is covered by src/lib/revalidation/routes/category.test.ts. Here we
     // only assert the route wires up that exact function, so the behavior isn't re-tested per route.
     test('re-exports the shared listing revalidation policy', () => {
         expect(shouldRevalidate).toBe(sharedShouldRevalidate);

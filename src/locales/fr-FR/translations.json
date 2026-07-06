@@ -358,7 +358,7 @@
                 "minLength": "La promo doit comporter au moins 2 caractères."
             },
             "errors": {
-                "invalidCode": "Code promo non valide",
+                "invalidCode": "Le code promo « {{code}} » n’est pas valide.",
                 "expiredCode": "Ce code promo a expiré.",
                 "alreadyApplied": "Ce code promo est déjà appliqué.",
                 "notApplicable": "Ce code promo ne s’applique pas à votre panier",
@@ -863,6 +863,16 @@
             "productPlaceholderInitial": "Article",
             "quantityLabel": "Qté : {{count}}",
             "trackingNumber": "N° de suivi",
+            "tracking": {
+                "provider": "Carrier",
+                "expectedDelivery": "Expected delivery",
+                "delivered": "Delivered",
+                "trackingNumberLinkLabel": "Track shipment {{number}} (opens in a new tab)"
+            },
+            "actions": {
+                "trackShipment": "Track shipment",
+                "trackShipmentNewTab": "Track shipment (opens in a new tab)"
+            },
             "shippingAddress": "Adresse de livraison",
             "paymentMethod": "Mode de paiement",
             "paymentMethodEndingIn": "{{cardType}} se terminant par {{lastDigits}}",

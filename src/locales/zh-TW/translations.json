@@ -357,7 +357,7 @@
                 "minLength": "促銷碼長度必須至少為 2 個字元。"
             },
             "errors": {
-                "invalidCode": "無效的折價券代碼",
+                "invalidCode": "折價券代碼「{{code}}」無效。",
                 "expiredCode": "此促銷代碼已到期。",
                 "alreadyApplied": "此促銷碼已套用。",
                 "notApplicable": "此促銷代碼不適用於您的購物車",
@@ -862,6 +862,16 @@
             "productPlaceholderInitial": "項目",
             "quantityLabel": "數量：{{count}}",
             "trackingNumber": "追蹤編號",
+            "tracking": {
+                "provider": "Carrier",
+                "expectedDelivery": "Expected delivery",
+                "delivered": "Delivered",
+                "trackingNumberLinkLabel": "Track shipment {{number}} (opens in a new tab)"
+            },
+            "actions": {
+                "trackShipment": "Track shipment",
+                "trackShipmentNewTab": "Track shipment (opens in a new tab)"
+            },
             "shippingAddress": "運送地址",
             "paymentMethod": "付款方式",
             "paymentMethodEndingIn": "{{cardType}} 尾碼 {{lastDigits}}"

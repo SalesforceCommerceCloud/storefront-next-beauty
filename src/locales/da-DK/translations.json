@@ -353,7 +353,7 @@
                 "minLength": "Kampagnen skal indeholde mindst 2 tegn."
             },
             "errors": {
-                "invalidCode": "Ugyldig kampagnekode",
+                "invalidCode": "Kampagnekoden “{{code}}” er ugyldig.",
                 "expiredCode": "Denne kampagnekode er udløbet.",
                 "alreadyApplied": "Denne kampagnekode er allerede blevet anvendt.",
                 "notApplicable": "Denne kampagnekode gælder ikke for din kurv",
@@ -859,6 +859,16 @@
             "productPlaceholderInitial": "Vare",
             "quantityLabel": "Antal: {{count}}",
             "trackingNumber": "Sporingsnummer",
+            "tracking": {
+                "provider": "Carrier",
+                "expectedDelivery": "Expected delivery",
+                "delivered": "Delivered",
+                "trackingNumberLinkLabel": "Track shipment {{number}} (opens in a new tab)"
+            },
+            "actions": {
+                "trackShipment": "Track shipment",
+                "trackShipmentNewTab": "Track shipment (opens in a new tab)"
+            },
             "shippingAddress": "Forsendelsesadresse",
             "paymentMethod": "Betalingsmetode",
             "paymentMethodEndingIn": "{{cardType}} Slutter på {{lastDigits}}"

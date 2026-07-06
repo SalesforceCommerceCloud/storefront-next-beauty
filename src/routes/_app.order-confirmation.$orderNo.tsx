@@ -108,7 +108,7 @@ const getPrimaryImageFromProduct = (product: ShopperProducts.schemas['Product'] 
  * @param args - Loader function arguments containing context and parameters
  * @returns Promise that resolves to an object containing the order data promise
  */
-export function loader({ context, params }: Route.LoaderArgs): CheckoutConfirmationLoaderData {
+export async function loader({ context, params }: Route.LoaderArgs): Promise<CheckoutConfirmationLoaderData> {
     const { orderNo } = params;
     const logger = getLogger(context);
     logger.debug('OrderConfirmation: loader starting', { orderNo });
@@ -131,7 +131,7 @@ export function loader({ context, params }: Route.LoaderArgs): CheckoutConfirmat
 
     // Determine if we should show post-order registration (guest + email verification disabled)
     const userIsRegistered = isRegisteredCustomer(context);
-    const { emailVerificationEnabled } = getLoginPreferences(context);
+    const { emailVerificationEnabled } = await getLoginPreferences(context);
     const showPostOrderRegistration = !userIsRegistered && !emailVerificationEnabled;
 
     // @sfdc-extension-line SFDC_EXT_BOPIS
@@ -470,9 +470,9 @@ function OrderConfirmationContent({
                                     return (
                                         <div
                                             key={productKey}
-                                            className="border border-border/70 bg-card p-4 sm:p-7 flex flex-col gap-4 sm:flex-row sm:items-center">
+                                            className="rounded-ui border border-border/70 bg-card p-4 sm:p-7 flex flex-col gap-4 sm:flex-row sm:items-center">
                                             <div className="flex items-center justify-center">
-                                                <div className="h-24 w-24 bg-muted overflow-hidden flex items-center justify-center text-muted-foreground text-sm font-semibold">
+                                                <div className="h-24 w-24 bg-muted overflow-hidden rounded-ui flex items-center justify-center text-muted-foreground text-sm font-semibold">
                                                     {imageSrc ? (
                                                         <ProductImage
                                                             src={toImageUrl({ src: imageSrc, config }) ?? imageSrc}

@@ -18,7 +18,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { ApiError } from '@/scapi';
 import { NormalizedApiError } from '@/lib/api/normalized-api-error';
 import { loader } from './_app.cart';
-import { createTestContext, UNSTABLE_PATTERN } from '@/lib/test-utils';
+import { createTestContext, ROUTE_PATTERN } from '@/lib/test-utils';
 import type { Route } from './+types/_app.cart';
 
 vi.mock('@/middlewares/basket.server', () => ({
@@ -39,9 +39,7 @@ vi.mock('@/lib/cart/cart-wishlist.server', () => ({
 }));
 
 vi.mock('@/lib/wishlist/fetch-initial-state.server', () => ({
-    fetchWishlistInitialState: vi.fn(() =>
-        Promise.resolve({ customerId: null, listId: null, itemsByProductId: new Map() })
-    ),
+    fetchWishlistInitialState: vi.fn(() => Promise.resolve({ customerId: null, productIds: new Set() })),
 }));
 
 vi.mock('@/lib/product/recommendations.server', () => ({
@@ -86,7 +84,8 @@ describe('Cart route loader', () => {
         params: { siteId: 'test-site', localeId: 'en-US' },
         context: createTestContext({ currency: 'USD' }),
         request: new Request('http://localhost/cart'),
-        unstable_pattern: UNSTABLE_PATTERN,
+        url: new URL('http://localhost/cart'),
+        pattern: ROUTE_PATTERN,
     });
 
     beforeEach(() => {
@@ -99,6 +98,7 @@ describe('Cart route loader', () => {
             totalItemCount: 1,
             uniqueProductCount: 1,
             currency: 'USD',
+            lastModified: '',
         });
         vi.mocked(fetchProductsInBasket).mockResolvedValue({
             productsByItemId: { 'item-1': { id: 'product-1' } as any },
@@ -123,14 +123,12 @@ describe('Cart route loader', () => {
             totalItemCount: 1,
             uniqueProductCount: 1,
             currency: 'USD',
+            lastModified: '',
         });
         expect(result.pageUrl).toContain('/cart');
     });
 
-    test('skips the Einstein recommendation fetches when the vertical disables recommendations', async () => {
-        // Cosmetic sets showRecommendations: false. The loader must not issue either
-        // recommendation call, and the rec promises must still resolve to an empty
-        // Recommendation so the shape the component pins stays stable.
+    test('skips the Einstein recommendation fetches when recommendations are disabled', async () => {
         uiConfig.pages.cart.showRecommendations = false;
 
         const result = loader(createLoaderArgs()) as any;
@@ -141,8 +139,6 @@ describe('Cart route loader', () => {
     });
 
     test('issues the Einstein recommendation fetches when recommendations are enabled', async () => {
-        // Canonical/fashion default. CART_RECENTLY_VIEWED fires immediately; CART_MAY_ALSO_LIKE
-        // chains off the basket — awaiting it forces both calls through.
         const result = loader(createLoaderArgs()) as any;
         await result.cartMayAlsoLikePromise;
         await result.cartRecentlyViewedPromise;

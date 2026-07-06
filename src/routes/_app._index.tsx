@@ -45,7 +45,7 @@ import { buildCanonicalUrl } from '@/utils/canonical-url';
 import { useTranslation } from 'react-i18next';
 import { NormalizedApiError } from '@/lib/api/normalized-api-error';
 
-export { shouldRevalidate } from '@/lib/routes/revalidation/home';
+export { shouldRevalidate } from '@/lib/revalidation/routes/home';
 
 @PageType({
     name: 'Home Page',
@@ -327,9 +327,8 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
                             {/* Featured Content Cards - Static content. The
                              * `data-section="home-content"` scope flattens the
                              * Card primitive shape (radius / shadow) via base.css
-                             * so these editorial tiles match Dazzle's plain-div
-                             * presentation rather than reading as token-driven
-                             * Card surfaces. */}
+                             * so these editorial tiles read as flat plain-div
+                             * presentation rather than token-driven Card surfaces. */}
                             <div className="pt-16" data-section="home-content">
                                 <div className="section-container">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

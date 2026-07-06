@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { data } from 'react-router';
+import { ApiError } from '@/scapi';
 import { BasketAction, createBasketAction } from '@/lib/cart/basket-action.server';
 import { createActionError, httpStatusForErrorCode } from '@/lib/action-error-helpers.server';
 import { createPromoCodeFormSchema } from '@/components/promo-code-form';
@@ -42,7 +43,7 @@ export const action = createBasketAction(
         // Pass `context` so `t()` resolves against the request-scoped i18next
         // instance the middleware populated. Bare `getTranslation()` returns the
         // uninitialized module-global instance, so keys like
-        // `cart:promoCode.errors.notApplicable` don't resolve to the loaded
+        // `cart:promoCode.errors.generic` don't resolve to the loaded
         // translation and the shopper sees a generic fallback string instead.
         const { t } = getTranslation(context);
         const promoCodeFormSchema = createPromoCodeFormSchema(t);
@@ -65,14 +66,41 @@ export const action = createBasketAction(
         const { code: validatedPromoCode } = validationResult.data;
         logger.debug('PromoCodeAdd: starting', { basketId });
 
-        const { data: updatedBasket } = await clients.shopperBasketsV2.addCouponToBasket({
-            params: {
-                path: { basketId },
-            },
-            body: {
-                code: validatedPromoCode,
-            },
-        });
+        let updatedBasket;
+        try {
+            ({ data: updatedBasket } = await clients.shopperBasketsV2.addCouponToBasket({
+                params: {
+                    path: { basketId },
+                },
+                body: {
+                    code: validatedPromoCode,
+                },
+            }));
+        } catch (error) {
+            // SCAPI doesn't park every bad code — for some (e.g. an unknown
+            // code) it throws a 4xx whose `detail` names the code verbatim
+            // ("Coupon code 'X' is invalid."). Letting that bubble to the
+            // basket-action catch would surface SCAPI's raw, code-specific
+            // English string and reopen the enumeration oracle this fix closes.
+            // Convert any client-side (4xx) coupon rejection into the same
+            // localized message the parked-but-ineligible path returns, echoing
+            // back only the shopper's own submitted code (never SCAPI's raw
+            // `detail`), so unknown and ineligible codes are indistinguishable.
+            if (error instanceof ApiError && error.status >= 400 && error.status < 500) {
+                logger.info('PromoCodeAdd: coupon rejected by SCAPI', { status: error.status });
+                return data(
+                    {
+                        success: false,
+                        error: createActionError({
+                            code: ErrorCode.INVALID_INPUT,
+                            message: t('cart:promoCode.errors.invalidCode', { code: validatedPromoCode }),
+                        }),
+                    },
+                    { status: 400 }
+                );
+            }
+            throw error;
+        }
 
         // SCAPI returns HTTP 200 and adds the coupon item even when the code is
         // valid but no promotion in the cart qualifies (e.g. statusCode
@@ -89,7 +117,13 @@ export const action = createBasketAction(
             return data(
                 {
                     success: false,
-                    error: createActionError({ code: statusError.code, message: t(statusError.messageKey) }),
+                    // Pass the shopper's own code for `{{code}}`-bearing messages
+                    // (invalidCode); keys without the placeholder ignore it. The
+                    // submitted code — never SCAPI's raw detail — is what's echoed.
+                    error: createActionError({
+                        code: statusError.code,
+                        message: t(statusError.messageKey, { code: validatedPromoCode }),
+                    }),
                 },
                 { status: httpStatusForErrorCode(statusError.code) }
             );

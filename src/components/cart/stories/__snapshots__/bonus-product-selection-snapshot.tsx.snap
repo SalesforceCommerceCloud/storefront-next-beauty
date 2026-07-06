@@ -1,12 +1,348 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`BonusProductSelection stories snapshot > Default story renders and matches snapshot 1`] = `
+exports[`Cosmetic BonusProductSelection stories snapshot > AtMax story renders and matches snapshot 1`] = `
 <div
   class="max-w-[465px]"
 >
   <section
     aria-label="Bonus Product Bundle"
-    class="w-full overflow-hidden border border-border bg-[var(--bg-input-30)] p-4"
+    class="w-full overflow-hidden rounded-ui border border-border bg-[var(--bg-input-30)] p-4"
+    data-max-reached=""
+  >
+    <h3
+      class="text-base leading-6 text-card-foreground font-sans pb-3"
+    >
+      <span
+        class="font-semibold"
+      >
+        Buy one men's suit, get 2 free ties
+      </span>
+      <span
+        class="font-normal"
+      />
+    </h3>
+    <ul
+      class="flex gap-3 overflow-x-auto scroll-px-1 px-px py-1 [scroll-snap-type:x_mandatory]"
+      role="list"
+    >
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+            <span
+              aria-hidden="true"
+              class="absolute right-1 top-1 z-10 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground"
+              data-testid="bonus-selected-check"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-check size-3"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 6 9 17l-5-5"
+                />
+              </svg>
+            </span>
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Navy 1
+            </p>
+          </div>
+          <button
+            aria-pressed="true"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="selected"
+            data-variant="default"
+          >
+            Selected
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Red 2
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+            disabled=""
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Black 3
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+            disabled=""
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+    </ul>
+    <div
+      class="mt-3 flex items-center gap-2"
+      data-slot="bonus-max-reached"
+    >
+      <span
+        class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-secondary/90 bg-primary/10 text-primary uppercase font-semibold text-xs tracking-wide"
+        data-slot="badge"
+      >
+        Free
+      </span>
+      <span
+        class="text-xs text-muted-foreground"
+      >
+        Added to your bag — change any time before checkout.
+      </span>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Cosmetic BonusProductSelection stories snapshot > Default story renders and matches snapshot 1`] = `
+<div
+  class="max-w-[465px]"
+>
+  <section
+    aria-label="Bonus Product Bundle"
+    class="w-full overflow-hidden rounded-ui border border-border bg-[var(--bg-input-30)] p-4"
+  >
+    <h3
+      class="text-base leading-6 text-card-foreground font-sans pb-3"
+    >
+      <span
+        class="font-semibold"
+      >
+        Buy one men's suit, get 2 free ties
+      </span>
+      <span
+        class="font-normal"
+      >
+        0/3
+      </span>
+    </h3>
+    <ul
+      class="flex gap-3 overflow-x-auto scroll-px-1 px-px py-1 [scroll-snap-type:x_mandatory]"
+      role="list"
+    >
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Navy 1
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Red 2
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Black 3
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+    </ul>
+  </section>
+</div>
+`;
+
+exports[`Cosmetic BonusProductSelection stories snapshot > Scrollable story renders and matches snapshot 1`] = `
+<div
+  class="max-w-[465px]"
+>
+  <section
+    aria-label="Bonus Product Bundle"
+    class="w-full overflow-hidden rounded-ui border border-border bg-[var(--bg-input-30)] p-4"
   >
     <h3
       class="text-base leading-6 text-card-foreground font-sans pb-3"
@@ -19,314 +355,752 @@ exports[`BonusProductSelection stories snapshot > Default story renders and matc
       <span
         class="font-normal"
       >
-        0/3
+        0/12
       </span>
     </h3>
-    <div
-      aria-roledescription="carousel"
-      class="relative w-full"
-      data-slot="carousel"
-      role="region"
+    <ul
+      class="flex gap-3 overflow-x-auto scroll-px-1 px-px py-1 [scroll-snap-type:x_mandatory]"
+      role="list"
     >
-      <div
-        class="relative"
+      <li
+        class="[scroll-snap-align:start]"
       >
-        <div
-          class="overflow-hidden"
-          data-slot="carousel-content"
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
         >
           <div
-            class="flex -ml-3 justify-start"
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
           >
-            <div
-              aria-roledescription="slide"
-              class="min-w-0 shrink-0 grow-0 basis-[220px] pl-3"
-              data-slot="carousel-item"
-              role="group"
-            >
-              <article
-                aria-label="Bonus bundle product card"
-                class="flex h-[329px] flex-col justify-between items-start border border-border bg-background"
-              >
-                <div
-                  class="flex flex-col items-start self-stretch"
-                >
-                  <div
-                    class="px-4 py-3 self-stretch"
-                  >
-                    <div
-                      class="bg-muted/30 border border-border overflow-hidden"
-                    >
-                      <div
-                        class="h-36 w-full relative"
-                      >
-                        <div
-                          class="absolute inset-0 flex items-center justify-center bg-muted"
-                        >
-                          <span
-                            class="text-muted-foreground text-sm"
-                          >
-                            No image available
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="px-4 pb-2 flex items-start justify-between gap-1.5 self-stretch"
-                  >
-                    <p
-                      class="text-sm font-semibold leading-tight text-card-foreground line-clamp-2"
-                    >
-                      Classic Silk Tie - Navy
-                    </p>
-                    <div
-                      class="flex flex-col items-end gap-1 flex-shrink-0"
-                    >
-                      <span
-                        class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-primary text-primary-foreground font-semibold text-xs"
-                        data-slot="badge"
-                      >
-                        Free
-                      </span>
-                      <span
-                        class="text-sm text-muted-foreground line-through"
-                      >
-                        $29.00
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="px-4 pb-3 self-stretch"
-                >
-                  <button
-                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 has-[>svg]:px-3 w-full h-9"
-                    data-size="default"
-                    data-slot="button"
-                    data-variant="default"
-                  >
-                    Select
-                  </button>
-                </div>
-              </article>
-            </div>
-            <div
-              aria-roledescription="slide"
-              class="min-w-0 shrink-0 grow-0 basis-[220px] pl-3"
-              data-slot="carousel-item"
-              role="group"
-            >
-              <article
-                aria-label="Bonus bundle product card"
-                class="flex h-[329px] flex-col justify-between items-start border border-border bg-background"
-              >
-                <div
-                  class="flex flex-col items-start self-stretch"
-                >
-                  <div
-                    class="px-4 py-3 self-stretch"
-                  >
-                    <div
-                      class="bg-muted/30 border border-border overflow-hidden"
-                    >
-                      <div
-                        class="h-36 w-full relative"
-                      >
-                        <div
-                          class="absolute inset-0 flex items-center justify-center bg-muted"
-                        >
-                          <span
-                            class="text-muted-foreground text-sm"
-                          >
-                            No image available
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="px-4 pb-2 flex items-start justify-between gap-1.5 self-stretch"
-                  >
-                    <p
-                      class="text-sm font-semibold leading-tight text-card-foreground line-clamp-2"
-                    >
-                      Classic Silk Tie - Red
-                    </p>
-                    <div
-                      class="flex flex-col items-end gap-1 flex-shrink-0"
-                    >
-                      <span
-                        class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-primary text-primary-foreground font-semibold text-xs"
-                        data-slot="badge"
-                      >
-                        Free
-                      </span>
-                      <span
-                        class="text-sm text-muted-foreground line-through"
-                      >
-                        $35.00
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="px-4 pb-3 self-stretch"
-                >
-                  <button
-                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 has-[>svg]:px-3 w-full h-9"
-                    data-size="default"
-                    data-slot="button"
-                    data-variant="default"
-                  >
-                    Select
-                  </button>
-                </div>
-              </article>
-            </div>
-            <div
-              aria-roledescription="slide"
-              class="min-w-0 shrink-0 grow-0 basis-[220px] pl-3"
-              data-slot="carousel-item"
-              role="group"
-            >
-              <article
-                aria-label="Bonus bundle product card"
-                class="flex h-[329px] flex-col justify-between items-start border border-border bg-background"
-              >
-                <div
-                  class="flex flex-col items-start self-stretch"
-                >
-                  <div
-                    class="px-4 py-3 self-stretch"
-                  >
-                    <div
-                      class="bg-muted/30 border border-border overflow-hidden"
-                    >
-                      <div
-                        class="h-36 w-full relative"
-                      >
-                        <div
-                          class="absolute inset-0 flex items-center justify-center bg-muted"
-                        >
-                          <span
-                            class="text-muted-foreground text-sm"
-                          >
-                            No image available
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="px-4 pb-2 flex items-start justify-between gap-1.5 self-stretch"
-                  >
-                    <p
-                      class="text-sm font-semibold leading-tight text-card-foreground line-clamp-2"
-                    >
-                      Classic Silk Tie - Black
-                    </p>
-                    <div
-                      class="flex flex-col items-end gap-1 flex-shrink-0"
-                    >
-                      <span
-                        class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent [a&]:hover:bg-primary/90 bg-primary text-primary-foreground font-semibold text-xs"
-                        data-slot="badge"
-                      >
-                        Free
-                      </span>
-                      <span
-                        class="text-sm text-muted-foreground line-through"
-                      >
-                        $42.00
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="px-4 pb-3 self-stretch"
-                >
-                  <button
-                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 has-[>svg]:px-3 w-full h-9"
-                    data-size="default"
-                    data-slot="button"
-                    data-variant="default"
-                  >
-                    Select
-                  </button>
-                </div>
-              </article>
-            </div>
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
           </div>
-        </div>
-        <button
-          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 absolute left-0 top-1/2 -translate-y-1/2 size-8 rounded-full border border-border"
-          data-size="icon"
-          data-slot="carousel-previous"
-          data-variant="outline"
-          disabled=""
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Navy 1
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
         >
-          <svg
-            aria-hidden="true"
-            class="lucide lucide-arrow-left"
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
           >
-            <path
-              d="m12 19-7-7 7-7"
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
             />
-            <path
-              d="M19 12H5"
-            />
-          </svg>
-          <span
-            class="sr-only"
+            <span
+              class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90 absolute left-1 top-1 z-10 uppercase font-semibold text-xs tracking-wide"
+              data-slot="badge"
+            >
+              Sale
+            </span>
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
           >
-            Previous slide
-          </span>
-        </button>
-        <button
-          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 absolute right-0 top-1/2 -translate-y-1/2 size-8 rounded-full border border-border"
-          data-size="icon"
-          data-slot="carousel-next"
-          data-variant="outline"
-          disabled=""
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Red 2
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
         >
-          <svg
-            aria-hidden="true"
-            class="lucide lucide-arrow-right"
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
           >
-            <path
-              d="M5 12h14"
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
             />
-            <path
-              d="m12 5 7 7-7 7"
-            />
-          </svg>
-          <span
-            class="sr-only"
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
           >
-            Next slide
-          </span>
-        </button>
-      </div>
-    </div>
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Black 3
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Forest 4
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Burgundy 5
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+            <span
+              class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90 absolute left-1 top-1 z-10 uppercase font-semibold text-xs tracking-wide"
+              data-slot="badge"
+            >
+              Sale
+            </span>
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Cream 6
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Slate 7
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Mustard 8
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Navy 9
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+            <span
+              class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90 absolute left-1 top-1 z-10 uppercase font-semibold text-xs tracking-wide"
+              data-slot="badge"
+            >
+              Sale
+            </span>
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Red 10
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Black 11
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Forest 12
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+    </ul>
+  </section>
+</div>
+`;
+
+exports[`Cosmetic BonusProductSelection stories snapshot > WithSelected story renders and matches snapshot 1`] = `
+<div
+  class="max-w-[465px]"
+>
+  <section
+    aria-label="Bonus Product Bundle"
+    class="w-full overflow-hidden rounded-ui border border-border bg-[var(--bg-input-30)] p-4"
+  >
+    <h3
+      class="text-base leading-6 text-card-foreground font-sans pb-3"
+    >
+      <span
+        class="font-semibold"
+      >
+        Buy one men's suit, get 2 free ties
+      </span>
+      <span
+        class="font-normal"
+      >
+        1/3
+      </span>
+    </h3>
+    <ul
+      class="flex gap-3 overflow-x-auto scroll-px-1 px-px py-1 [scroll-snap-type:x_mandatory]"
+      role="list"
+    >
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+            <span
+              class="inline-flex items-center justify-center rounded-full border px-2 py-0.5 w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90 absolute left-1 top-1 z-10 uppercase font-semibold text-xs tracking-wide"
+              data-slot="badge"
+            >
+              Sale
+            </span>
+            <span
+              aria-hidden="true"
+              class="absolute right-1 top-1 z-10 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground"
+              data-testid="bonus-selected-check"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-check size-3"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 6 9 17l-5-5"
+                />
+              </svg>
+            </span>
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Navy 1
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="true"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="selected"
+            data-variant="default"
+          >
+            Selected
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Red 2
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+      <li
+        class="[scroll-snap-align:start]"
+      >
+        <article
+          aria-label="Bonus bundle product card"
+          class="flex h-full w-32 shrink-0 flex-col gap-2 overflow-hidden rounded-ui border border-border bg-background p-2"
+          data-slot="bonus-product-tile"
+        >
+          <div
+            class="relative aspect-square w-full overflow-hidden rounded-ui bg-muted"
+          >
+            <img
+              alt="Sample product"
+              class="size-full object-cover"
+              loading="lazy"
+              src="__ASSET_MOCK__"
+            />
+          </div>
+          <div
+            class="flex flex-col gap-0.5"
+          >
+            <p
+              class="text-xs font-medium leading-snug text-foreground line-clamp-2"
+            >
+              Classic Silk Tie - Black 3
+            </p>
+            <p
+              class="text-xs leading-tight text-muted-foreground"
+            >
+              10 ml, 1 week supply
+            </p>
+          </div>
+          <button
+            aria-pressed="false"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-ui font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-ui hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 mt-auto h-8 w-full text-xs"
+            data-size="default"
+            data-slot="button"
+            data-state="unselected"
+            data-variant="outline"
+          >
+            Pick
+          </button>
+        </article>
+      </li>
+    </ul>
   </section>
 </div>
 `;

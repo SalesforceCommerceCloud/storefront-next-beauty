@@ -15,27 +15,38 @@
  */
 
 /**
- * Cosmetic (Dazzle) per-page UI overrides:
- * - Hides the cart recommendation carousels — Dazzle's cart is a focused
+ * Dazzle per-page UI overrides:
+ * - Hides the cart recommendation carousels — the cart is a focused
  *   checkout-intent page with no below-the-fold cross-sell — which also skips
  *   the two Einstein recommendation fetches in the cart loader.
- * - Shows the category-page QuickFilters "Shop by {label}" header — Dazzle
- *   leads the subcategory chips with a labelled, sparkles-iconed prompt.
+ * - Pares the cart line item (default variant) down to a minimal tile: hides the
+ *   variation-attributes row, the strikethrough list price, the "Saved $X" promo
+ *   badge, and the "Bonus Product" title badge, leaving image, title, current
+ *   price, quantity, and the CTAs.
+ * - Shows the category-page QuickFilters "Shop by {label}" header — the
+ *   subcategory chips lead with a labelled, sparkles-iconed prompt.
  *
- * This module shadows the canonical `@/lib/config.ui` and the mirror script
- * overlays (overwrites) the canonical file with this one in the flattened
- * artifact. It must therefore be self-contained — no import from the canonical
- * module (it won't exist post-flatten) — so the `UIConfig` shape is declared
- * inline here. Same self-contained pattern as the `@/lib/fonts` override.
+ * Also configures the bonus-product carousel tile: `subtitleVariationAttributeId`
+ * selects which variation attribute supplies the tile subtitle (the value's
+ * display name, e.g. "10 ml, 1 week supply"). Default `size`; merchants can point
+ * it at a custom variation attribute (e.g. `volume`) authored in Business Manager.
  */
 interface UIConfig {
     pages: {
         cart: {
             showRecommendations: boolean;
+            showLineItemVariantAttributes: boolean;
+            showLineItemListPrice: boolean;
+            showLineItemPromoBadge: boolean;
+            showLineItemBonusBadge: boolean;
         };
         category: {
             showCategoryLabel: boolean;
         };
+    };
+    bonusTile: {
+        /** Variation-attribute id whose selected value name renders as the bonus tile subtitle. */
+        subtitleVariationAttributeId: string;
     };
 }
 
@@ -43,9 +54,16 @@ export const uiConfig: UIConfig = {
     pages: {
         cart: {
             showRecommendations: false,
+            showLineItemVariantAttributes: false,
+            showLineItemListPrice: false,
+            showLineItemPromoBadge: false,
+            showLineItemBonusBadge: false,
         },
         category: {
             showCategoryLabel: true,
         },
+    },
+    bonusTile: {
+        subtitleVariationAttributeId: 'size',
     },
 };

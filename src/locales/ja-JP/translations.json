@@ -356,7 +356,7 @@
                 "minLength": "プロモーションは 2 文字以上で入力してください。"
             },
             "errors": {
-                "invalidCode": "無効なクーポンコードです",
+                "invalidCode": "クーポンコード「{{code}}」は無効です。",
                 "expiredCode": "このプロモーションコードの有効期限が切れています。",
                 "alreadyApplied": "このプロモーションコードはすでに適用されています。",
                 "notApplicable": "このプロモーションコードはお客様の買い物カゴには適用できません。",
@@ -863,6 +863,16 @@
             "productPlaceholderInitial": "商品",
             "quantityLabel": "数量: {{count}}",
             "trackingNumber": "追跡番号",
+            "tracking": {
+                "provider": "Carrier",
+                "expectedDelivery": "Expected delivery",
+                "delivered": "Delivered",
+                "trackingNumberLinkLabel": "Track shipment {{number}} (opens in a new tab)"
+            },
+            "actions": {
+                "trackShipment": "Track shipment",
+                "trackShipmentNewTab": "Track shipment (opens in a new tab)"
+            },
             "shippingAddress": "配送先住所",
             "paymentMethod": "お支払い方法",
             "paymentMethodEndingIn": "末尾が {{lastDigits}} の {{cardType}}"

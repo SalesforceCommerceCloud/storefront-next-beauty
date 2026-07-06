@@ -1,7 +1,7 @@
 name: Auto Release
 
 # This workflow automatically creates releases when stable versions are pushed
-# from cosmetic-release-* branches in the monorepo.
+# from release-* branches in the monorepo.
 #
 # ⚠️ FOR CUSTOMERS: After cloning this template, you can safely delete this workflow
 # file.
@@ -13,7 +13,7 @@ name: Auto Release
 on:
   push:
     branches:
-      - 'cosmetic-release-*'
+      - 'release-*'
 
 env:
   NODE_VERSION: '24'

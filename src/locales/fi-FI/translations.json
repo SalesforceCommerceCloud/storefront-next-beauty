@@ -354,7 +354,7 @@
                 "minLength": "Kampanjakoodin on oltava vähintään 2 merkkiä pitkä."
             },
             "errors": {
-                "invalidCode": "Virheellinen kuponkikoodi",
+                "invalidCode": "Kuponkikoodi ”{{code}}” ei kelpaa.",
                 "expiredCode": "Tämä kampanjakoodi on vanhentunut.",
                 "alreadyApplied": "Tätä kampanjakoodia on jo käytetty.",
                 "notApplicable": "Tämä kampanjakoodi ei koske ostoskoriasi",
@@ -862,6 +862,16 @@
             "productPlaceholderInitial": "Tuote",
             "quantityLabel": "Lkm: {{count}}",
             "trackingNumber": "Seurantanumero",
+            "tracking": {
+                "provider": "Carrier",
+                "expectedDelivery": "Expected delivery",
+                "delivered": "Delivered",
+                "trackingNumberLinkLabel": "Track shipment {{number}} (opens in a new tab)"
+            },
+            "actions": {
+                "trackShipment": "Track shipment",
+                "trackShipmentNewTab": "Track shipment (opens in a new tab)"
+            },
             "shippingAddress": "Toimitusosoite",
             "paymentMethod": "Maksutapa",
             "paymentMethodEndingIn": "{{cardType}} Loppuu numeroihin {{lastDigits}}"

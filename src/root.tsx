@@ -38,7 +38,7 @@ import { createInstance, type i18n } from 'i18next';
 import { I18nextProvider, useTranslation, initReactI18next } from 'react-i18next';
 import { PageDesignerProvider } from '@salesforce/storefront-next-runtime/design/react/core';
 import { isDesignModeActive, isPreviewModeActive } from '@salesforce/storefront-next-runtime/design/mode';
-import { dataStoreMiddleware, getGcpApiKey } from '@salesforce/storefront-next-runtime/data-store';
+import { dataStoreMiddlewareLazy } from '@salesforce/storefront-next-runtime/data-store';
 import {
     buildUrl,
     SiteProvider,
@@ -124,9 +124,8 @@ import StoreLocatorProvider from '@/extensions/store-locator/providers/store-loc
 // @sfdc-extension-block-end SFDC_EXT_STORE_LOCATOR
 import { type Maintenance, maintenanceContext } from '@/lib/maintenance';
 
-// Layout Components - logo for error page. Imported via `@/...` so the Vite
-// vertical resolver swaps in the active vertical's logo override (e.g. cosmetic's
-// inline-SVG wordmark) instead of the canonical raster asset.
+// Layout Components - logo for error page. Imported via `@/...` so different
+// logo implementations (raster, inline-SVG, etc.) can be provided per brand.
 import Logo from '@/components/logo';
 
 export const links: Route.LinksFunction = () => {
@@ -151,7 +150,7 @@ export const middleware: MiddlewareFunction<Response>[] = [
     appConfigMiddlewareServer,
     securityHeadersMiddleware,
     siteContextMiddleware, // Must run after appConfig, before i18next and currency
-    ...dataStoreMiddleware,
+    ...dataStoreMiddlewareLazy,
     siteUrlConfigMiddleware, // Must run after siteContextMiddleware (entry key uses site id)
     i18nextMiddleware,
     pageDesignerResolutionMiddleware,
@@ -184,7 +183,7 @@ const i18nextOnClient =
           })
         : undefined;
 
-export { shouldRevalidate } from '@/lib/routes/revalidation/root';
+export { shouldRevalidate } from '@/lib/revalidation/routes/root';
 
 export const loader = ({
     context,
@@ -208,8 +207,6 @@ export const loader = ({
     pageDesignerMode: 'EDIT' | 'PREVIEW' | undefined;
     // Pre-computed in the loader (server-only) so seo.ts stays out of the client bundle
     seoMeta: MetaDescriptor[];
-    // OOTB GCP Address Autocomplete API key sourced from the MRT data store
-    gcpApiKeyFromDAL: string;
     // Return as function to prevent i18next instance serialization
     getI18next: () => i18n;
     // Serialized error namespace for the active locale — used by ErrorBoundary on SSR/hydration
@@ -283,7 +280,6 @@ export const loader = ({
         maintenance,
         clientAuth,
         seoMeta,
-        gcpApiKeyFromDAL: getGcpApiKey(context),
         getI18next: () => i18next,
         errorTranslations: (i18next.getResourceBundle(i18next.language, 'routeError') as Record<string, unknown>) ?? {},
         pageDesignerMode: isDesignModeActive(request) ? 'EDIT' : isPreviewModeActive(request) ? 'PREVIEW' : undefined,
@@ -370,8 +366,6 @@ export function Layout({ children }: PropsWithChildren) {
                 <AppToaster />
                 <ScrollRestoration nonce={nonce} />
                 <Scripts nonce={nonce} />
-                {/* Dev-only overlay: mounts outside the React tree to avoid interfering with app state/context. Zero production overhead — tree-shaken by Vite when PROD=true. */}
-                <UITargetDevModeInit />
             </body>
         </html>
     );
@@ -771,29 +765,5 @@ function BackNavigationRevalidator() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    return null;
-}
-
-/**
- * Initialize UITarget dev mode overlay (DEV ONLY - zero production overhead)
- * Lazy-loads the overlay when VITE_UI_TARGET_DEV_MODE=true
- */
-function UITargetDevModeInit() {
-    useEffect(() => {
-        // Only runs in browser
-        if (typeof window === 'undefined') return;
-
-        // Only in development
-        if (import.meta.env.PROD) return;
-
-        // Only if enabled
-        if (import.meta.env.VITE_UI_TARGET_DEV_MODE !== 'true') return;
-
-        // Lazy load the overlay
-        void import('@/lib/ui-target-dev-mode').then(({ initUITargetDevMode }) => {
-            void initUITargetDevMode();
-        });
-    }, []);
-
     return null;
 }

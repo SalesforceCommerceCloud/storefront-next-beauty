@@ -355,7 +355,7 @@
                 "minLength": "La promoción debe tener al menos 2 caracteres."
             },
             "errors": {
-                "invalidCode": "Código de cupón no válido",
+                "invalidCode": "El código de cupón «{{code}}» no es válido.",
                 "expiredCode": "Este código promocional ha caducado.",
                 "alreadyApplied": "Este código promocional ya está aplicado.",
                 "notApplicable": "Este código promocional no es aplicable a tu carrito",
@@ -860,6 +860,16 @@
             "productPlaceholderInitial": "Elemento",
             "quantityLabel": "Cantidad: {{count}}",
             "trackingNumber": "Número de seguimiento",
+            "tracking": {
+                "provider": "Carrier",
+                "expectedDelivery": "Expected delivery",
+                "delivered": "Delivered",
+                "trackingNumberLinkLabel": "Track shipment {{number}} (opens in a new tab)"
+            },
+            "actions": {
+                "trackShipment": "Track shipment",
+                "trackShipmentNewTab": "Track shipment (opens in a new tab)"
+            },
             "shippingAddress": "Dirección de envío",
             "paymentMethod": "Método de pago",
             "paymentMethodEndingIn": "{{cardType}} Terminando en {{lastDigits}}"

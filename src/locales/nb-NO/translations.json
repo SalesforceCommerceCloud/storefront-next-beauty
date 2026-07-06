@@ -355,7 +355,7 @@
                 "minLength": "Kampanjen må være på minst 2 tegn."
             },
             "errors": {
-                "invalidCode": "Ugyldig rabattkode",
+                "invalidCode": "Rabattkoden «{{code}}» er ugyldig.",
                 "expiredCode": "Denne kampanjekoden er utløpt.",
                 "alreadyApplied": "Denne kampanjekoden er allerede brukt.",
                 "notApplicable": "Denne kampanjekoden kan ikke brukes for din kurv",
@@ -858,6 +858,16 @@
             "productPlaceholderInitial": "Vare",
             "quantityLabel": "Antall: {{count}}",
             "trackingNumber": "Sporingsnummer",
+            "tracking": {
+                "provider": "Carrier",
+                "expectedDelivery": "Expected delivery",
+                "delivered": "Delivered",
+                "trackingNumberLinkLabel": "Track shipment {{number}} (opens in a new tab)"
+            },
+            "actions": {
+                "trackShipment": "Track shipment",
+                "trackShipmentNewTab": "Track shipment (opens in a new tab)"
+            },
             "shippingAddress": "Leveringsadresse",
             "paymentMethod": "Betalingsmåte",
             "paymentMethodEndingIn": "{{cardType}} Som ender med {{lastDigits}}"
