@@ -105,6 +105,16 @@
     --ui-radius: 9999px;
 }
 
+/* Checkboxes — the shared primitive carries `rounded-ui`, which resolves to
+ * --radius-xl (12px) in cosmetic. On a 16px box that near-circular corner
+ * reads as a radio button. The Dazzle audit ("Checkmark comboboxes") calls
+ * for a subtle rounded-sm (4px) corner on every checkbox, so re-point
+ * --ui-radius here. Matches the 4px given to non-color swatches in
+ * tokens/swatch.css. */
+[data-slot='checkbox'] {
+    --ui-radius: var(--radius-sm);
+}
+
 /* Inputs and native-selects inside a dialog should sit on the dialog's
  * white surface, not pick up the cosmetic --input cream tone. Cosmetic's
  * --input is #ece0d8 (cream); against the white dialog Card it reads as a

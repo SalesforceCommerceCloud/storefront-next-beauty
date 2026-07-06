@@ -65,9 +65,12 @@
     display: none;
 }
 
-/* Text/size swatches - pill shape */
+/* Text/size/shader swatches - subtle rounded-sm (4px) corner per the Dazzle
+ * design audit (New Shaders row: "meant to be a rounded-sm (4px)"), replacing
+ * the full-round pill that read as a radio button. Color swatches keep their
+ * circular 50% shape above. */
 [role='radio']:not([data-swatch-type='color']) {
-    border-radius: 9999px;
+    border-radius: var(--radius-sm);
 }
 
 /* Color swatch container - styled to match express payment container (p-3) */
