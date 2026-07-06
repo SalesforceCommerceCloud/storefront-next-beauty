@@ -163,6 +163,22 @@ main[data-has-top-padding='true'] [data-gallery-thumbs] button {
     border-radius: var(--radius-xl);
 }
 
+/* User Reviews attached-image thumbnails — the review-card photo buttons ship
+ * with no corner token, so they read as hard squares. Round them to the global
+ * --ui-radius so they track the storefront's shape token like the rest of the
+ * imagery (cart line-item thumbs do the same), per the Dazzle audit. The review
+ * card is a plain <article>, not a card surface, so --ui-radius resolves to its
+ * default here (var(--radius-xl), 12px) rather than the 16px card override. The
+ * button has overflow-hidden, so rounding it clips the img; round the img too
+ * for the direct-render path. */
+[data-testid='review-card'] button:has(> img) {
+    border-radius: var(--ui-radius);
+}
+
+[data-testid='review-card'] button:has(> img) > img {
+    border-radius: var(--ui-radius);
+}
+
 /* Quick-add modal renders the same ImageGallery as the PDP, but inside a
  * dialog — outside the main[data-has-top-padding] scope above — so the hero
  * and thumbnails render square (audit #4, #6). Mirror the PDP radii here so
