@@ -163,6 +163,17 @@ main[data-has-top-padding='true'] [data-gallery-thumbs] button {
     border-radius: var(--radius-xl);
 }
 
+/* Quick-add modal renders the same ImageGallery as the PDP, but inside a
+ * dialog — outside the main[data-has-top-padding] scope above — so the hero
+ * and thumbnails render square (audit #4, #6). Mirror the PDP radii here so
+ * the modal gallery matches the PDP. */
+[data-slot='dialog-content'] [data-gallery-hero] {
+    border-radius: var(--radius-2xl);
+}
+[data-slot='dialog-content'] [data-gallery-thumbs] button {
+    border-radius: var(--radius-xl);
+}
+
 /* PDP express checkout container: warm cream surface + sage border for
  * brand chrome. Shadow drops to none — the express-payments Card is
  * explicitly `shadow-none`. The surface --radius-2xl is inherited from

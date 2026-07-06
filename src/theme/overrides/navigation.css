@@ -30,6 +30,15 @@ header ~ * [data-slot='navigation-menu-viewport'],
     margin-top: 0 !important;
 }
 
+/* Megamenu content wrapper carries `pb-6` (1.5rem bottom pad) but no top
+ * pad, so the open panel's contents sit flush under the header with a large
+ * gap beneath — top and bottom spacing don't match (audit #7). Add an equal
+ * top pad so the panel breathes symmetrically. Scoped to the section-container
+ * wrapper the mega renderer emits as the direct child of the content slot. */
+header [data-slot='navigation-menu-content'] > .section-container {
+    padding-top: 1.5rem;
+}
+
 /* Navigation menu trigger hover text color */
 [data-slot='navigation-menu-trigger']:hover,
 [data-slot='navigation-menu-trigger']:focus,
