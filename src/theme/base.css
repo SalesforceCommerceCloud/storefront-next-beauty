@@ -179,14 +179,22 @@ main[data-has-top-padding='true'] [data-gallery-thumbs] button {
     border-radius: var(--ui-radius);
 }
 
-/* Quick-add modal renders the same ImageGallery as the PDP, but inside a
- * dialog — outside the main[data-has-top-padding] scope above — so the hero
- * and thumbnails render square (audit #4, #6). Mirror the PDP radii here so
- * the modal gallery matches the PDP. */
+/* Dialog galleries (quick-add modal, bonus-product modal) render the same
+ * ImageGallery as the PDP but inside a dialog — outside the
+ * main[data-has-top-padding] scope above — so they render square (audit #4,
+ * #6). Mirror the PDP radii here so the modal gallery matches the PDP.
+ *
+ * The gallery renders thumbnails in one of two layouts, each with its own
+ * seam: the grid layout emits [data-gallery-thumbs] (bonus-product modal), and
+ * the horizontal-strip layout emits [data-gallery-strip] (quick-add modal,
+ * which passes horizontalThumbnails). Round both so whichever layout a given
+ * dialog uses, its thumbnails match the hero. The hero (--radius-2xl) always
+ * renders; thumbnails take the smaller --radius-xl like the PDP. */
 [data-slot='dialog-content'] [data-gallery-hero] {
     border-radius: var(--radius-2xl);
 }
-[data-slot='dialog-content'] [data-gallery-thumbs] button {
+[data-slot='dialog-content'] [data-gallery-thumbs] button,
+[data-slot='dialog-content'] [data-gallery-strip] button {
     border-radius: var(--radius-xl);
 }
 
