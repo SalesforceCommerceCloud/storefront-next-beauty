@@ -36,10 +36,6 @@
     },
     "search": {
         "results": "Search Results for",
-        "shopperAgent": {
-            "title": "Ask Shopper Agent",
-            "description": "I can help you find the perfect look. Shop with me."
-        },
         "suggestions": {
             "didYouMean": "Did you mean",
             "categories": "Categories",
@@ -48,6 +44,9 @@
             "recentSearches": "You looked at",
             "clearRecentSearches": "Clear recent searches",
             "viewAll": "View All"
+        },
+        "shopperAgent": {
+            "description": "I can help you find the perfect look. Shop with me."
         }
     },
     "customer": {

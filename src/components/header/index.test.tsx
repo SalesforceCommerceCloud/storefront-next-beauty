@@ -58,12 +58,10 @@ vi.mock('../page-config-manager', () => ({
     PageConfigManager: () => null,
 }));
 
-vi.mock('@/components/shopper-agent', () => ({
-    launchChat: vi.fn(),
-}));
-
-vi.mock('@/components/shopper-agent/shopper-agent.utils', () => ({
-    validateShopperAgentConfig: vi.fn(() => false),
+vi.mock('@/components/cimulate', () => ({
+    openAgentWidget: vi.fn(),
+    isCimulateEnabled: vi.fn(() => false),
+    validateCimulateConfig: vi.fn(() => false),
 }));
 
 vi.mock('@/targets/ui-target', () => ({
@@ -74,7 +72,7 @@ vi.mock('@salesforce/storefront-next-runtime/config', async (importOriginal) => 
     const actual = await importOriginal<typeof import('@salesforce/storefront-next-runtime/config')>();
     return {
         ...actual,
-        useConfig: () => ({ commerceAgent: { enabled: false } }),
+        useConfig: () => ({ cimulateAgent: { enabled: false } }),
     };
 });
 
