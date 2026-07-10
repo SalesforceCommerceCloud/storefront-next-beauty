@@ -143,5 +143,6 @@ describe('Cosmetic HeaderMetadata', () => {
         expect(definitions).toHaveLength(1);
         expect(definitions[0].id).toBe('announcement');
         expect(definitions[0].name).toBe('Announcement');
+        expect(definitions[0].description).toBe('Displayed above the header');
     });
 });
