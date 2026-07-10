@@ -3,7 +3,7 @@ import { i as FrameworkAdapter, n as ComponentModule } from "./types3.js";
 import { g as IsomorphicConfiguration } from "./index.js";
 import { r as RegionDecoratorProps, t as ComponentDecoratorProps } from "./component.types.js";
 import React$1 from "react";
-import * as react_jsx_runtime2 from "react/jsx-runtime";
+import * as react_jsx_runtime1 from "react/jsx-runtime";
 
 //#region src/design/react/core/PageDesignerProvider.d.ts
 type PageDesignerContextType = {
@@ -49,7 +49,7 @@ declare function PageDesignerPageMetadataProvider({
   children
 }: React.PropsWithChildren<{
   page: ShopperExperience.schemas['Page'];
-}>): react_jsx_runtime2.JSX.Element;
+}>): react_jsx_runtime1.JSX.Element;
 //#endregion
 //#region src/design/react/core/RegionContext.d.ts
 interface RegionContextType {
@@ -57,6 +57,32 @@ interface RegionContextType {
   contentLinkUuids: string[];
 }
 declare const useRegionContext: () => RegionContextType | null;
+//#endregion
+//#region src/design/react/core/EmbeddedSubtreeContext.d.ts
+/**
+ * Marks everything rendered beneath it as living in an embedded subtree — Page
+ * Designer content the host cannot resolve for select / delete / move. The
+ * template sets `embedded` from the embedded owner's `embedded` flag; the
+ * design decorators read it via {@link useIsWithinEmbeddedSubtree} to suppress
+ * their editing chrome.
+ *
+ * Nesting is sticky: once a subtree is embedded, descendants stay embedded even
+ * if an inner provider passes `embedded={false}`, since embeddedness is a
+ * property of the whole subtree, not any single boundary.
+ */
+declare function EmbeddedSubtreeProvider({
+  embedded,
+  children
+}: {
+  embedded: boolean;
+  children: React$1.ReactNode;
+}): React$1.JSX.Element;
+/**
+ * Whether the caller is rendered within an {@link EmbeddedSubtreeProvider} that
+ * was told the subtree is embedded. `false` when no provider is present, so
+ * page content — which the template never wraps — is never treated as embedded.
+ */
+declare function useIsWithinEmbeddedSubtree(): boolean;
 //#endregion
 //#region src/design/react/core/ComponentDecorator.d.ts
 /**
@@ -101,5 +127,5 @@ declare class ReactAdapter<TProps> implements FrameworkAdapter<TProps, ReactDesi
  */
 declare function createReactAdapter<TProps>(): ReactAdapter<TProps>;
 //#endregion
-export { PageDesignerPageMetadataProvider, PageDesignerProvider, type ReactDesignComponentType, createReactAdapter, createReactComponentDesignDecorator, createReactRegionDesignDecorator, usePageDesignerMode, useRegionContext };
+export { EmbeddedSubtreeProvider, PageDesignerPageMetadataProvider, PageDesignerProvider, type ReactDesignComponentType, createReactAdapter, createReactComponentDesignDecorator, createReactRegionDesignDecorator, useIsWithinEmbeddedSubtree, usePageDesignerMode, useRegionContext };
 //# sourceMappingURL=design-react-core.d.ts.map
