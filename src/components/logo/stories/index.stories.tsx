@@ -24,7 +24,7 @@ const meta: Meta<typeof Logo> = {
         docs: {
             description: {
                 component:
-                    'The "Dazzle Beauty Essentials" inline-SVG wordmark, used in the header and error page. The SVG fills with `currentColor` and carries its own `aria-label`; sizing and color come from the caller via `className`.',
+                    'The "Beauty Next" inline-SVG wordmark, used in the header and error page. The SVG fills with `currentColor` and carries its own `aria-label`; sizing and color come from the caller via `className`.',
             },
         },
     },

@@ -256,7 +256,7 @@ function CommunityCTA({ t }: { t: TFunction<'aboutUs'> }) {
                 {t('section.community.eyebrow', { defaultValue: 'Join us' })}
             </Typography>
             <ContentCard
-                title={t('section.community.title', { defaultValue: 'Become part of the Dazzle community' })}
+                title={t('section.community.title', { defaultValue: 'Become part of the Beauty Next community' })}
                 description={t('section.community.eyebrow', { defaultValue: 'Join us' })}
                 imageUrl={heroRoutineImage}
                 imageAlt={t('section.community.imageAlt', {
@@ -368,7 +368,7 @@ function PostContactRegionContent({ page, t }: { page: PageWithComponentData | n
 }
 
 /**
- * Cosmetic vertical About Us page. Editorial layout for Dazzle:
+ * Cosmetic vertical About Us page. Editorial layout for Beauty Next:
  *   1. Breadcrumb + page title
  *   2. Headline Region (Page Designer) → hero + principles + standards
  *   3. Contact form (always visible)

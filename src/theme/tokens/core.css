@@ -13,7 +13,7 @@
     --primary-foreground: oklch(0.99 0.006 92);
     --primary-hover: oklch(0.36 0.065 155);
 
-    /* Dazzle-only token: tertiary green (in-stock pills, shipping confirmed) */
+    /* Cosmetic-only token: tertiary green (in-stock pills, shipping confirmed) */
     --tertiary: oklch(0.55 0.09 155);
     --tertiary-foreground: oklch(0.99 0.006 92);
 

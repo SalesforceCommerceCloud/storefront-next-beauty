@@ -15,7 +15,7 @@
  */
 
 /**
- * Dazzle per-page UI overrides:
+ * Beauty Next per-page UI overrides:
  * - Hides the cart recommendation carousels — the cart is a focused
  *   checkout-intent page with no below-the-fold cross-sell — which also skips
  *   the two Einstein recommendation fetches in the cart loader.

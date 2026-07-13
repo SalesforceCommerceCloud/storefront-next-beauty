@@ -11,7 +11,7 @@
         "noFilterOptionsAvailable": "No filter options available."
     },
     "common": {
-        "defaultSiteName": "Storefront Next: Dazzle",
+        "defaultSiteName": "Beauty Next",
         "loading": "Loading",
         "loadingMore": "Loading more...",
         "product": "the product",
@@ -1250,7 +1250,7 @@
             }
         },
         "meta": {
-            "title": "Storefront Next: Dazzle",
+            "title": "Beauty Next",
             "description": "Beauty reimagined — clean, considered cosmetics for every day."
         },
         "featuredProducts": {
@@ -1380,7 +1380,7 @@
             },
             "community": {
                 "eyebrow": "Join us",
-                "title": "Become part of the Dazzle community",
+                "title": "Become part of the Beauty Next community",
                 "imageAlt": "Skincare bottles laid out on warm linen.",
                 "ctaText": "Create your account",
                 "ctaLink": "/signup"

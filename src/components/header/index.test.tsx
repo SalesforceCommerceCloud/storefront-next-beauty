@@ -16,7 +16,7 @@
 
 // Cosmetic vertical Header test. The cosmetic header is a full override of the
 // canonical component (three-column editorial layout, inline-SVG Logo recolored
-// via `color`, Dazzle scroll-to-solid chrome). It imports its children through
+// via `color`, Beauty Next scroll-to-solid chrome). It imports its children through
 // the `@/components/header/*` alias rather than the canonical's `./*` relative
 // specifiers, so this override mocks those alias paths. Mirrors the assertions
 // of the canonical header/index.test.tsx (logo/search/user-actions/cart, the

@@ -20,7 +20,7 @@ import Logo from '.';
 describe('Logo', () => {
     test('renders SVG with correct aria-label', () => {
         render(<Logo />);
-        const logo = screen.getByRole('img', { name: /dazzle beauty essentials/i });
+        const logo = screen.getByRole('img', { name: /beauty next/i });
         expect(logo).toBeInTheDocument();
     });
 
@@ -31,20 +31,23 @@ describe('Logo', () => {
     });
 
     test('uses currentColor for fill to enable CSS color inheritance', () => {
+        // The wordmark is an outlined <path> (no live <text>), so the color hook
+        // is fill="currentColor" on the path — the theme drives it via the
+        // header/footer logo color tokens.
         const { container } = render(<Logo />);
-        const group = container.querySelector('g');
-        expect(group).toHaveAttribute('fill', 'currentColor');
+        const path = container.querySelector('path');
+        expect(path).toHaveAttribute('fill', 'currentColor');
     });
 
-    test('contains "Dazzle" text', () => {
+    test('renders non-trivial wordmark geometry', () => {
+        // Guard against a blanked/garbled export: the aria-label and className
+        // live on the <svg>, so they pass even if the path's `d` is empty. Assert
+        // the geometry is actually present (multiple sub-paths) so a blank logo
+        // can't ship green.
         const { container } = render(<Logo />);
-        const svg = container.innerHTML;
-        expect(svg).toContain('Dazzle');
-    });
-
-    test('contains "BEAUTY ESSENTIALS" text', () => {
-        const { container } = render(<Logo />);
-        const svg = container.innerHTML;
-        expect(svg).toContain('BEAUTY ESSENTIALS');
+        const d = container.querySelector('path')?.getAttribute('d') ?? '';
+        expect(d.length).toBeGreaterThan(100);
+        // "Beauty Next" is many glyphs → many moveto (M) commands.
+        expect((d.match(/M/g) ?? []).length).toBeGreaterThan(1);
     });
 });

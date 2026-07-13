@@ -3,7 +3,7 @@
     --brand-primary: oklch(0.44 0.08 155);
     --brand-primary-hover: oklch(0.36 0.065 155);
 
-    /* Brand neutrals — warm beige scale matching Dazzle exactly */
+    /* Brand neutrals — warm beige scale matching the cosmetic brand spec exactly */
     --brand-black: oklch(0.2 0.015 78);
     --brand-black-off: oklch(0.23 0.015 78);
     --brand-black-charcoal: oklch(0.31 0.018 80);
