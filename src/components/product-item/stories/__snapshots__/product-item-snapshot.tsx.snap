@@ -1123,15 +1123,16 @@ exports[`ProductItem stories snapshot > SummaryVariant story renders and matches
            
           1
         </div>
-        <div
+        <ul
           class="text-sm font-normal leading-5 text-muted-foreground space-y-1 mb-1"
+          role="list"
         >
-          <div>
+          <li>
             Size
             : 
             L
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
       <div
         class="items-center gap-2 text-sm"
