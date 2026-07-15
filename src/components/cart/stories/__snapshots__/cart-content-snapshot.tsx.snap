@@ -124,10 +124,11 @@ exports[`CartContent stories snapshot > CartWithItems story renders and matches 
               </div>
             </div>
           </div>
-          <div
+          <ul
             class="space-y-4"
+            role="list"
           >
-            <div
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -468,8 +469,8 @@ exports[`CartContent stories snapshot > CartWithItems story renders and matches 
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
       <div
@@ -1002,10 +1003,11 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
               Change Store
             </button>
           </div>
-          <div
+          <ul
             class="space-y-4"
+            role="list"
           >
-            <div
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -1324,8 +1326,8 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
         <div
           class="md:p-8 p-3 border border-border rounded-none"
@@ -1376,10 +1378,11 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
               </div>
             </div>
           </div>
-          <div
+          <ul
             class="space-y-4"
+            role="list"
           >
-            <div
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -1720,8 +1723,8 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                   </div>
                 </div>
               </div>
-            </div>
-            <div
+            </li>
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -2068,8 +2071,8 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
       <div
@@ -2587,10 +2590,11 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
               </div>
             </div>
           </div>
-          <div
+          <ul
             class="space-y-4"
+            role="list"
           >
-            <div
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -2931,8 +2935,8 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                   </div>
                 </div>
               </div>
-            </div>
-            <div
+            </li>
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -3273,8 +3277,8 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
       <div
@@ -4208,10 +4212,11 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
             Change Store
           </button>
         </div>
-        <div
+        <ul
           class="space-y-4"
+          role="list"
         >
-          <div
+          <li
             class="border-b border-muted-foreground/10 last:border-b-0"
           >
             <div
@@ -4530,8 +4535,8 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
       <div
         class="p-3 border border-border rounded-none"
@@ -4582,10 +4587,11 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
             </div>
           </div>
         </div>
-        <div
+        <ul
           class="space-y-4"
+          role="list"
         >
-          <div
+          <li
             class="border-b border-muted-foreground/10 last:border-b-0"
           >
             <div
@@ -4926,8 +4932,8 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                 </div>
               </div>
             </div>
-          </div>
-          <div
+          </li>
+          <li
             class="border-b border-muted-foreground/10 last:border-b-0"
           >
             <div
@@ -5299,8 +5305,8 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                 </div>
               </div>
             </div>
-          </div>
-          <div
+          </li>
+          <li
             class="border-b border-muted-foreground/10 last:border-b-0"
           >
             <div
@@ -5534,8 +5540,8 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -5666,10 +5672,11 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
               </div>
             </div>
           </div>
-          <div
+          <ul
             class="space-y-4"
+            role="list"
           >
-            <div
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -6010,8 +6017,8 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                   </div>
                 </div>
               </div>
-            </div>
-            <div
+            </li>
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -6245,8 +6252,8 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                   </div>
                 </div>
               </div>
-            </div>
-            <div
+            </li>
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -6480,8 +6487,8 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
       <div
@@ -7067,10 +7074,11 @@ exports[`CartContent stories snapshot > WithErrorBanner story renders and matche
               </div>
             </div>
           </div>
-          <div
+          <ul
             class="space-y-4"
+            role="list"
           >
-            <div
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -7417,8 +7425,8 @@ exports[`CartContent stories snapshot > WithErrorBanner story renders and matche
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
       <div
@@ -8017,10 +8025,11 @@ exports[`CartContent stories snapshot > WithGiftLine story renders and matches s
               </div>
             </div>
           </div>
-          <div
+          <ul
             class="space-y-4"
+            role="list"
           >
-            <div
+            <li
               class="border-b border-muted-foreground/10 last:border-b-0"
             >
               <div
@@ -8392,8 +8401,8 @@ exports[`CartContent stories snapshot > WithGiftLine story renders and matches s
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
       <div
