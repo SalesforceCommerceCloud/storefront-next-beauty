@@ -103,7 +103,7 @@ function buildBonusFixture({
 }
 
 const meta: Meta<typeof BonusProductSelection> = {
-    title: 'Cosmetic/CART/Bonus Product Selection',
+    title: 'Cart/Bonus Products/Bonus Product Selection',
     tags: ['autodocs', 'interaction'],
     parameters: {
         layout: 'padded',
