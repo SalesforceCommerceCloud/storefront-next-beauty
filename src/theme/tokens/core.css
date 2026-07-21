@@ -27,14 +27,20 @@
     --accent: oklch(0.92 0.02 89);
     --accent-foreground: oklch(0.31 0.018 80);
 
-    --border: oklch(0.87 0.02 88);
-    --border-subtle: oklch(0.92 0.02 89);
-    --border-primary: oklch(0.87 0.02 88);
-    --input: oklch(0.9 0.018 90);
+    /* Boundary tokens darkened to clear WCAG SC 1.4.11 (3:1) against the default
+       cream --background and --card surfaces. Written as hex (sRGB) to match the
+       fashion vertical's token format; ratios below are measured on --card. The
+       subtle/separator tier (3.33:1) can dip below 3:1 on darker panels such as
+       --accent and muted-hover; 1.4.11 exempts purely decorative dividers, and the
+       primary --border / --input tokens still clear 3:1 on the common surfaces. */
+    --border: #7c776a; /* 4.10:1 on --card */
+    --border-subtle: #8b8679; /* 3.33:1 on --card */
+    --border-primary: #8b8679; /* 3.33:1 on --card */
+    --input: #848074; /* 3.62:1 on --card */
     --ring: oklch(0.47 0.07 155);
 
     /* separator colors */
-    --separator: oklch(0.87 0.02 88);
+    --separator: #8b8679; /* 3.33:1 on --card */
     --separator-foreground: oklch(0.61 0.02 85);
 
     /* rating colors */
