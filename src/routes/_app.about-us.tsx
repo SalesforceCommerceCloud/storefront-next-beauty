@@ -102,6 +102,7 @@ function AboutHero({ t }: { t: TFunction<'aboutUs'> }) {
                 title={t('hero.headline', {
                     defaultValue: 'Clean ingredients. Every-shade colour. Beauty that fits your day.',
                 })}
+                titleTypography="Heading 1"
                 description={t('hero.eyebrow', { defaultValue: 'Our story' })}
                 imageUrl={heroFoundationsImage}
                 imageAlt={t('hero.imageAlt', {
@@ -112,7 +113,6 @@ function AboutHero({ t }: { t: TFunction<'aboutUs'> }) {
                 showBackground={false}
                 showBorder={false}
                 loading="eager"
-                className="[&_h3]:text-3xl [&_h3]:md:text-5xl [&_h3]:font-semibold [&_h3]:tracking-tight [&_h3]:mb-4 [&_h3]:max-w-2xl"
             />
         </section>
     );
@@ -135,6 +135,7 @@ function PrinciplesGrid({ t }: { t: TFunction<'aboutUs'> }) {
                         defaultValue:
                             'Beauty that earns its place on your shelf. Every product starts with one question: would we use it every day?',
                     })}
+                    descriptionTypography="Paragraph"
                     imageUrl={heroIngredientsImage}
                     imageAlt={t('section.ourVision.imageAlt', {
                         defaultValue: 'Serum bottles with fresh eucalyptus.',
@@ -142,7 +143,6 @@ function PrinciplesGrid({ t }: { t: TFunction<'aboutUs'> }) {
                     showBackground={false}
                     showBorder={false}
                     loading="lazy"
-                    className="[&_h3]:text-2xl [&_h3]:font-semibold [&_p]:text-sm [&_p]:md:text-base [&_p]:leading-relaxed"
                 />
                 <ContentCard
                     title={t('section.ourValue.title', { defaultValue: 'Why We Exist' })}
@@ -150,6 +150,7 @@ function PrinciplesGrid({ t }: { t: TFunction<'aboutUs'> }) {
                         defaultValue:
                             'Honest formulas, real shades, and less guesswork. Beauty that fits the people who wear it.',
                     })}
+                    descriptionTypography="Paragraph"
                     imageUrl={heroTextureImage}
                     imageAlt={t('section.ourValue.imageAlt', {
                         defaultValue: 'A pipette drawing a smooth ribbon of cream.',
@@ -157,7 +158,6 @@ function PrinciplesGrid({ t }: { t: TFunction<'aboutUs'> }) {
                     showBackground={false}
                     showBorder={false}
                     loading="lazy"
-                    className="[&_h3]:text-2xl [&_h3]:font-semibold [&_p]:text-sm [&_p]:md:text-base [&_p]:leading-relaxed"
                 />
             </div>
         </section>
@@ -257,6 +257,7 @@ function CommunityCTA({ t }: { t: TFunction<'aboutUs'> }) {
             </Typography>
             <ContentCard
                 title={t('section.community.title', { defaultValue: 'Become part of the Beauty Next community' })}
+                titleTypography="Heading 2"
                 description={t('section.community.eyebrow', { defaultValue: 'Join us' })}
                 imageUrl={heroRoutineImage}
                 imageAlt={t('section.community.imageAlt', {
@@ -267,7 +268,6 @@ function CommunityCTA({ t }: { t: TFunction<'aboutUs'> }) {
                 showBackground={false}
                 showBorder={false}
                 loading="lazy"
-                className="[&_h3]:text-2xl [&_h3]:md:text-3xl [&_h3]:font-semibold"
             />
         </section>
     );
