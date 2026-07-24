@@ -42,6 +42,12 @@ interface UIConfig {
         };
         category: {
             showCategoryLabel: boolean;
+            pagination: {
+                mode: 'load-more' | 'traditional';
+                batchSize: number;
+                mobileBatchSize: number;
+                maxProducts: number;
+            };
         };
     };
     bonusTile: {
@@ -61,6 +67,12 @@ export const uiConfig: UIConfig = {
         },
         category: {
             showCategoryLabel: true,
+            pagination: {
+                mode: 'load-more',
+                batchSize: 24,
+                mobileBatchSize: 12,
+                maxProducts: 200,
+            },
         },
     },
     bonusTile: {
