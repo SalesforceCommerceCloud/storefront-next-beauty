@@ -43,20 +43,20 @@
 
     /* Cursor pointer for all interactive elements */
     button:not(:disabled),
-    [role='button']:not([aria-disabled='true']):not([data-disabled]),
-    [role='tab']:not([aria-disabled='true']):not([data-disabled]),
+    [role="button"]:not([aria-disabled="true"]):not([data-disabled]),
+    [role="tab"]:not([aria-disabled="true"]):not([data-disabled]),
     a[href],
     select:not(:disabled),
-    input[type='button']:not(:disabled),
-    input[type='submit']:not(:disabled),
-    input[type='reset']:not(:disabled),
-    input[type='date']:not(:disabled),
-    input[type='datetime-local']:not(:disabled),
-    input[type='month']:not(:disabled),
-    input[type='time']:not(:disabled),
-    input[type='week']:not(:disabled),
-    input[type='color']:not(:disabled),
-    input[type='file']:not(:disabled),
+    input[type="button"]:not(:disabled),
+    input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled),
+    input[type="date"]:not(:disabled),
+    input[type="datetime-local"]:not(:disabled),
+    input[type="month"]:not(:disabled),
+    input[type="time"]:not(:disabled),
+    input[type="week"]:not(:disabled),
+    input[type="color"]:not(:disabled),
+    input[type="file"]:not(:disabled),
     summary {
         cursor: pointer;
     }
@@ -68,21 +68,21 @@
 
     /* Cursor not-allowed for disabled interactive elements */
     button:disabled,
-    [role='button'][aria-disabled='true'],
-    [role='button'][data-disabled],
-    [role='tab'][aria-disabled='true'],
-    [role='tab'][data-disabled],
+    [role="button"][aria-disabled="true"],
+    [role="button"][data-disabled],
+    [role="tab"][aria-disabled="true"],
+    [role="tab"][data-disabled],
     select:disabled,
-    input[type='button']:disabled,
-    input[type='submit']:disabled,
-    input[type='reset']:disabled,
-    input[type='date']:disabled,
-    input[type='datetime-local']:disabled,
-    input[type='month']:disabled,
-    input[type='time']:disabled,
-    input[type='week']:disabled,
-    input[type='color']:disabled,
-    input[type='file']:disabled {
+    input[type="button"]:disabled,
+    input[type="submit"]:disabled,
+    input[type="reset"]:disabled,
+    input[type="date"]:disabled,
+    input[type="datetime-local"]:disabled,
+    input[type="month"]:disabled,
+    input[type="time"]:disabled,
+    input[type="week"]:disabled,
+    input[type="color"]:disabled,
+    input[type="file"]:disabled {
         cursor: not-allowed;
     }
 }
@@ -93,10 +93,10 @@
  * and no shadow. We restore the 1px border here AND drop the shadow for those
  * sections. :where() keeps specificity low so per-card className overrides
  * (e.g. [--ui-border-width:0px]) still win. */
-:where([data-testid='account-layout']) [data-slot='card'],
-:where([data-section='auth']) [data-slot='card'],
-:where([data-section='checkout']) [data-slot='card'],
-:where([data-section='order-confirmation']) [data-slot='card'] {
+:where([data-testid="account-layout"]) [data-slot="card"],
+:where([data-section="auth"]) [data-slot="card"],
+:where([data-section="checkout"]) [data-slot="card"],
+:where([data-section="order-confirmation"]) [data-slot="card"] {
     --ui-border-width: 1px;
     --ui-shadow: none;
 }
@@ -156,14 +156,14 @@
  * tailwind.css). The .shadow-ui utility resolves var(--ui-shadow)
  * directly, so writing to the bridge var has no effect. The other
  * :where() blocks in this file get the same right. */
-:where([data-section='home-content']) [data-slot='card'] {
+:where([data-section="home-content"]) [data-slot="card"] {
     --ui-shadow: none;
 }
 
 /* Product tile uses the cream --card surface so it stands out a touch
  * warmer than the page background. Shadow inherits the global --ui-shadow
  * default (Tailwind v4 shadow-sm) — no deeper drop. */
-.product-card[data-slot='card'] {
+.product-card[data-slot="card"] {
     background-color: var(--card);
 }
 
@@ -306,7 +306,7 @@ main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
 }
 
 /* Use primary-hover token for button hover state instead of opacity-based hover */
-[data-slot='button'][data-variant='default']:hover {
+[data-slot="button"][data-variant="default"]:hover {
     background-color: var(--primary-hover);
 }
 
@@ -345,12 +345,12 @@ main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
 }
 
 /* Add bottom padding when product bottom bar is visible to prevent footer overlap */
-body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
+body:has([data-slot="product-bottom-bar"]:not(.translate-y-full)) {
     padding-bottom: 88px;
 }
 
 /* Category page: filters-wrapper should be vertical on all screen sizes */
-[data-slot='filters-wrapper'] {
+[data-slot="filters-wrapper"] {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem; /* gap-3 */
@@ -363,18 +363,18 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
  * Inactive = card surface + accent text; active = primary fill +
  * primary-foreground text. Radius inherits the global --ui-radius default
  * so the chips round consistently with the rest of the storefront. */
-[data-slot='quick-filters'] [data-slot='button'] {
+[data-slot="quick-filters"] [data-slot="button"] {
     gap: 0.375rem; /* gap-1.5 — icon/label spacing inside the chip */
     background-color: var(--card);
     color: var(--accent-foreground);
 }
 
-[data-slot='quick-filters'] [data-slot='button']:hover {
+[data-slot="quick-filters"] [data-slot="button"]:hover {
     background-color: var(--muted-hover);
 }
 
 /* Active chip (selected cgid refinement): canonical sets aria-pressed="true". */
-[data-slot='quick-filters'] [data-slot='button'][aria-pressed='true'] {
+[data-slot="quick-filters"] [data-slot="button"][aria-pressed="true"] {
     background-color: var(--primary);
     color: var(--primary-foreground);
 }
@@ -385,7 +385,7 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
  * radius match the order summary Card (var(--border), --radius-2xl) so the
  * three cart panels read as one set. The canonical `border` utility supplies
  * the 1px width; we only recolor it here. */
-[data-slot='cart-delivery-group'] {
+[data-slot="cart-delivery-group"] {
     background-color: var(--card);
     border-color: var(--border);
     border-radius: var(--radius-2xl);
@@ -395,14 +395,14 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
  * the bonus carousel aligns under the cart items column rather than spanning
  * the full editorial width. Uses the same utility string as the items grid in
  * cart-content.tsx so the two stay in sync. */
-[data-slot='bonus-products-rail'] {
+[data-slot="bonus-products-rail"] {
     @apply grid grid-cols-1 lg:grid-cols-[66%_1fr] lg:gap-11;
 }
 
 /* The visible bonus panel is the <section> inside the rail wrapper (the wrapper
  * itself is a transparent grid track). Match the delivery group + order summary
  * surface: cream --card background, --border color, --radius-2xl. */
-[data-slot='bonus-products-rail'] > section {
+[data-slot="bonus-products-rail"] > section {
     background-color: var(--card);
     border-color: var(--border);
     border-radius: var(--radius-2xl);
@@ -411,7 +411,7 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
 /* Cart line-item product images: round the thumbnail corners to the global
  * --ui-radius so they match the rest of the storefront's rounded surfaces.
  * The wrapper already has overflow-hidden, so the radius clips the image. */
-[data-testid='sf-cart-container'] [data-slot='product-item-image'] {
+[data-testid="sf-cart-container"] [data-slot="product-item-image"] {
     border-radius: var(--ui-radius);
 }
 
@@ -419,7 +419,7 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
  * "selected/max" count (right) across the full width. The canonical <h3>
  * renders both as inline spans; flexing it pushes the count to the far right
  * (count text is overridden to "{{selected}}/{{max}}" in the cosmetic locale). */
-[data-slot='bonus-products-rail'] > section > h3 {
+[data-slot="bonus-products-rail"] > section > h3 {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -429,7 +429,7 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
 /* Title span (left): its own flex row so the gift icon and the promotion text
  * are flex items spaced by gap (gap-2 / 0.5rem). This is a nested flex inside
  * the <h3> — the <h3>'s flex only spaces the title span from the count span. */
-[data-slot='bonus-products-rail'] > section > h3 > span:first-child {
+[data-slot="bonus-products-rail"] > section > h3 > span:first-child {
     display: inline-flex;
     align-items: center; /* icon vertically centered against the title text */
     gap: 0.5rem; /* gap-2 — icon ↔ title text */
@@ -438,7 +438,7 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
 }
 
 /* Count span (right): smaller than the title. */
-[data-slot='bonus-products-rail'] > section > h3 > span:last-child {
+[data-slot="bonus-products-rail"] > section > h3 > span:last-child {
     font-size: var(--text-xs); /* text-xs — 0.75rem */
     line-height: var(--text-xs--line-height); /* 1rem */
 }
@@ -449,8 +449,8 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
  * tintable (currentColor / card-foreground), which a `content: url(...)` image
  * would not be. Path data mirrors lucide-react@0.544 `gift`; bump it if the
  * dependency changes. */
-[data-slot='bonus-products-rail'] > section > h3 > span:first-child::before {
-    content: '';
+[data-slot="bonus-products-rail"] > section > h3 > span:first-child::before {
+    content: "";
     display: inline-block;
     flex-shrink: 0;
     width: 1rem; /* size-4 */
@@ -463,7 +463,7 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
 /* Once the promotion's max bonus products are selected (the component sets `data-max-reached` on the
  * <section>), swap the gift callout for the lucide `sparkles` icon — a celebratory cue that the offer is
  * fulfilled. Only the mask image changes; size/tint inherit from the rule above. */
-[data-slot='bonus-products-rail'] > section[data-max-reached] > h3 > span:first-child::before {
+[data-slot="bonus-products-rail"] > section[data-max-reached] > h3 > span:first-child::before {
     -webkit-mask: var(--icon-sparkles) center / contain no-repeat;
     mask: var(--icon-sparkles) center / contain no-repeat;
 }
@@ -471,11 +471,11 @@ body:has([data-slot='product-bottom-bar']:not(.translate-y-full)) {
 /* Cart order summary Card: opt into a 1px border (cosmetic Cards are
  * borderless by default). Color comes from the global `* { border-border }`
  * default (var(--border)), matching the delivery group and bonus rail. */
-[data-slot='order-summary'] [data-slot='card'] {
+[data-slot="order-summary"] [data-slot="card"] {
     --ui-border-width: 1px;
 }
 
 /* Category page: filters button badge should be circular */
-[data-slot='filters-wrapper'] [data-slot='badge'] {
+[data-slot="filters-wrapper"] [data-slot="badge"] {
     border-radius: 50%;
 }

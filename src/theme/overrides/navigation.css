@@ -1,5 +1,5 @@
 /* Header navigation uses header-specific colors */
-header [data-slot='navigation-menu-trigger'] {
+header [data-slot="navigation-menu-trigger"] {
     color: var(--header-foreground);
 }
 
@@ -17,7 +17,7 @@ header svg {
  * downward extension of the (flat, full-width) header band rather than
  * a rounded floating panel. Bottom corners stay rounded to cap the
  * dropdown cleanly against the page below. */
-header [data-slot='navigation-menu-viewport'] {
+header [data-slot="navigation-menu-viewport"] {
     margin-top: 0 !important;
     border-top-color: var(--header-border);
     border-top-left-radius: 0;
@@ -25,8 +25,8 @@ header [data-slot='navigation-menu-viewport'] {
 }
 
 /* Navigation viewport positioned flush with header */
-header ~ * [data-slot='navigation-menu-viewport'],
-.absolute.top-full.left-0.isolate.z-50:has([data-slot='navigation-menu-viewport']) {
+header ~ * [data-slot="navigation-menu-viewport"],
+.absolute.top-full.left-0.isolate.z-50:has([data-slot="navigation-menu-viewport"]) {
     margin-top: 0 !important;
 }
 
@@ -35,17 +35,17 @@ header ~ * [data-slot='navigation-menu-viewport'],
  * gap beneath — top and bottom spacing don't match (audit #7). Add an equal
  * top pad so the panel breathes symmetrically. Scoped to the section-container
  * wrapper the mega renderer emits as the direct child of the content slot. */
-header [data-slot='navigation-menu-content'] > .section-container {
+header [data-slot="navigation-menu-content"] > .section-container {
     padding-top: 1.5rem;
 }
 
 /* Navigation menu trigger hover text color */
-[data-slot='navigation-menu-trigger']:hover,
-[data-slot='navigation-menu-trigger']:focus,
-[data-slot='navigation-menu-trigger'][data-state='open']:hover,
-[data-slot='navigation-menu-trigger'][data-state='open']:focus,
-[data-slot='navigation-menu-link']:hover,
-[data-slot='navigation-menu-link']:focus {
+[data-slot="navigation-menu-trigger"]:hover,
+[data-slot="navigation-menu-trigger"]:focus,
+[data-slot="navigation-menu-trigger"][data-state="open"]:hover,
+[data-slot="navigation-menu-trigger"][data-state="open"]:focus,
+[data-slot="navigation-menu-link"]:hover,
+[data-slot="navigation-menu-link"]:focus {
     color: var(--header-menu-hover-foreground) !important;
 }
 
@@ -57,6 +57,6 @@ header [data-slot='navigation-menu-content'] > .section-container {
  * the shared scroll-to-solid rate for the hover pill) and let the text color
  * change instantly like the triggers. `transition` is not animatable, so no
  * !important needed — this just out-specifies the utility class. */
-header [data-slot='navigation-menu-link'] {
+header [data-slot="navigation-menu-link"] {
     transition: background-color 300ms ease-out;
 }

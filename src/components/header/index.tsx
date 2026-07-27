@@ -53,6 +53,7 @@ import { PageConfigManager } from '../page-config-manager';
     component_id: 'header',
 })
 @RegionDefinition([{ id: 'announcement', name: 'Announcement', description: 'Displayed above the header' }])
+// oxlint-disable-next-line react/only-export-components -- oxlint flags the co-exported Page Designer metadata class; eslint-plugin-react-refresh does not
 export class HeaderMetadata {}
 
 interface HeaderProps extends PropsWithChildren {

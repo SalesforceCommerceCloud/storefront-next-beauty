@@ -1,14 +1,14 @@
 :root {
     /* payment provider colors */
-    --paypal-gold: #ffc439;
-    --paypal-gold-hover: #f5bb41; /* rgb(245, 187, 65) */
-    --venmo-blue: #3d95ce;
-    --venmo-blue-hover: #427db3; /* rgb(66, 125, 179) */
-    --express-foreground-hover: #39342b; /* rgb(57, 52, 43) - Google Pay & Apple Pay hover */
+    --paypal-gold: #FFC439;
+    --paypal-gold-hover: #F5BB41; /* rgb(245, 187, 65) */
+    --venmo-blue: #3D95CE;
+    --venmo-blue-hover: #427DB3; /* rgb(66, 125, 179) */
+    --express-foreground-hover: #39342B; /* rgb(57, 52, 43) - Google Pay & Apple Pay hover */
 
     /* cart & mini-cart tokens */
     --cart-summary-px: 1rem;
-    --cart-free-price: #2e844a;
+    --cart-free-price: #2E844A;
     --cart-free-price-size: 1.125rem;
 
     /* product badge — promo variant (Sale, Best Seller); aliases of semantic tokens */
