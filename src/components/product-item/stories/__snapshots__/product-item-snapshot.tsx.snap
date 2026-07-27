@@ -102,7 +102,7 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                         disabled=""
                       >
@@ -110,7 +110,7 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         disabled=""
                         max="98"
                         min="0"
@@ -120,7 +120,7 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                         disabled=""
                       >
@@ -250,7 +250,7 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                         disabled=""
                       >
@@ -258,7 +258,7 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         max="3"
                         min="0"
                         step="1"
@@ -267,7 +267,7 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                       >
                         +
@@ -415,7 +415,7 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                         disabled=""
                       >
@@ -423,7 +423,7 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         max="98"
                         min="0"
                         step="1"
@@ -432,7 +432,7 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                       >
                         +
@@ -567,7 +567,7 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                         disabled=""
                       >
@@ -575,7 +575,7 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         max="98"
                         min="0"
                         step="1"
@@ -584,7 +584,7 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                       >
                         +
@@ -719,7 +719,7 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                         disabled=""
                       >
@@ -727,7 +727,7 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         max="98"
                         min="0"
                         step="1"
@@ -736,7 +736,7 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                       >
                         +
@@ -869,7 +869,7 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                         disabled=""
                       >
@@ -877,7 +877,7 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         max="98"
                         min="0"
                         step="1"
@@ -886,7 +886,7 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                       >
                         +
@@ -1028,14 +1028,14 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                       >
                         −
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         max="98"
                         min="0"
                         step="1"
@@ -1044,7 +1044,7 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                       >
                         +
@@ -1286,7 +1286,7 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                         disabled=""
                       >
@@ -1294,7 +1294,7 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         max="98"
                         min="0"
                         step="1"
@@ -1303,7 +1303,7 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                       >
                         +
@@ -1451,7 +1451,7 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
                     >
                       <button
                         aria-label="Decrement Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-decrement"
                         disabled=""
                       >
@@ -1459,7 +1459,7 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
                       </button>
                       <input
                         aria-label="Quantity"
-                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         max="98"
                         min="0"
                         step="1"
@@ -1468,7 +1468,7 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
                       />
                       <button
                         aria-label="Increment Quantity for the product"
-                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-2.5 py-1.5 text-base font-semibold leading-normal text-foreground hover:bg-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed"
                         data-testid="quantity-increment"
                       >
                         +
