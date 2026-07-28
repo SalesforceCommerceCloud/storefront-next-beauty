@@ -17,6 +17,11 @@
     --account-action-destructive: var(--destructive);
     --account-action-destructive-foreground: #ffffff;
 
+    /* account primary CTAs (Buy Again, Rate & review) — semantic hook so verticals decide the fill.
+       Default is the neutral foreground/background pairing this brand has always used. */
+    --account-action-primary: var(--foreground);
+    --account-action-primary-foreground: var(--background);
+
     /* WCAG AA: 7.13:1 on white; 5.53:1 on --success-foreground */
     --success: #166534;
     --success-foreground: #CBEAD7;
