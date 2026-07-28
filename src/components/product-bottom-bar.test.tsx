@@ -218,7 +218,7 @@ describe('ProductBottomBar', () => {
         test('observes the main add-to-cart button', () => {
             renderComponent();
 
-            // eslint-disable-next-line @typescript-eslint/unbound-method -- test fixture
+            // oxlint-disable-next-line @typescript-eslint/unbound-method -- test fixture
             const mockQuerySelector = document.querySelector as ReturnType<typeof vi.fn>;
             expect(mockQuerySelector).toHaveBeenCalledWith('[data-slot="add-to-cart-button"]');
             expect(mockObserve).toHaveBeenCalled();
