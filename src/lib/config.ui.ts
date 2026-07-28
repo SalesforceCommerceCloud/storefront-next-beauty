@@ -49,6 +49,9 @@ interface UIConfig {
                 maxProducts: number;
             };
         };
+        product: {
+            showRatingAverage: boolean;
+        };
     };
     bonusTile: {
         /** Variation-attribute id whose selected value name renders as the bonus tile subtitle. */
@@ -73,6 +76,9 @@ export const uiConfig: UIConfig = {
                 mobileBatchSize: 12,
                 maxProducts: 200,
             },
+        },
+        product: {
+            showRatingAverage: false,
         },
     },
     bonusTile: {
