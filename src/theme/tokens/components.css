@@ -19,6 +19,11 @@
     --footer-background: oklch(0.99 0.006 92);
     --footer-foreground: oklch(0.24 0.02 80);
 
+    /* newsletter band — homepage CTA block. Defaults to the primary CTA color,
+     * matching the shared component's prior hardcoded bg-primary values. */
+    --newsletter-background: var(--primary);
+    --newsletter-foreground: var(--primary-foreground);
+
     /* filter chip — selected state (semantic alias of --info*) */
     --filter-selected: var(--info-foreground);
     --filter-selected-border: var(--info);

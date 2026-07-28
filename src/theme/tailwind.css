@@ -122,6 +122,10 @@
     --color-footer-background: var(--footer-background);
     --color-footer-foreground: var(--footer-foreground);
 
+    /* -- newsletter band -- */
+    --color-newsletter-background: var(--newsletter-background);
+    --color-newsletter-foreground: var(--newsletter-foreground);
+
     /* -- filter -- */
     --color-filter-selected: var(--filter-selected);
     --color-filter-selected-border: var(--filter-selected-border);
