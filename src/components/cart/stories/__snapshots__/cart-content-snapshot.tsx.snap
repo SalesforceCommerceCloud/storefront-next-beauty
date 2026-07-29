@@ -362,8 +362,7 @@ exports[`CartContent stories snapshot > CartWithItems story renders and matches 
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $42.00"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $42.00
@@ -408,7 +407,7 @@ exports[`CartContent stories snapshot > CartWithItems story renders and matches 
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_a_"
                                     max="98"
                                     min="0"
@@ -672,7 +671,9 @@ exports[`CartContent stories snapshot > CartWithItems story renders and matches 
                   Continue to Checkout
                 </a>
                 <div
+                  aria-label="Accepted payment methods: Visa, Mastercard, American Express, Discover"
                   class="flex justify-center"
+                  role="img"
                 >
                   <svg
                     class="mr-2"
@@ -1221,8 +1222,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $35.00"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $35.00
@@ -1267,7 +1267,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_5i_"
                                     max="98"
                                     min="0"
@@ -1620,8 +1620,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $45.00"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $45.00
@@ -1666,7 +1665,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_60_"
                                     max="98"
                                     min="0"
@@ -1964,8 +1963,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $60.00"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $60.00
@@ -2016,7 +2014,7 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_6e_"
                                     max="98"
                                     min="0"
@@ -2282,7 +2280,9 @@ exports[`CartContent stories snapshot > CartWithPickupDelivery story renders and
                   Continue to Checkout
                 </a>
                 <div
+                  aria-label="Accepted payment methods: Visa, Mastercard, American Express, Discover"
                   class="flex justify-center"
+                  role="img"
                 >
                   <svg
                     class="mr-2"
@@ -2836,8 +2836,7 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $40.00"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $40.00
@@ -2882,7 +2881,7 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_r_"
                                     max="98"
                                     min="0"
@@ -3180,8 +3179,7 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $27.00"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $27.00
@@ -3226,7 +3224,7 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_19_"
                                     max="98"
                                     min="0"
@@ -3514,7 +3512,9 @@ exports[`CartContent stories snapshot > CartWithPromotions story renders and mat
                   Continue to Checkout
                 </a>
                 <div
+                  aria-label="Accepted payment methods: Visa, Mastercard, American Express, Discover"
                   class="flex justify-center"
+                  role="img"
                 >
                   <svg
                     class="mr-2"
@@ -3974,7 +3974,9 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                 Continue to Checkout
               </a>
               <div
+                aria-label="Accepted payment methods: Visa, Mastercard, American Express, Discover"
                 class="flex justify-center"
+                role="img"
               >
                 <svg
                   class="mr-2"
@@ -4440,8 +4442,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                   class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                 >
                                   <span
-                                    aria-label="Current price: $30.00"
-                                    aria-live="polite"
+                                    aria-hidden="true"
                                     class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                   >
                                     $30.00
@@ -4486,7 +4487,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                   −
                                 </button>
                                 <input
-                                  class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                   id="cart-qty-_r_1t_"
                                   max="98"
                                   min="0"
@@ -4839,8 +4840,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                   class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                 >
                                   <span
-                                    aria-label="Current price: $42.00"
-                                    aria-live="polite"
+                                    aria-hidden="true"
                                     class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                   >
                                     $42.00
@@ -4885,7 +4885,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                   −
                                 </button>
                                 <input
-                                  class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                   id="cart-qty-_r_2b_"
                                   max="98"
                                   min="0"
@@ -5183,8 +5183,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                   class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                 >
                                   <span
-                                    aria-label="Current price: $76.00"
-                                    aria-live="polite"
+                                    aria-hidden="true"
                                     class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                   >
                                     $76.00
@@ -5235,7 +5234,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                   −
                                 </button>
                                 <input
-                                  class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                   id="cart-qty-_r_2p_"
                                   max="98"
                                   min="0"
@@ -5533,7 +5532,7 @@ exports[`CartContent stories snapshot > MobileLayout story renders and matches s
                                   −
                                 </button>
                                 <input
-                                  class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                   disabled=""
                                   id="cart-qty-_r_31_"
                                   max="98"
@@ -5930,8 +5929,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $20.00"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $20.00
@@ -5976,7 +5974,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_3f_"
                                     max="98"
                                     min="0"
@@ -6249,7 +6247,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     disabled=""
                                     id="cart-qty-_r_3n_"
                                     max="98"
@@ -6486,7 +6484,7 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     disabled=""
                                     id="cart-qty-_r_3v_"
                                     max="98"
@@ -6735,7 +6733,9 @@ exports[`CartContent stories snapshot > WithBonusProducts story renders and matc
                   Continue to Checkout
                 </a>
                 <div
+                  aria-label="Accepted payment methods: Visa, Mastercard, American Express, Discover"
                   class="flex justify-center"
+                  role="img"
                 >
                   <svg
                     class="mr-2"
@@ -7338,8 +7338,7 @@ exports[`CartContent stories snapshot > WithErrorBanner story renders and matche
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $38.38"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $38.38
@@ -7390,7 +7389,7 @@ exports[`CartContent stories snapshot > WithErrorBanner story renders and matche
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_51_"
                                     max="98"
                                     min="0"
@@ -7737,7 +7736,9 @@ exports[`CartContent stories snapshot > WithErrorBanner story renders and matche
                   Continue to Checkout
                 </a>
                 <div
+                  aria-label="Accepted payment methods: Visa, Mastercard, American Express, Discover"
                   class="flex justify-center"
+                  role="img"
                 >
                   <svg
                     class="mr-2"
@@ -8291,8 +8292,7 @@ exports[`CartContent stories snapshot > WithGiftLine story renders and matches s
                                     class="flex flex-row-reverse flex-wrap items-baseline justify-end gap-2"
                                   >
                                     <span
-                                      aria-label="Current price: $38.38"
-                                      aria-live="polite"
+                                      aria-hidden="true"
                                       class="[&:not(:first-child)]:mt-6 text-xl font-bold leading-[120%] tracking-[-0.6px] text-card-foreground text-right relative"
                                     >
                                       $38.38
@@ -8343,7 +8343,7 @@ exports[`CartContent stories snapshot > WithGiftLine story renders and matches s
                                     −
                                   </button>
                                   <input
-                                    class="w-9 text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    class="w-9 min-w-[2ch] text-center text-sm font-semibold leading-normal text-foreground border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-[-2px] disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     id="cart-qty-_r_4g_"
                                     max="98"
                                     min="0"
@@ -8634,7 +8634,9 @@ exports[`CartContent stories snapshot > WithGiftLine story renders and matches s
                   Continue to Checkout
                 </a>
                 <div
+                  aria-label="Accepted payment methods: Visa, Mastercard, American Express, Discover"
                   class="flex justify-center"
+                  role="img"
                 >
                   <svg
                     class="mr-2"
