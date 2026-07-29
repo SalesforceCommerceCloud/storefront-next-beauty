@@ -16,7 +16,7 @@
 
 // Cosmetic vertical Header test. The cosmetic header is a full override of the
 // canonical component (three-column editorial layout, inline-SVG Logo recolored
-// via `color`, Dazzle scroll-to-solid chrome). It imports its children through
+// via `color`, Beauty Next scroll-to-solid chrome). It imports its children through
 // the `@/components/header/*` alias rather than the canonical's `./*` relative
 // specifiers, so this override mocks those alias paths. Mirrors the assertions
 // of the canonical header/index.test.tsx (logo/search/user-actions/cart, the
@@ -58,12 +58,10 @@ vi.mock('../page-config-manager', () => ({
     PageConfigManager: () => null,
 }));
 
-vi.mock('@/components/shopper-agent', () => ({
-    launchChat: vi.fn(),
-}));
-
-vi.mock('@/components/shopper-agent/shopper-agent.utils', () => ({
-    validateShopperAgentConfig: vi.fn(() => false),
+vi.mock('@/components/cimulate', () => ({
+    openAgentWidget: vi.fn(),
+    isCimulateEnabled: vi.fn(() => false),
+    validateCimulateConfig: vi.fn(() => false),
 }));
 
 vi.mock('@/targets/ui-target', () => ({
@@ -74,7 +72,7 @@ vi.mock('@salesforce/storefront-next-runtime/config', async (importOriginal) => 
     const actual = await importOriginal<typeof import('@salesforce/storefront-next-runtime/config')>();
     return {
         ...actual,
-        useConfig: () => ({ commerceAgent: { enabled: false } }),
+        useConfig: () => ({ cimulateAgent: { enabled: false } }),
     };
 });
 
@@ -145,5 +143,6 @@ describe('Cosmetic HeaderMetadata', () => {
         expect(definitions).toHaveLength(1);
         expect(definitions[0].id).toBe('announcement');
         expect(definitions[0].name).toBe('Announcement');
+        expect(definitions[0].description).toBe('Displayed above the header');
     });
 });

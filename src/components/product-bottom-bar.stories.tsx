@@ -39,7 +39,7 @@ import { mockConfig, mockLocale, mockSiteObject } from '@/test-utils/config';
  * - Sets body data attribute for page padding adjustment
  */
 const meta: Meta<typeof ProductBottomBar> = {
-    title: 'COSMETIC/Product Bottom Bar',
+    title: 'Products/Product Bottom Bar',
     component: ProductBottomBar,
     tags: ['autodocs', 'interaction'],
     parameters: {

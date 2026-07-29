@@ -21,9 +21,6 @@ import { type ShopperProducts } from '@/scapi';
 import { shouldRevalidate as shouldRevalidateProduct } from '@/lib/revalidation/routes/product';
 import { fetchProductById } from '@/lib/api/products.server';
 import { fetchCategory } from '@/lib/api/categories.server';
-import { fetchWishlistInitialState } from '@/lib/wishlist/fetch-initial-state.server';
-import type { WishlistInitialState } from '@/lib/wishlist/state';
-import { WishlistProvider } from '@/providers/wishlist';
 import { NormalizedApiError } from '@/lib/api/normalized-api-error';
 import { siteContext } from '@salesforce/storefront-next-runtime/site-context';
 import ProductView from '@/components/product-view';
@@ -77,10 +74,8 @@ import { WriteReviewFormProvider } from '@/extensions/ratings-reviews/context/wr
 // @sfdc-extension-block-start SFDC_EXT_PRODUCT_CONTENT
 import {
     getReturnsAndWarranty,
-    getFaqQuestions,
     pdpSectionApi,
     type ReturnsAndWarrantyData,
-    type FaqQuestionsData,
     type HtmlContent,
 } from '@/extensions/product-content/lib/api/product-content.server';
 import { resolvePdpSections } from '@/extensions/product-content/lib/pdp-sections';
@@ -135,7 +130,6 @@ export type ProductPageData = {
     pageKey: string;
     pageUrl: string;
     productSchema: Promise<ReturnType<typeof generateProductSchema> | null>;
-    wishlistInitialState: Promise<WishlistInitialState>;
     // @sfdc-extension-block-start SFDC_EXT_BNPL
     bnplMessage: Promise<BuyNowPayLaterMessageData>;
     bnplLearnMore: Promise<BuyNowPayLaterLearnMoreData>;
@@ -147,7 +141,6 @@ export type ProductPageData = {
     // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
     // @sfdc-extension-block-start SFDC_EXT_PRODUCT_CONTENT
     returnsWarranty: Promise<ReturnsAndWarrantyData>;
-    faqQuestions: Promise<FaqQuestionsData>;
     pdpCollapsibles: Promise<Array<HtmlContent | null>>;
     // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
     // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
@@ -315,7 +308,6 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
         pageKey: productId,
         pageUrl,
         productSchema: productSchemaPromise,
-        wishlistInitialState: fetchWishlistInitialState(context),
         // @sfdc-extension-block-start SFDC_EXT_BNPL
         bnplMessage: getBuyNowPayLaterMessage(productLookupId),
         bnplLearnMore: getBuyNowPayLaterLearnMore(productLookupId),
@@ -327,7 +319,6 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
         // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
         // @sfdc-extension-block-start SFDC_EXT_PRODUCT_CONTENT
         returnsWarranty: getReturnsAndWarranty(productLookupId),
-        faqQuestions: getFaqQuestions(productLookupId),
         pdpCollapsibles: Promise.all(
             resolvePdpSections(product).map((section) =>
                 pdpSectionApi[section.apiMethod](productLookupId).catch(() => null)
@@ -358,7 +349,6 @@ function ProductContent({
     // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
     // @sfdc-extension-block-start SFDC_EXT_PRODUCT_CONTENT
     returnsWarrantyPromise,
-    faqQuestionsPromise,
     pdpCollapsiblesPromise,
     // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
 }: {
@@ -371,7 +361,6 @@ function ProductContent({
     // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
     // @sfdc-extension-block-start SFDC_EXT_PRODUCT_CONTENT
     returnsWarrantyPromise: Promise<ReturnsAndWarrantyData>;
-    faqQuestionsPromise: Promise<FaqQuestionsData>;
     pdpCollapsiblesPromise: Promise<Array<HtmlContent | null>>;
     // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
 }) {
@@ -402,7 +391,6 @@ function ProductContent({
             <ProductContentDataProvider
                 product={product}
                 returnsWarrantyPromise={returnsWarrantyPromise}
-                faqQuestionsPromise={faqQuestionsPromise}
                 pdpCollapsiblesPromise={pdpCollapsiblesPromise}>
                 {/* @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT */}
                 {/* @sfdc-extension-block-start SFDC_EXT_RATINGS_REVIEWS */}
@@ -480,7 +468,6 @@ function ProductDetailView({ loaderData }: { loaderData: ProductPageData }) {
                         // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
                         // @sfdc-extension-block-start SFDC_EXT_PRODUCT_CONTENT
                         returnsWarrantyPromise={loaderData.returnsWarranty}
-                        faqQuestionsPromise={loaderData.faqQuestions}
                         pdpCollapsiblesPromise={loaderData.pdpCollapsibles}
                         // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
                     />
@@ -553,21 +540,19 @@ export default function ProductPage({ loaderData }: { loaderData: ProductPageDat
     const nonce = rootData?.nonce ?? undefined;
 
     return (
-        <WishlistProvider initialState={loaderData.wishlistInitialState}>
-            <Fragment key={pageKey}>
-                <ProductDetailView loaderData={loaderData} />
+        <Fragment key={pageKey}>
+            <ProductDetailView loaderData={loaderData} />
 
-                {/* Product JSON-LD Schema for SEO - render after page content so it appears at end of body flow.
-                    JSON-LD is non-critical: errorElement renders nothing so a schema-generation failure
-                    silently degrades to no <script> tag. */}
-                <Suspense fallback={null}>
-                    <Await resolve={loaderData.productSchema} errorElement={null}>
-                        {(productSchema) =>
-                            productSchema ? <JsonLd data={productSchema} id="product-schema" nonce={nonce} /> : null
-                        }
-                    </Await>
-                </Suspense>
-            </Fragment>
-        </WishlistProvider>
+            {/* Product JSON-LD Schema for SEO - render after page content so it appears at end of body flow.
+                JSON-LD is non-critical: errorElement renders nothing so a schema-generation failure
+                silently degrades to no <script> tag. */}
+            <Suspense fallback={null}>
+                <Await resolve={loaderData.productSchema} errorElement={null}>
+                    {(productSchema) =>
+                        productSchema ? <JsonLd data={productSchema} id="product-schema" nonce={nonce} /> : null
+                    }
+                </Await>
+            </Suspense>
+        </Fragment>
     );
 }

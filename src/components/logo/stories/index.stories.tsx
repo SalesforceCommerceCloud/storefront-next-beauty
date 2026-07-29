@@ -17,14 +17,14 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import Logo from '../index';
 
 const meta: Meta<typeof Logo> = {
-    title: 'Cosmetic/Logo',
+    title: 'Layout/Logo',
     component: Logo,
     tags: ['autodocs'],
     parameters: {
         docs: {
             description: {
                 component:
-                    'The "Dazzle Beauty Essentials" inline-SVG wordmark, used in the header and error page. The SVG fills with `currentColor` and carries its own `aria-label`; sizing and color come from the caller via `className`.',
+                    'The "Beauty Next" inline-SVG wordmark, used in the header and error page. The SVG fills with `currentColor` and carries its own `aria-label`; sizing and color come from the caller via `className`.',
             },
         },
     },

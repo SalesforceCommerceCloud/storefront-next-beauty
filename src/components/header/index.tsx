@@ -35,8 +35,7 @@ import { Button } from '@/components/ui/button';
 import { SparklesIcon } from '@/components/icons';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import type { AppConfig } from '@/types/config';
-import { launchChat } from '@/components/shopper-agent';
-import { validateShopperAgentConfig } from '@/components/shopper-agent/shopper-agent.utils';
+import { openAgentWidget, isCimulateEnabled, validateCimulateConfig } from '@/components/cimulate';
 import { UITarget } from '@/targets/ui-target';
 import { cn } from '@/lib/utils';
 import { Component } from '@/lib/decorators/component';
@@ -53,7 +52,8 @@ import { PageConfigManager } from '../page-config-manager';
     embedded: true,
     component_id: 'header',
 })
-@RegionDefinition([{ id: 'announcement', name: 'Announcement' }])
+@RegionDefinition([{ id: 'announcement', name: 'Announcement', description: 'Displayed above the header' }])
+// oxlint-disable-next-line react/only-export-components -- oxlint flags the co-exported Page Designer metadata class; eslint-plugin-react-refresh does not
 export class HeaderMetadata {}
 
 interface HeaderProps extends PropsWithChildren {
@@ -82,8 +82,8 @@ export default function Header({
     const config = useConfig<AppConfig>();
     const showChat =
         variant === 'full' &&
-        (config.commerceAgent?.enabled === 'true' || config.commerceAgent?.enabled === true) &&
-        validateShopperAgentConfig(config.commerceAgent);
+        isCimulateEnabled(config.cimulateAgent?.enabled) &&
+        validateCimulateConfig(config.cimulateAgent);
 
     const updateHeaderHeight = useCallback(() => {
         if (headerRef.current) {
@@ -226,7 +226,7 @@ export default function Header({
                                 variant="ghost"
                                 size="icon"
                                 className="cursor-pointer lg:px-2 px-1 hover:bg-transparent hover:opacity-60 transition-opacity"
-                                onClick={() => launchChat()}
+                                onClick={() => openAgentWidget()}
                                 aria-label={t('openChat')}>
                                 <SparklesIcon />
                             </Button>

@@ -13,7 +13,7 @@
     --primary-foreground: oklch(0.99 0.006 92);
     --primary-hover: oklch(0.36 0.065 155);
 
-    /* Dazzle-only token: tertiary green (in-stock pills, shipping confirmed) */
+    /* Cosmetic-only token: tertiary green (in-stock pills, shipping confirmed) */
     --tertiary: oklch(0.55 0.09 155);
     --tertiary-foreground: oklch(0.99 0.006 92);
 
@@ -27,14 +27,20 @@
     --accent: oklch(0.92 0.02 89);
     --accent-foreground: oklch(0.31 0.018 80);
 
-    --border: oklch(0.87 0.02 88);
-    --border-subtle: oklch(0.92 0.02 89);
-    --border-primary: oklch(0.87 0.02 88);
-    --input: oklch(0.9 0.018 90);
+    /* Boundary tokens darkened to clear WCAG SC 1.4.11 (3:1) against the default
+       cream --background and --card surfaces. Written as hex (sRGB) to match the
+       fashion vertical's token format; ratios below are measured on --card. The
+       subtle/separator tier (3.33:1) can dip below 3:1 on darker panels such as
+       --accent and muted-hover; 1.4.11 exempts purely decorative dividers, and the
+       primary --border / --input tokens still clear 3:1 on the common surfaces. */
+    --border: #7c776a; /* 4.10:1 on --card */
+    --border-subtle: #8b8679; /* 3.33:1 on --card */
+    --border-primary: #8b8679; /* 3.33:1 on --card */
+    --input: #848074; /* 3.62:1 on --card */
     --ring: oklch(0.47 0.07 155);
 
     /* separator colors */
-    --separator: oklch(0.87 0.02 88);
+    --separator: #8b8679; /* 3.33:1 on --card */
     --separator-foreground: oklch(0.61 0.02 85);
 
     /* rating colors */
@@ -46,7 +52,7 @@
     --chart-2: oklch(0.38 0.07 155);
     --chart-3: oklch(0.32 0.06 155);
     --chart-4: oklch(0.26 0.05 155);
-    --chart-5: oklch(0.2 0.04 155);
+    --chart-5: oklch(0.20 0.04 155);
 
     /* focus states */
     --focus: oklch(0.61 0.02 85 / 50%);
@@ -100,7 +106,7 @@
        (see base.css `section[data-max-reached]`). Bump the path data if the dependency changes. */
     --icon-sparkles: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>');
 
-    [role='radio']:not([data-labeled]) {
+    [role="radio"]:not([data-labeled]) {
         min-width: var(--swatch-pill-size);
         min-height: var(--swatch-pill-size);
     }

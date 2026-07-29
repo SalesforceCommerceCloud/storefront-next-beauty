@@ -97,18 +97,18 @@ html[data-mega-menu-open='true'] {
  *
  * The literal background matches the :root --header-background above.
  */
-header [data-slot='navigation-menu-viewport'] {
+header [data-slot="navigation-menu-viewport"] {
     background-color: oklch(0.985 0.012 90);
     color: oklch(0.24 0.02 80);
 }
 
-[data-page-at-top='true'] [data-slot='navigation-menu-viewport'] {
+[data-page-at-top='true'] [data-slot="navigation-menu-viewport"] {
     --header-menu-foreground: oklch(0.24 0.02 80);
     --header-menu-hover-foreground: oklch(0.28 0.035 70);
     --header-menu-icon: oklch(0.49 0.022 84);
 }
 
-[data-page-at-top='true'] [data-slot='navigation-menu-viewport'] a {
+[data-page-at-top='true'] [data-slot="navigation-menu-viewport"] a {
     color: oklch(0.24 0.02 80);
 }
 
@@ -120,15 +120,13 @@ header [data-slot='navigation-menu-viewport'] {
  * explicitly for BOTH data-slots here. The shared transition keeps every
  * nav item changing colour at the same rate during the scroll-to-solid
  * flip regardless of which Radix primitive it is. */
-header [data-slot='navigation-menu-trigger'],
-header [data-slot='navigation-menu-link'] {
-    transition:
-        background-color 300ms ease-out,
-        color 300ms ease-out;
+header [data-slot="navigation-menu-trigger"],
+header [data-slot="navigation-menu-link"] {
+    transition: background-color 300ms ease-out, color 300ms ease-out;
 }
 
-[data-slot='navigation-menu-trigger']:hover,
-[data-slot='navigation-menu-link']:hover {
+[data-slot="navigation-menu-trigger"]:hover,
+[data-slot="navigation-menu-link"]:hover {
     background-color: var(--header-menu-hover-background);
     color: var(--header-menu-hover-foreground);
 }

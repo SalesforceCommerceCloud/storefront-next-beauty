@@ -2,7 +2,7 @@
  * the control matches the rest of the storefront's rounded surfaces.
  * (The `square-radio` class names are styling hooks only, kept stable to avoid
  * churning the consuming components and snapshots.) */
-.store-locator-square-radio-group [data-slot='radio-group-item'].store-locator-square-radio {
+.store-locator-square-radio-group [data-slot="radio-group-item"].store-locator-square-radio {
     position: relative;
     border-radius: var(--ui-radius);
     background-color: var(--background);
@@ -10,18 +10,17 @@
     border-color: var(--muted-foreground);
 }
 
-.store-locator-square-radio-group [data-slot='radio-group-item'].store-locator-square-radio[data-state='checked'] {
+.store-locator-square-radio-group [data-slot="radio-group-item"].store-locator-square-radio[data-state='checked'] {
     border-color: var(--foreground);
 }
 
 .store-locator-square-radio-group
-    [data-slot='radio-group-item'].store-locator-square-radio
+    [data-slot="radio-group-item"].store-locator-square-radio
     [data-slot='radio-group-indicator'] {
     display: none;
 }
 
-.store-locator-square-radio-group
-    [data-slot='radio-group-item'].store-locator-square-radio[data-state='checked']::after {
+.store-locator-square-radio-group [data-slot="radio-group-item"].store-locator-square-radio[data-state='checked']::after {
     content: '';
     position: absolute;
     top: 50%;

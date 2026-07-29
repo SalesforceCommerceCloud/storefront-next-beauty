@@ -22,5 +22,7 @@
 /* Component-specific CSS overrides */
 @import './overrides/sonner.css';
 @import './overrides/navigation.css';
+@import './overrides/search.css';
 @import './overrides/store-locator.css';
 @import './overrides/cart-sheet.css';
+@import './overrides/header.css';

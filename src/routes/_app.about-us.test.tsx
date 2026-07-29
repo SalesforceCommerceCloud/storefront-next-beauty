@@ -192,7 +192,7 @@ describe('AboutUs (cosmetic)', () => {
         test('renders community CTA and closing manifesto in post-contact region', async () => {
             renderComponent();
             await waitFor(() => {
-                expect(screen.getByText('Become part of the Dazzle community')).toBeInTheDocument();
+                expect(screen.getByText('Become part of the Beauty Next community')).toBeInTheDocument();
                 expect(screen.getByText('Beauty that meets you where you are')).toBeInTheDocument();
             });
         });
@@ -268,7 +268,7 @@ describe('AboutUs (cosmetic)', () => {
             await waitFor(() => {
                 expect(screen.getByTestId('region-additionalinformation')).toBeInTheDocument();
                 // Static fallback (community CTA) should NOT render when the region wins.
-                expect(screen.queryByText('Become part of the Dazzle community')).not.toBeInTheDocument();
+                expect(screen.queryByText('Become part of the Beauty Next community')).not.toBeInTheDocument();
             });
         });
 
