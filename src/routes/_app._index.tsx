@@ -202,6 +202,7 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
     return (
         <>
             <div className="pb-16">
+                <h1 className="sr-only">{t('meta.title', { defaultValue: 'NextGen PWA Kit Store' })}</h1>
                 <style>{`
                     /* Remove padding from hero carousel items and make each slide full viewport width */
                     .cosmetic-hero-carousel [data-slot="carousel-item"] {
