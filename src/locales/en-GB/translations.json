@@ -104,6 +104,7 @@
         "mobileNavigation": "Mobile navigation menu",
         "expandCategory": "Expand {{category}}",
         "collapseCategory": "Collapse {{category}}",
+        "featuredContent": "{{category}} featured content",
         "menu": {
             "yourLists": "Your Lists",
             "yourAccount": "Your Account",
@@ -1413,6 +1414,22 @@
             "styleForRealLife": {
                 "title": "Style for Real Life",
                 "description": "Formulas that perform from five-minute mornings to fifty-minute routines. Clean is the floor, not the ceiling. Built for the people who actually wear it."
+            },
+            "newArrivals": {
+                "cubes": {
+                    "title": "Cubes",
+                    "description": "Discover our curated collection of sculptural forms designed for the modern space.",
+                    "ctaText": "SHOP NEW ARRIVALS",
+                    "ctaAriaLabel": "Shop new arrivals: cubes",
+                    "imageAlt": "New arrivals collection"
+                },
+                "pyramids": {
+                    "title": "Pyramids",
+                    "description": "Timeless craftsmanship meets contemporary design in our curated collection.",
+                    "ctaText": "SHOP NEW ARRIVALS",
+                    "ctaAriaLabel": "Shop new arrivals: pyramids",
+                    "imageAlt": "New arrivals collection"
+                }
             }
         }
     },
