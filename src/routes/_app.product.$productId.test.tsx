@@ -195,10 +195,6 @@ vi.mock('@/components/category-breadcrumbs', () => ({
     default: () => <div data-testid="category-breadcrumbs" />,
 }));
 
-vi.mock('@/components/category-breadcrumbs/skeleton', () => ({
-    CategoryBreadcrumbsSkeleton: () => <div data-testid="category-breadcrumbs-skeleton" />,
-}));
-
 vi.mock('@/components/seo-meta', () => ({
     SeoMeta: () => null,
 }));
@@ -236,13 +232,6 @@ describe('Product Detail Route', () => {
         shortDescription: 'Test product description',
         longDescription: 'Long test product description',
         master: undefined,
-    };
-
-    const mockCategory: ShopperProducts.schemas['Category'] = {
-        id: 'test-category-123',
-        name: 'Test Category',
-        parentCategoryId: 'parent-category-123',
-        categories: [],
     };
 
     const mockPage = Promise.resolve({
@@ -381,7 +370,6 @@ describe('Product Detail Route', () => {
             const { default: ProductPage } = await import('./_app.product.$productId');
             const mockLoaderData: ProductPageData = {
                 product: productWithoutDescription,
-                category: Promise.resolve(mockCategory),
                 page: mockPage,
                 pageKey: 'test-product-123',
                 pageUrl: 'http://localhost/product/test',
@@ -408,7 +396,6 @@ describe('Product Detail Route', () => {
             const { default: ProductPage } = await import('./_app.product.$productId');
             const mockLoaderData: ProductPageData = {
                 product: productWithDescription,
-                category: Promise.resolve(mockCategory),
                 page: mockPage,
                 pageKey: 'test-product-123',
                 pageUrl: 'http://localhost/product/test',
@@ -430,7 +417,6 @@ describe('Product Detail Route', () => {
             const { default: ProductPage } = await import('./_app.product.$productId');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
-                category: Promise.resolve(mockCategory),
                 page: mockPage,
                 pageKey: 'test-product-123',
                 pageUrl: 'http://localhost/product/test',
@@ -449,7 +435,6 @@ describe('Product Detail Route', () => {
             const { default: ProductPage } = await import('./_app.product.$productId');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
-                category: Promise.resolve(mockCategory),
                 page: mockPage,
                 pageKey: 'test-product-123',
                 pageUrl: 'http://localhost/product/test',
@@ -478,7 +463,6 @@ describe('Product Detail Route', () => {
         test('should handle pageKey correctly', () => {
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
-                category: Promise.resolve(mockCategory),
                 page: mockPage,
                 pageKey: 'test-product-123',
                 pageUrl: 'http://localhost/product/test',
@@ -493,7 +477,6 @@ describe('Product Detail Route', () => {
         test('should have proper loader data structure', () => {
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
-                category: Promise.resolve(mockCategory),
                 page: mockPage,
                 pageKey: 'test-product-123',
                 pageUrl: 'http://localhost/product/test',
@@ -503,7 +486,6 @@ describe('Product Detail Route', () => {
 
             // Test that all required properties are present
             expect(mockLoaderData).toHaveProperty('product');
-            expect(mockLoaderData).toHaveProperty('category');
             expect(mockLoaderData).toHaveProperty('page');
             expect(mockLoaderData).toHaveProperty('pageKey');
             expect(mockLoaderData).toHaveProperty('productSchema');
@@ -516,7 +498,6 @@ describe('Product Detail Route', () => {
             const { default: ProductPage } = await import('./_app.product.$productId');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
-                category: Promise.resolve(mockCategory),
                 page: mockPage,
                 pageKey: 'test-product-123',
                 pageUrl: 'http://localhost/product/test',
@@ -539,7 +520,6 @@ describe('Product Detail Route', () => {
             const { default: ProductPage } = await import('./_app.product.$productId');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
-                category: Promise.resolve(mockCategory),
                 page: mockPage,
                 pageKey: 'test-product-123',
                 pageUrl: '/product/test-product-123',
