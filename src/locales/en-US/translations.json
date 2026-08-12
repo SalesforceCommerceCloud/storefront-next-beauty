@@ -27,7 +27,9 @@
         "hero": {
             "defaultTitle": "Beauty Reimagined",
             "defaultImageAlt": "Hero Image",
-            "defaultCtaText": "Discover the Look"
+            "defaultCtaText": "Discover the Look",
+            "emptyTitle": "Add your title here",
+            "emptyButton": "Button"
         },
         "previousImage": "Previous image",
         "nextImage": "Next image",
