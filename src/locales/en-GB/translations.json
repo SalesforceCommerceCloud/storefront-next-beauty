@@ -1298,7 +1298,8 @@
                 "hasNumber": "At least one number",
                 "hasSpecial": "At least one special character",
                 "statusMet": "Requirement met",
-                "statusNotMet": "Requirement not met"
+                "statusNotMet": "Requirement not met",
+                "summary": "{{met}} of {{total}} requirements met"
             }
         },
         "common": {
@@ -1373,24 +1374,28 @@
                 "title": "The New Edit",
                 "subtitle": "A fresh drop of clean formulas and every-shade colour. Essentials for the season ahead, ready when you are.",
                 "ctaText": "Shop the Edit",
+                "ctaAriaLabel": "Discover the Collection: The New Season",
                 "imageAlt": "Foundation droppers fanned across warm marble."
             },
             "slide2": {
                 "title": "The Daily Ritual",
                 "subtitle": "Considered skincare for the morning that actually happens. Five minutes or fifty, we slot in.",
                 "ctaText": "Shop Skincare",
+                "ctaAriaLabel": "Shop the Look: The Modern Wardrobe",
                 "imageAlt": "Serum bottles beside fresh eucalyptus."
             },
             "slide3": {
                 "title": "The Essentials",
                 "subtitle": "The shelf that does the work — cleansers, serums, and balms built to layer.",
                 "ctaText": "Shop the Essentials",
+                "ctaAriaLabel": "Explore the Collection: After Hours",
                 "imageAlt": "A lineup of skincare bottles and jars on linen."
             },
             "slide4": {
                 "title": "New Perspectives",
                 "subtitle": "Honest formulas, real shades, beauty that fits.",
                 "ctaText": "Discover the Look",
+                "ctaAriaLabel": "Shop Now: New Perspectives",
                 "imageAlt": "Rich cream lifted from a spoon."
             }
         },
