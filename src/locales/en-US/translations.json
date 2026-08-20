@@ -53,6 +53,9 @@
             "emptyTitle": "Add your title here",
             "emptyDescription": "Add your description here"
         },
+        "productTile": {
+            "emptyTitle": "Product"
+        },
         "shopBy": "Shop by"
     },
     "search": {
