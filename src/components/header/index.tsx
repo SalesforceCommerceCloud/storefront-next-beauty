@@ -150,7 +150,7 @@ export default function Header({
         return (
             <header
                 ref={headerRef}
-                className="bg-header-background text-header-foreground border-b border-header-border sticky top-0 z-50">
+                className="bg-header-background text-header-foreground border-b border-header-border sticky top-0 z-50 [@media(max-height:400px)]:static">
                 <div className="section-container">
                     <div className="flex items-center h-16">
                         <Link to="/" className="flex-shrink-0 flex items-center" data-testid="header-logo">
@@ -180,7 +180,13 @@ export default function Header({
             ref={headerRef}
             data-page-at-top="true"
             className={cn(
-                'bg-header-background text-header-foreground fixed top-0 left-0 right-0 z-50',
+                // `fixed` lets hero content bleed behind the header at normal heights. At the 400%
+                // zoom proxy (viewport height <= 400px) it drops to `static` so a pinned header can
+                // no longer sit on top of focused content (WCAG 2.4.11 Focus Not Obscured), matching
+                // the canonical header's `[@media(max-height:400px)]:static` treatment. The reserved
+                // <main> top padding is zeroed at the same breakpoint in base.css so the now-in-flow
+                // header doesn't double-offset the content.
+                'bg-header-background text-header-foreground fixed top-0 left-0 right-0 z-50 [@media(max-height:400px)]:static',
                 'border-b border-header-border',
                 'transition-[background-color,border-color,color] duration-300 ease-out'
             )}>
