@@ -80,10 +80,6 @@ import { resolvePdpSections } from '@/extensions/product-content/lib/pdp-section
 import { ProductContentDataProvider } from '@/extensions/product-content/context/product-content-data-context';
 // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
 // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
-import {
-    getEstimatedDelivery,
-    type EstimatedDeliveryData,
-} from '@/extensions/shipping-delivery/lib/api/shipping-delivery.server';
 import { ShippingDeliveryProvider } from '@/extensions/shipping-delivery/context/shipping-delivery-context';
 // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
 
@@ -140,9 +136,6 @@ export type ProductPageData = {
     returnsWarranty: Promise<ReturnsAndWarrantyData>;
     pdpCollapsibles: Promise<Array<HtmlContent | null>>;
     // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
-    // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
-    estimatedDelivery: Promise<EstimatedDeliveryData>;
-    // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
 };
 
 /**
@@ -185,7 +178,6 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
     // needs the product ID and drives above-the-fold star display + SEO.
     const reviewsSummaryPromise = getReviewsSummary(productLookupId);
     // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
-
     let product: ShopperProducts.schemas['Product'] | null;
     try {
         product = await fetchProductById(context, productLookupId, {
@@ -283,9 +275,6 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
             )
         ),
         // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
-        // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
-        estimatedDelivery: getEstimatedDelivery(productLookupId),
-        // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
     };
 }
 
@@ -413,7 +402,13 @@ function ProductDetailView({ loaderData }: { loaderData: ProductPageData }) {
                 ) : null}
 
                 {/* Main Product Content — product is resolved synchronously by the loader */}
-                <ProductViewProvider product={loaderData.product} mode="add">
+                <ProductViewProvider
+                    product={loaderData.product}
+                    mode="add"
+                    // @sfdc-extension-block-start SFDC_EXT_BOPIS
+                    clearDeferredPickupSelection
+                    // @sfdc-extension-block-end SFDC_EXT_BOPIS
+                >
                     <ProductContent
                         product={loaderData.product}
                         url={loaderData.pageUrl}
@@ -473,9 +468,7 @@ function ProductDetailView({ loaderData }: { loaderData: ProductPageData }) {
     // @sfdc-extension-block-end SFDC_EXT_BNPL
     // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
     finalContent = (
-        <ShippingDeliveryProvider estimatedDeliveryPromise={loaderData.estimatedDelivery}>
-            {finalContent}
-        </ShippingDeliveryProvider>
+        <ShippingDeliveryProvider productId={loaderData.product.id}>{finalContent}</ShippingDeliveryProvider>
     );
     // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
 

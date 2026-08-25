@@ -182,6 +182,16 @@ vi.mock('@/extensions/bopis/context/pickup-context', () => ({
 }));
 // @sfdc-extension-block-end SFDC_EXT_BOPIS
 
+// @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
+vi.mock('@/extensions/shipping-delivery/context/shipping-delivery-context', () => ({
+    ShippingDeliveryProvider: ({ children, productId }: any) => (
+        <div data-testid="shipping-delivery-provider" data-product-id={productId}>
+            {children}
+        </div>
+    ),
+}));
+// @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
+
 // --- Cosmetic-specific component/provider mocks ---
 // The cosmetic PDP override pulls in a few modules the canonical route doesn't
 // (its editorial layout + the ProductView/Wishlist providers it wraps content
@@ -297,15 +307,6 @@ describe('Product Detail Route', () => {
         }),
         pdpCollapsibles: Promise.resolve([]),
         // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
-        // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
-        estimatedDelivery: Promise.resolve({
-            title: '',
-            estimatedDelivery: { options: [], note: '' },
-            shippingOptions: [],
-            internationalShipping: { heading: '', points: [] },
-            orderTracking: { heading: '', points: [] },
-        }),
-        // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
     };
 
     describe('shouldRevalidate export', () => {
@@ -512,6 +513,27 @@ describe('Product Detail Route', () => {
             expect(getByTestId('product-view')).toBeInTheDocument();
             expect(queryByTestId('product-skeleton')).not.toBeInTheDocument();
         });
+
+        // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
+        test('passes the product and destination promise to the delivery provider', async () => {
+            const { default: ProductPage } = await import('./_app.product.$productId');
+            const mockLoaderData: ProductPageData = {
+                product: mockProduct,
+                page: mockPage,
+                pageKey: 'test-product-123',
+                pageUrl: 'http://localhost/product/test',
+                productSchema: Promise.resolve(null),
+                ...mockExtensionLoaderData,
+            };
+
+            render(<ProductPage loaderData={mockLoaderData} />);
+
+            expect(screen.getByTestId('shipping-delivery-provider')).toHaveAttribute(
+                'data-product-id',
+                'test-product-123'
+            );
+        });
+        // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
 
         test('renders product JSON-LD after main page content', async () => {
             vi.mocked(isProductSet).mockReturnValue(false);
