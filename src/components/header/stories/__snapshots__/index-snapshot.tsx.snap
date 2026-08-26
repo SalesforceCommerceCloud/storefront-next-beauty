@@ -132,7 +132,7 @@ exports[`Header stories snapshot > Default story renders and matches snapshot 1`
               </svg>
             </button>
             <div
-              class="hidden lg:flex items-center h-full"
+              class="hidden lg:flex h-full w-full items-center"
             />
           </div>
           <div
@@ -171,7 +171,7 @@ exports[`Header stories snapshot > Default story renders and matches snapshot 1`
               </svg>
             </button>
             <div
-              class="hidden lg:flex items-center h-full"
+              class="hidden lg:flex h-full w-full items-center"
             />
           </div>
         </div>
@@ -501,7 +501,7 @@ exports[`Header stories snapshot > MobileView story renders and matches snapshot
                 </svg>
               </button>
               <div
-                class="hidden lg:flex items-center h-full"
+                class="hidden lg:flex h-full w-full items-center"
               />
             </div>
             <div
@@ -540,7 +540,7 @@ exports[`Header stories snapshot > MobileView story renders and matches snapshot
                 </svg>
               </button>
               <div
-                class="hidden lg:flex items-center h-full"
+                class="hidden lg:flex h-full w-full items-center"
               />
             </div>
           </div>
@@ -864,7 +864,7 @@ exports[`Header stories snapshot > WithAnnouncementBanner story renders and matc
               </svg>
             </button>
             <div
-              class="hidden lg:flex items-center h-full"
+              class="hidden lg:flex h-full w-full items-center"
             />
           </div>
           <div
@@ -903,7 +903,7 @@ exports[`Header stories snapshot > WithAnnouncementBanner story renders and matc
               </svg>
             </button>
             <div
-              class="hidden lg:flex items-center h-full"
+              class="hidden lg:flex h-full w-full items-center"
             />
           </div>
         </div>
