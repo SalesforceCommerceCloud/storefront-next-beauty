@@ -89,14 +89,18 @@
 
 /* Cards are borderless by default (--ui-border-width: 0) with --ui-shadow:
  * shadow-sm. But most Cards in account / auth / checkout / order-confirmation
- * sections sit on white backgrounds and read better with a delineation border
- * and no shadow. We restore the 1px border here AND drop the shadow for those
- * sections. :where() keeps specificity low so per-card className overrides
- * (e.g. [--ui-border-width:0px]) still win. */
+ * sections — plus the cart's desktop Order Summary — sit on white backgrounds
+ * and read better with a delineation border and no shadow. We restore the 1px
+ * border here AND drop the shadow for those surfaces. The cart summary is scoped
+ * via its unique [data-slot="order-summary"] wrapper so product tiles in the
+ * cart's recommendation/bonus rails stay borderless, and the mobile summary
+ * (outside the wrapper) stays borderless too. :where() keeps specificity low so
+ * per-card className overrides (e.g. [--ui-border-width:0px]) still win. */
 :where([data-testid="account-layout"]) [data-slot="card"],
 :where([data-section="auth"]) [data-slot="card"],
 :where([data-section="checkout"]) [data-slot="card"],
-:where([data-section="order-confirmation"]) [data-slot="card"] {
+:where([data-section="order-confirmation"]) [data-slot="card"],
+:where([data-slot="order-summary"]) [data-slot="card"] {
     --ui-border-width: 1px;
     --ui-shadow: none;
 }
@@ -295,6 +299,30 @@ main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
     }
 }
 
+/* At the 400% zoom proxy (viewport height <= 400px) the header drops to
+ * `position: static` (cosmetic header/index.tsx) so it can no longer obscure
+ * focused content (WCAG 2.4.11 Focus Not Obscured). A static header is back in
+ * normal flow and occupies its own space, so <main> must NOT also reserve the
+ * header's height on top of that. The fixed-header padding above would double
+ * the offset and push content down by a whole header height, reopening a gap at
+ * the top. Zero the reserved top padding (and the matching scroll padding, which
+ * only exists to clear a pinned header) at this breakpoint. Placed after the
+ * responsive rules above so it wins by source order when a viewport is both wide
+ * and short. */
+@media (max-height: 400px) {
+    html {
+        scroll-padding-top: 0;
+    }
+
+    main:not([data-layout='empty']) {
+        padding-top: 0;
+    }
+
+    main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
+        padding-top: var(--ui-vertical-spacing);
+    }
+}
+
 /* Header logo: uses header-logo-color token (sage green on opaque, white on transparent) */
 .header-logo {
     color: var(--header-logo-color);
@@ -466,13 +494,6 @@ body:has([data-slot="product-bottom-bar"]:not(.translate-y-full)) {
 [data-slot="bonus-products-rail"] > section[data-max-reached] > h3 > span:first-child::before {
     -webkit-mask: var(--icon-sparkles) center / contain no-repeat;
     mask: var(--icon-sparkles) center / contain no-repeat;
-}
-
-/* Cart order summary Card: opt into a 1px border (cosmetic Cards are
- * borderless by default). Color comes from the global `* { border-border }`
- * default (var(--border)), matching the delivery group and bonus rail. */
-[data-slot="order-summary"] [data-slot="card"] {
-    --ui-border-width: 1px;
 }
 
 /* Category page: filters button badge should be circular */

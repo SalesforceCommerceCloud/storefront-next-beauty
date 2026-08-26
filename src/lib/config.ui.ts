@@ -48,9 +48,21 @@ interface UIConfig {
                 mobileBatchSize: number;
                 maxProducts: number;
             };
+            /** Opt-in: keep the `cgid` refinement in the sidebar as a single-select radio group. @default undefined */
+            sidebarCategoryRefinement?: {
+                enabled: boolean;
+            };
         };
         product: {
             showRatingAverage: boolean;
+            /** Variation-attribute ids rendered as a grouped/tabbed swatch selector. @default undefined */
+            groupedSwatchAxes?: string[];
+            /** Variation-attribute ids whose image swatches render as larger option cards. @default undefined */
+            imageCardAxes?: string[];
+            /** When true, wrap each PDP swatch section in a collapsible with a selected-value summary. @default false */
+            collapsibleSwatchSections?: boolean;
+            /** PDP product-image gallery layout: 'stacked' (hero + thumbnails) or 'mosaic'. @default 'stacked' */
+            galleryLayout?: 'stacked' | 'mosaic';
         };
     };
     bonusTile: {

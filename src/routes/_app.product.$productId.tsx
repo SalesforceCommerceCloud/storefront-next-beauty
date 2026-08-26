@@ -20,13 +20,11 @@ import type { Route } from './+types/_app.product.$productId';
 import { type ShopperProducts } from '@/scapi';
 import { shouldRevalidate as shouldRevalidateProduct } from '@/lib/revalidation/routes/product';
 import { fetchProductById } from '@/lib/api/products.server';
-import { fetchCategory } from '@/lib/api/categories.server';
 import { NormalizedApiError } from '@/lib/api/normalized-api-error';
 import { siteContext } from '@salesforce/storefront-next-runtime/site-context';
 import ProductView from '@/components/product-view';
 import ChildProducts from '@/components/product-view/child-products';
 import CategoryBreadcrumbs from '@/components/category-breadcrumbs';
-import { CategoryBreadcrumbsSkeleton } from '@/components/category-breadcrumbs/skeleton';
 import { isProductSet, isProductBundle } from '@/lib/product/product-utils';
 import ProductRecommendations from '@/components/product-recommendations';
 import { EINSTEIN_RECOMMENDERS } from '@/lib/product/einstein-recommenders';
@@ -82,10 +80,6 @@ import { resolvePdpSections } from '@/extensions/product-content/lib/pdp-section
 import { ProductContentDataProvider } from '@/extensions/product-content/context/product-content-data-context';
 // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
 // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
-import {
-    getEstimatedDelivery,
-    type EstimatedDeliveryData,
-} from '@/extensions/shipping-delivery/lib/api/shipping-delivery.server';
 import { ShippingDeliveryProvider } from '@/extensions/shipping-delivery/context/shipping-delivery-context';
 // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
 
@@ -125,7 +119,6 @@ export const handle = {
 
 export type ProductPageData = {
     product: ShopperProducts.schemas['Product'];
-    category: Promise<ShopperProducts.schemas['Category'] | undefined>;
     page: ReturnType<typeof fetchPageWithComponentData>;
     pageKey: string;
     pageUrl: string;
@@ -143,20 +136,17 @@ export type ProductPageData = {
     returnsWarranty: Promise<ReturnsAndWarrantyData>;
     pdpCollapsibles: Promise<Array<HtmlContent | null>>;
     // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
-    // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
-    estimatedDelivery: Promise<EstimatedDeliveryData>;
-    // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
 };
 
 /**
- * Server-side loader function that fetches product data and category information.
+ * Server-side loader function that fetches product data.
  * This function runs on the server during SSR and can access cookies for store information.
  *
  * The product is awaited as critical data: a 404 from SCAPI is re-thrown as
  * `Response(message, { status: 404 })` so React Router renders the 404 page with
  * the proper HTTP status (essential for SEO).
  *
- * @returns Object containing the resolved product, deferred category, page data, and schema promises
+ * @returns Object containing the resolved product, page data, and schema promises
  */
 export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
     const { request, params, context } = args;
@@ -188,7 +178,6 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
     // needs the product ID and drives above-the-fold star display + SEO.
     const reviewsSummaryPromise = getReviewsSummary(productLookupId);
     // @sfdc-extension-block-end SFDC_EXT_RATINGS_REVIEWS
-
     let product: ShopperProducts.schemas['Product'] | null;
     try {
         product = await fetchProductById(context, productLookupId, {
@@ -199,6 +188,7 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
                 'options',
                 'page_meta_tags',
                 'prices', // <-- TTL = 900s
+                'primary_category',
                 'promotions', // <-- TTL = 900s
                 'set_products',
                 'variations',
@@ -221,36 +211,6 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
     if (!product) {
         throw new Response('Product not found', { status: 404 });
     }
-
-    // Fetch the master product once and share it across the category lookup and the
-    // Page Designer page lookup below — variant PDPs derive their primary category from
-    // the master, and both consumers need it. Hoisted so we don't fetch it twice.
-    const masterProductPromise = (() => {
-        if (product.master?.masterId) {
-            return fetchProductById(context, product.master.masterId, {
-                ...(currency ? { currency } : {}),
-            });
-        }
-
-        return null;
-    })();
-
-    // Build the deferred category promise. Category is optional context for the
-    // breadcrumbs — failures degrade silently via the route-level <Await errorElement={null}>.
-    const categoryPromise: Promise<ShopperProducts.schemas['Category'] | undefined> = (async () => {
-        if (product.primaryCategoryId) {
-            return fetchCategory(context, product.primaryCategoryId, 1);
-        }
-
-        // For variant products, try to get the master product's category.
-        const masterProduct = await masterProductPromise;
-
-        if (masterProduct?.primaryCategoryId) {
-            return fetchCategory(context, masterProduct.primaryCategoryId, 1);
-        }
-
-        return undefined;
-    })();
 
     const pageUrl = buildCanonicalUrl(requestUrl.origin, requestUrl.pathname, requestUrl.search);
 
@@ -276,19 +236,14 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
         }
     );
 
-    // Page Designer PDP lookup. Thread the product's primary category (falling back to
-    // the master product's for variants) into the page fetch so category-scoped PD
-    // content resolves correctly — matches canonical's loader and feeds categoryId into
-    // the SCAPI getPages query (see src/lib/api/page.server.ts).
-    const pagePromise = (async () => {
-        const primaryCategoryId = product.primaryCategoryId ?? (await masterProductPromise)?.primaryCategoryId;
-
-        return fetchPageWithComponentData(args, {
-            aspectType: 'pdp',
-            productId: productLookupId,
-            ...(primaryCategoryId ? { categoryId: primaryCategoryId } : {}),
-        });
-    })();
+    // Category context for Page Designer PDP content, sourced from the primary_category
+    // expansion (falls back to the flat primaryCategoryId when the expansion is absent).
+    const primaryCategoryId = product.primaryCategory?.id ?? product.primaryCategoryId;
+    const page = fetchPageWithComponentData(args, {
+        aspectType: 'pdp',
+        productId: productLookupId,
+        ...(primaryCategoryId ? { categoryId: primaryCategoryId } : {}),
+    });
 
     // @sfdc-extension-block-start SFDC_EXT_RATINGS_REVIEWS
     // Await the summary started earlier (ran in parallel with fetchProductById).
@@ -299,12 +254,7 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
 
     return {
         product,
-        category: categoryPromise,
-        /**
-         * Fetch page data from Page Designer API with nested componentData promises.
-         * Handle errors gracefully - return page with empty componentData if fetch failed.
-         */
-        page: pagePromise,
+        page,
         pageKey: productId,
         pageUrl,
         productSchema: productSchemaPromise,
@@ -325,9 +275,6 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
             )
         ),
         // @sfdc-extension-block-end SFDC_EXT_PRODUCT_CONTENT
-        // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
-        estimatedDelivery: getEstimatedDelivery(productLookupId),
-        // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
     };
 }
 
@@ -447,17 +394,21 @@ function ProductDetailView({ loaderData }: { loaderData: ProductPageData }) {
                 {/* Promo Content Region - Promotional content above main product */}
                 <Region className="mb-8" page={loaderData.page} regionId="promoContent" />
 
-                {/* Category breadcrumbs - streams independently of product data.
-                    Breadcrumbs are non-critical: errorElement renders nothing so a category
-                    fetch failure silently degrades to an empty breadcrumbs row. */}
-                <Suspense fallback={<CategoryBreadcrumbsSkeleton />}>
-                    <Await resolve={loaderData.category} errorElement={null}>
-                        {(category) => (category ? <CategoryBreadcrumbs category={category} /> : null)}
-                    </Await>
-                </Suspense>
+                {/* Category breadcrumbs — sourced from the product's primary_category
+                    expansion, so they render synchronously with the product. Absent a
+                    primary category, the row renders nothing. */}
+                {loaderData.product.primaryCategory ? (
+                    <CategoryBreadcrumbs category={loaderData.product.primaryCategory} />
+                ) : null}
 
                 {/* Main Product Content — product is resolved synchronously by the loader */}
-                <ProductViewProvider product={loaderData.product} mode="add">
+                <ProductViewProvider
+                    product={loaderData.product}
+                    mode="add"
+                    // @sfdc-extension-block-start SFDC_EXT_BOPIS
+                    clearDeferredPickupSelection
+                    // @sfdc-extension-block-end SFDC_EXT_BOPIS
+                >
                     <ProductContent
                         product={loaderData.product}
                         url={loaderData.pageUrl}
@@ -517,9 +468,7 @@ function ProductDetailView({ loaderData }: { loaderData: ProductPageData }) {
     // @sfdc-extension-block-end SFDC_EXT_BNPL
     // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
     finalContent = (
-        <ShippingDeliveryProvider estimatedDeliveryPromise={loaderData.estimatedDelivery}>
-            {finalContent}
-        </ShippingDeliveryProvider>
+        <ShippingDeliveryProvider productId={loaderData.product.id}>{finalContent}</ShippingDeliveryProvider>
     );
     // @sfdc-extension-block-end SFDC_EXT_SHIPPING_DELIVERY
 
