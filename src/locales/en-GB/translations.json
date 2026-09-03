@@ -1997,12 +1997,12 @@
         "clearStarFilter": "Clear {{count}} star filter",
         "clearPhotoFilter": "Clear photo filter",
         "writeReviewButton": "Write a Review",
-        "materials": "Materials",
-        "usageInstructions": "Usage Instructions",
-        "specifications": "Specifications",
+        "materials": "Ingredients",
+        "usageInstructions": "How to Use",
+        "specifications": "Product Details",
         "dimensions": "Dimensions",
         "assembly": "Assembly",
-        "careInstructions": "Care Instructions",
+        "careInstructions": "Key Benefits",
         "careInstructionsComingSoon": "Care instructions coming soon.",
         "productSet": "Product Set",
         "productBundle": "Product Bundle",
@@ -2105,7 +2105,13 @@
             "listPrice": "List price: {{price}}"
         },
         "removingFromWishlist": "Removing from wishlist...",
-        "inWishlist": "In your wishlist"
+        "inWishlist": "In your wishlist",
+        "cosmeticSpec": {
+            "skinType": "Skin Type",
+            "finish": "Finish",
+            "coverage": "Coverage",
+            "size": "Size"
+        }
     },
     "orderLookup": {
         "results": {
