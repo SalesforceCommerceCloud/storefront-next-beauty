@@ -32,6 +32,10 @@
  * it at a custom variation attribute (e.g. `volume`) authored in Business Manager.
  */
 interface UIConfig {
+    checkout: {
+        /** When true, allow placing orders with $0 total without payment instruments or billing addresses. @default false */
+        allowZeroTotalOrders: boolean;
+    };
     pages: {
         cart: {
             showRecommendations: boolean;
@@ -39,6 +43,12 @@ interface UIConfig {
             showLineItemListPrice: boolean;
             showLineItemPromoBadge: boolean;
             showLineItemBonusBadge: boolean;
+        };
+        swatches: {
+            /** Maximum number of distinct swatches that can be selected per order. @default 0 */
+            maxDistinctSwatches: number;
+            /** Maximum quantity allowed per individual swatch product. @default 1 */
+            maxQtyPerSwatch: number;
         };
         category: {
             showCategoryLabel: boolean;
@@ -74,6 +84,9 @@ interface UIConfig {
 }
 
 export const uiConfig: UIConfig = {
+    checkout: {
+        allowZeroTotalOrders: false,
+    },
     pages: {
         cart: {
             showRecommendations: false,
@@ -81,6 +94,10 @@ export const uiConfig: UIConfig = {
             showLineItemListPrice: false,
             showLineItemPromoBadge: false,
             showLineItemBonusBadge: false,
+        },
+        swatches: {
+            maxDistinctSwatches: 0,
+            maxQtyPerSwatch: 1,
         },
         category: {
             showCategoryLabel: true,
