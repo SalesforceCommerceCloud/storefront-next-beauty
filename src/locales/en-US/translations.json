@@ -1153,6 +1153,7 @@
             "remove": "Remove",
             "default": "Default",
             "expires": "Expires",
+            "sepaDebit": "SEPA Debit",
             "addPaymentMethodTitle": "Add Payment Method",
             "creditCard": "Credit Card",
             "nameOnCard": "Name on Card*",
