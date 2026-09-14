@@ -102,4 +102,22 @@ describe('Cosmetic product route loader', () => {
         expect(mockPdpSectionApi.getCareInstructions).not.toHaveBeenCalled();
         expect(mockPdpSectionApi.getTechSpecs).not.toHaveBeenCalled();
     });
+
+    test('resolves the product ID from the final raw path segment, not the route param', async () => {
+        mockFetchProductById.mockResolvedValue({ id: 'serum-123' } as unknown as ShopperProducts.schemas['Product']);
+
+        // Under the SEO route aliases the product ID arrives on the alias splat, so the
+        // route param no longer carries it. The final raw path segment is authoritative.
+        const request = new Request('https://example.com/en-US/p/skincare/serums/serum-123');
+
+        await loader({
+            request,
+            params: { siteId: 'test-site', localeId: 'en-US', productId: 'stale-route-param' },
+            context,
+            url: new URL(request.url),
+            pattern: '/product/:productId',
+        });
+
+        expect(mockFetchProductById.mock.calls[0][1]).toBe('serum-123');
+    });
 });

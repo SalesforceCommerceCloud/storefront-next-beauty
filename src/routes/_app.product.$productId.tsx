@@ -21,6 +21,7 @@ import { type ShopperProducts } from '@/scapi';
 import { shouldRevalidate as shouldRevalidateProduct } from '@/lib/revalidation/routes/product';
 import { fetchProductById } from '@/lib/api/products.server';
 import { NormalizedApiError } from '@/lib/api/normalized-api-error';
+import { decodeFinalRawSegment } from '@/lib/seo/url-resolution.server';
 import { siteContext } from '@salesforce/storefront-next-runtime/site-context';
 import ProductView from '@/components/product-view';
 import ChildProducts from '@/components/product-view/child-products';
@@ -150,10 +151,10 @@ export type ProductPageData = {
  * @returns Object containing the resolved product, page data, and schema promises
  */
 export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
-    const { request, params, context } = args;
+    const { request, context } = args;
     const logger = getLogger(context);
-    const { productId } = params;
     const requestUrl = new URL(request.url);
+    const productId = decodeFinalRawSegment(requestUrl, args.params);
     const { searchParams } = requestUrl;
     const variantPid = searchParams.get('pid');
     logger.debug('Product: loader starting', { productId, variantPid: variantPid || undefined });
