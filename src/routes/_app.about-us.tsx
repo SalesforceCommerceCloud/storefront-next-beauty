@@ -43,6 +43,8 @@ import heroRoutineImage from '/images/hero-03.webp';
 import heroTextureImage from '/images/hero-04.webp';
 import { Region } from '@/components/region';
 import { fetchPageWithComponentData, type PageWithComponentData } from '@/lib/page-designer/page-loader.server';
+import { createCategoryUrlFromLegacyPath } from '@/route-paths';
+import { useSeoUrlContext } from '@/hooks/use-seo-url-context';
 
 @PageType({
     name: 'About Us Page',
@@ -90,6 +92,7 @@ export async function loader(args: Route.LoaderArgs): Promise<AboutUsPageData> {
  * a primary CTA. Reuses the canonical `ContentCard` primitive.
  */
 function AboutHero({ t }: { t: TFunction<'aboutUs'> }) {
+    const seoUrlContext = useSeoUrlContext();
     return (
         <section aria-labelledby="hero-heading">
             {/* The canonical ContentCard renders its title as h3. We expose an
@@ -109,7 +112,10 @@ function AboutHero({ t }: { t: TFunction<'aboutUs'> }) {
                     defaultValue: 'Foundation bottles arranged in a fan on warm marble.',
                 })}
                 buttonText={t('hero.ctaText', { defaultValue: 'Shop Skincare' })}
-                buttonLink={t('hero.ctaLink', { defaultValue: '/category/newarrivals' })}
+                buttonLink={createCategoryUrlFromLegacyPath(
+                    t('hero.ctaLink', { defaultValue: '/category/newarrivals' }),
+                    seoUrlContext
+                )}
                 showBackground={false}
                 showBorder={false}
                 loading="eager"
@@ -170,6 +176,7 @@ function PrinciplesGrid({ t }: { t: TFunction<'aboutUs'> }) {
  * tokens stay consistent with the rest of the storefront.
  */
 function StandardsPillars({ t }: { t: TFunction<'aboutUs'> }) {
+    const seoUrlContext = useSeoUrlContext();
     const pillars = [
         {
             id: 'transparency',
@@ -215,7 +222,11 @@ function StandardsPillars({ t }: { t: TFunction<'aboutUs'> }) {
                     {t('section.standards.title', { defaultValue: 'What we stand for' })}
                 </Typography>
                 <Button asChild variant="outline" className="mt-2">
-                    <Link to={t('section.standards.ctaLink', { defaultValue: '/category/top-seller' })}>
+                    <Link
+                        to={createCategoryUrlFromLegacyPath(
+                            t('section.standards.ctaLink', { defaultValue: '/category/top-seller' }),
+                            seoUrlContext
+                        )}>
                         {t('section.standards.ctaText', { defaultValue: 'See our ingredients' })}
                     </Link>
                 </Button>
@@ -279,6 +290,7 @@ function CommunityCTA({ t }: { t: TFunction<'aboutUs'> }) {
  * reads as a final brand statement.
  */
 function ClosingManifesto({ t }: { t: TFunction<'aboutUs'> }) {
+    const seoUrlContext = useSeoUrlContext();
     return (
         <Card className="[--ui-border-width:0px] bg-muted/40">
             <CardContent className="flex flex-col gap-4 items-start py-10 md:py-14 max-w-3xl">
@@ -301,7 +313,11 @@ function ClosingManifesto({ t }: { t: TFunction<'aboutUs'> }) {
                     })}
                 </p>
                 <Button asChild className="mt-2">
-                    <Link to={t('section.closing.ctaLink', { defaultValue: '/category/newarrivals' })}>
+                    <Link
+                        to={createCategoryUrlFromLegacyPath(
+                            t('section.closing.ctaLink', { defaultValue: '/category/newarrivals' }),
+                            seoUrlContext
+                        )}>
                         {t('section.closing.ctaText', { defaultValue: 'Explore our formulas' })}
                     </Link>
                 </Button>

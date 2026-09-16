@@ -23,6 +23,10 @@ import AboutUs, { type AboutUsPageData, loader } from './_app.about-us';
 import { createTestContext } from '@/lib/test-utils';
 import { fetchPageWithComponentData } from '@/lib/page-designer/page-loader.server';
 
+vi.mock('@/hooks/use-seo-url-context', () => ({
+    useSeoUrlContext: () => ({ siteId: 'RefArchGlobal' }),
+}));
+
 const { t } = getTranslation();
 
 const createMockPage = (regions: any[] = []): ShopperExperience.schemas['Page'] =>
