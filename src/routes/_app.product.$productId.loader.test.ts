@@ -15,23 +15,29 @@
  */
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { RouterContextProvider } from 'react-router';
-import type { ShopperProducts } from '@/scapi';
+import { ApiError, type ShopperProducts } from '@/scapi';
 import { siteContext } from '@salesforce/storefront-next-runtime/site-context';
+import { NormalizedApiError } from '@/lib/api/normalized-api-error';
 
-const { mockFetchProductById, mockPdpSectionApi, mockGetReturnsAndWarranty } = vi.hoisted(() => ({
-    mockFetchProductById: vi.fn(),
-    mockPdpSectionApi: {
-        getIngredientsData: vi.fn(),
-        getUsageInstructions: vi.fn(),
-        getCareInstructions: vi.fn(),
-        getTechSpecs: vi.fn(),
-    },
-    mockGetReturnsAndWarranty: vi.fn(),
-}));
+const { mockFetchProductById, mockPdpSectionApi, mockGetReturnsAndWarranty, mockAttemptRouteSeoFallback } = vi.hoisted(
+    () => ({
+        mockFetchProductById: vi.fn(),
+        mockPdpSectionApi: {
+            getIngredientsData: vi.fn(),
+            getUsageInstructions: vi.fn(),
+            getCareInstructions: vi.fn(),
+            getTechSpecs: vi.fn(),
+        },
+        mockGetReturnsAndWarranty: vi.fn(),
+        mockAttemptRouteSeoFallback: vi.fn(),
+    })
+);
 
 vi.mock('@/lib/api/products.server', () => ({
     fetchProductById: mockFetchProductById,
 }));
+
+vi.mock('@/lib/seo/route-fallback.server', () => ({ attemptRouteSeoFallback: mockAttemptRouteSeoFallback }));
 
 vi.mock('@/lib/page-designer/page-loader.server', () => ({
     fetchPageWithComponentData: vi.fn(() => Promise.resolve({ id: 'pdp', regions: [] })),
@@ -68,6 +74,7 @@ describe('Cosmetic product route loader', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
+        mockAttemptRouteSeoFallback.mockResolvedValue(undefined);
     });
 
     test('resolves cosmetic custom attributes without calling the mock section API', async () => {
@@ -119,5 +126,70 @@ describe('Cosmetic product route loader', () => {
         });
 
         expect(mockFetchProductById.mock.calls[0][1]).toBe('serum-123');
+        expect(mockAttemptRouteSeoFallback).not.toHaveBeenCalled();
+    });
+
+    test('passes an .html product ID unchanged to the primary lookup', async () => {
+        mockFetchProductById.mockResolvedValue({ id: 'legacy.html' } as ShopperProducts.schemas['Product']);
+        const request = new Request('https://example.com/product/legacy.html');
+
+        await loader({
+            request,
+            params: { siteId: 'test-site', localeId: 'en-US', productId: 'legacy.html' },
+            context,
+            url: new URL(request.url),
+            pattern: '',
+        });
+
+        expect(mockFetchProductById.mock.calls[0][1]).toBe('legacy.html');
+        expect(mockAttemptRouteSeoFallback).not.toHaveBeenCalled();
+    });
+
+    test('attempts fallback once for an authoritative path lookup 404', async () => {
+        mockFetchProductById.mockRejectedValue(normalizedError(404));
+        const request = new Request('https://example.com/product/missing');
+
+        await expect(
+            loader({
+                request,
+                params: { siteId: 'test-site', localeId: 'en-US', productId: 'missing' },
+                context,
+                url: new URL(request.url),
+                pattern: '',
+            })
+        ).rejects.toBeInstanceOf(Response);
+
+        expect(mockAttemptRouteSeoFallback).toHaveBeenCalledOnce();
+    });
+
+    test('does not attempt fallback for a non-404 product failure', async () => {
+        mockFetchProductById.mockRejectedValue(normalizedError(500));
+        const request = new Request('https://example.com/product/failure');
+
+        await expect(
+            loader({
+                request,
+                params: { siteId: 'test-site', localeId: 'en-US', productId: 'failure' },
+                context,
+                url: new URL(request.url),
+                pattern: '',
+            })
+        ).rejects.toBeInstanceOf(Response);
+
+        expect(mockAttemptRouteSeoFallback).not.toHaveBeenCalled();
     });
 });
+
+function normalizedError(status: number): NormalizedApiError {
+    return new NormalizedApiError(
+        new ApiError({
+            status,
+            statusText: 'Failure',
+            headers: new Headers(),
+            body: { type: 'Failure', title: 'Failure', detail: 'failure' },
+            rawBody: '{}',
+            url: 'https://api.example.com/products/failure',
+            method: 'GET',
+        })
+    );
+}
