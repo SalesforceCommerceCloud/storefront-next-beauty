@@ -31,7 +31,7 @@ const render = (ui: React.ReactElement) =>
     );
 import { use } from 'react';
 import type { ShopperProducts } from '@/scapi';
-import { type ProductPageData } from './_app.product.$productId';
+import { type ProductPageData } from './_app.p.$';
 
 // ProductPage reads `nonce` from the root loader. Tests render the page outside
 // a real data router, so stub `useRouteLoaderData` with a deterministic value.
@@ -233,7 +233,7 @@ describe('Product Detail Route', () => {
         // Reset modules to ensure fresh import and createPage call
         vi.resetModules();
         // Import the route module to trigger createPage call with mocks in place
-        await import('./_app.product.$productId');
+        await import('./_app.p.$');
     });
     const mockProduct: ShopperProducts.schemas['Product'] = {
         id: 'test-product-123',
@@ -316,7 +316,7 @@ describe('Product Detail Route', () => {
         // isn't re-tested at the route. (Was a hand-written nav-only copy before the suppress-by-
         // default refactor; kept in lockstep with canonical now.)
         test('re-exports the shared product revalidation policy', async () => {
-            const { shouldRevalidate: shouldRevalidateRoute } = await import('./_app.product.$productId');
+            const { shouldRevalidate: shouldRevalidateRoute } = await import('./_app.p.$');
             const { shouldRevalidate: shouldRevalidateProduct } = await import('@/lib/revalidation/routes/product');
             expect(shouldRevalidateRoute).toBe(shouldRevalidateProduct);
         });
@@ -368,7 +368,7 @@ describe('Product Detail Route', () => {
                 shortDescription: undefined,
             };
 
-            const { default: ProductPage } = await import('./_app.product.$productId');
+            const { default: ProductPage } = await import('./_app.p.$');
             const mockLoaderData: ProductPageData = {
                 product: productWithoutDescription,
                 page: mockPage,
@@ -394,7 +394,7 @@ describe('Product Detail Route', () => {
                 shortDescription: 'Test description',
             };
 
-            const { default: ProductPage } = await import('./_app.product.$productId');
+            const { default: ProductPage } = await import('./_app.p.$');
             const mockLoaderData: ProductPageData = {
                 product: productWithDescription,
                 page: mockPage,
@@ -415,7 +415,7 @@ describe('Product Detail Route', () => {
             vi.mocked(isProductSet).mockReturnValue(true);
             vi.mocked(isProductBundle).mockReturnValue(false);
 
-            const { default: ProductPage } = await import('./_app.product.$productId');
+            const { default: ProductPage } = await import('./_app.p.$');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
                 page: mockPage,
@@ -433,7 +433,7 @@ describe('Product Detail Route', () => {
             vi.mocked(isProductSet).mockReturnValue(false);
             vi.mocked(isProductBundle).mockReturnValue(true);
 
-            const { default: ProductPage } = await import('./_app.product.$productId');
+            const { default: ProductPage } = await import('./_app.p.$');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
                 page: mockPage,
@@ -452,7 +452,7 @@ describe('Product Detail Route', () => {
         test('should include ProductRecommendations component integration', async () => {
             // This test verifies that the ProductRecommendations component is properly integrated
             // The actual rendering with Suspense and async data is handled by React and tested in integration tests
-            const { default: ProductPage } = await import('./_app.product.$productId');
+            const { default: ProductPage } = await import('./_app.p.$');
 
             // Verify the page component can be imported and has the correct structure
             expect(ProductPage).toBeDefined();
@@ -496,7 +496,7 @@ describe('Product Detail Route', () => {
             vi.mocked(isProductSet).mockReturnValue(false);
             vi.mocked(isProductBundle).mockReturnValue(false);
 
-            const { default: ProductPage } = await import('./_app.product.$productId');
+            const { default: ProductPage } = await import('./_app.p.$');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
                 page: mockPage,
@@ -516,7 +516,7 @@ describe('Product Detail Route', () => {
 
         // @sfdc-extension-block-start SFDC_EXT_SHIPPING_DELIVERY
         test('passes the product and destination promise to the delivery provider', async () => {
-            const { default: ProductPage } = await import('./_app.product.$productId');
+            const { default: ProductPage } = await import('./_app.p.$');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
                 page: mockPage,
@@ -539,7 +539,7 @@ describe('Product Detail Route', () => {
             vi.mocked(isProductSet).mockReturnValue(false);
             vi.mocked(isProductBundle).mockReturnValue(false);
 
-            const { default: ProductPage } = await import('./_app.product.$productId');
+            const { default: ProductPage } = await import('./_app.p.$');
             const mockLoaderData: ProductPageData = {
                 product: mockProduct,
                 page: mockPage,
