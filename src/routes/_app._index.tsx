@@ -41,6 +41,8 @@ import { SeoMeta } from '@/components/seo-meta';
 import { buildCanonicalUrl } from '@/utils/canonical-url';
 import { useTranslation } from 'react-i18next';
 import type { NormalizedApiError } from '@/lib/api/normalized-api-error';
+import { createCategoryUrlFromLegacyPath } from '@/route-paths';
+import { useSeoUrlContext } from '@/hooks/use-seo-url-context';
 
 export { shouldRevalidate } from '@/lib/revalidation/routes/home';
 
@@ -156,6 +158,8 @@ export async function loader(args: LoaderFunctionArgs): Promise<HomePageData> {
  */
 export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
     const { t } = useTranslation('home');
+    const seoUrlContext = useSeoUrlContext();
+    const categoryUrl = (path: string) => createCategoryUrlFromLegacyPath(path, seoUrlContext);
 
     const heroSlides: HeroSlide[] = [
         {
@@ -165,7 +169,7 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
             imageUrl: hero01,
             imageAlt: t('hero.slide1.imageAlt'),
             ctaText: t('hero.slide1.ctaText'),
-            ctaLink: '/category/root',
+            ctaLink: categoryUrl('/category/root'),
             overlayPosition: 'Middle Center',
             overlayAlignment: 'center',
         },
@@ -176,7 +180,7 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
             imageUrl: hero02,
             imageAlt: t('hero.slide2.imageAlt'),
             ctaText: t('hero.slide2.ctaText'),
-            ctaLink: '/category/root',
+            ctaLink: categoryUrl('/category/root'),
             overlayPosition: 'Middle Center',
             overlayAlignment: 'center',
         },
@@ -187,7 +191,7 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
             imageUrl: hero03,
             imageAlt: t('hero.slide3.imageAlt'),
             ctaText: t('hero.slide3.ctaText'),
-            ctaLink: '/category/root',
+            ctaLink: categoryUrl('/category/root'),
             overlayPosition: 'Middle Center',
             overlayAlignment: 'center',
         },
@@ -198,7 +202,7 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
             imageUrl: hero04,
             imageAlt: t('hero.slide4.imageAlt'),
             ctaText: t('hero.slide4.ctaText'),
-            ctaLink: '/category/root',
+            ctaLink: categoryUrl('/category/root'),
             overlayPosition: 'Middle Center',
             overlayAlignment: 'center',
         },
@@ -296,7 +300,7 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
                                             <ProductCarouselWithData
                                                 data={searchResult}
                                                 title={t('featuredProducts.title')}
-                                                shopAllUrl="/category/root"
+                                                shopAllUrl={categoryUrl('/category/root')}
                                                 shopAllText={t('featuredProducts.shopAll')}
                                             />
                                         )}
@@ -331,7 +335,7 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
                                             imageUrl={hero03}
                                             imageAlt={t('featuredContent.women.imageAlt')}
                                             buttonText={t('featuredContent.women.ctaText')}
-                                            buttonLink="/category/womens"
+                                            buttonLink={categoryUrl('/category/womens')}
                                             showBackground={false}
                                             showBorder={false}
                                             loading="lazy"
@@ -342,7 +346,7 @@ export default function HomePage({ loaderData }: { loaderData: HomePageData }) {
                                             imageUrl={hero04}
                                             imageAlt={t('featuredContent.men.imageAlt')}
                                             buttonText={t('featuredContent.men.ctaText')}
-                                            buttonLink="/category/mens"
+                                            buttonLink={categoryUrl('/category/mens')}
                                             showBackground={false}
                                             showBorder={false}
                                             loading="lazy"

@@ -59,7 +59,7 @@ describe('usePageUIConfig', () => {
     it('should return empty object when no config exists', () => {
         vi.mocked(useMatches).mockReturnValue([
             {
-                id: 'routes/_app.product.$productId',
+                id: 'routes/_app.p.$',
                 pathname: '/product/123',
                 params: {},
                 data: null,
@@ -76,7 +76,7 @@ describe('usePageUIConfig', () => {
     it('should return main config when handle.ui.main exists', () => {
         vi.mocked(useMatches).mockReturnValue([
             {
-                id: 'routes/_app.product.$productId',
+                id: 'routes/_app.p.$',
                 pathname: '/product/123',
                 params: {},
                 data: null,

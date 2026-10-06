@@ -23,6 +23,10 @@ import AboutUs, { type AboutUsPageData, loader } from './_app.about-us';
 import { createTestContext } from '@/lib/test-utils';
 import { fetchPageWithComponentData } from '@/lib/page-designer/page-loader.server';
 
+vi.mock('@/hooks/use-seo-url-context', () => ({
+    useSeoUrlContext: () => ({ siteId: 'RefArchGlobal' }),
+}));
+
 const { t } = getTranslation();
 
 const createMockPage = (regions: any[] = []): ShopperExperience.schemas['Page'] =>
@@ -197,11 +201,11 @@ describe('AboutUs (cosmetic)', () => {
             });
         });
 
-        test('wires hero CTA to /category/newarrivals with eager image loading', async () => {
+        test('wires hero CTA to /c/newarrivals with eager image loading', async () => {
             renderComponent();
             await waitFor(() => {
                 const hero = screen.getByText('Shop Skincare').closest('a');
-                expect(hero).toHaveAttribute('href', '/category/newarrivals');
+                expect(hero).toHaveAttribute('href', '/c/newarrivals');
                 // Hero ContentCard is the only one with loading="eager".
                 const eagerCards = screen
                     .getAllByTestId('content-card')
@@ -210,11 +214,11 @@ describe('AboutUs (cosmetic)', () => {
             });
         });
 
-        test('wires standards CTA to /category/top-seller', async () => {
+        test('wires standards CTA to /c/top-seller', async () => {
             renderComponent();
             await waitFor(() => {
                 const standards = screen.getByText('See our ingredients').closest('a');
-                expect(standards).toHaveAttribute('href', '/category/top-seller');
+                expect(standards).toHaveAttribute('href', '/c/top-seller');
             });
         });
 
@@ -226,11 +230,11 @@ describe('AboutUs (cosmetic)', () => {
             });
         });
 
-        test('wires closing CTA to /category/newarrivals', async () => {
+        test('wires closing CTA to /c/newarrivals', async () => {
             renderComponent();
             await waitFor(() => {
                 const closing = screen.getByText('Explore our formulas').closest('a');
-                expect(closing).toHaveAttribute('href', '/category/newarrivals');
+                expect(closing).toHaveAttribute('href', '/c/newarrivals');
             });
         });
 

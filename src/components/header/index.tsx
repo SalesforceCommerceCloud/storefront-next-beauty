@@ -35,7 +35,12 @@ import { Button } from '@/components/ui/button';
 import { SparklesIcon } from '@/components/icons';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import type { AppConfig } from '@/types/config';
-import { openAgentWidget, isCimulateEnabled, validateCimulateConfig } from '@/components/cimulate';
+import {
+    openAgentWidget,
+    isCimulateEnabled,
+    validateCimulateConfig,
+    resolveShopperAgentConfig,
+} from '@/components/cimulate';
 import { UITarget } from '@/targets/ui-target';
 import { cn } from '@/lib/utils';
 import { Component } from '@/lib/decorators/component';
@@ -80,10 +85,9 @@ export default function Header({
     const { t } = useTranslation('header');
     const headerRef = useRef<HTMLElement>(null);
     const config = useConfig<AppConfig>();
+    const shopperAgent = resolveShopperAgentConfig(config);
     const showChat =
-        variant === 'full' &&
-        isCimulateEnabled(config.cimulateAgent?.enabled) &&
-        validateCimulateConfig(config.cimulateAgent);
+        variant === 'full' && isCimulateEnabled(shopperAgent?.enabled) && validateCimulateConfig(shopperAgent);
 
     const updateHeaderHeight = useCallback(() => {
         if (headerRef.current) {
