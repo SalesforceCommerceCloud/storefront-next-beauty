@@ -32,6 +32,10 @@
  * it at a custom variation attribute (e.g. `volume`) authored in Business Manager.
  */
 interface UIConfig {
+    checkout: {
+        /** When true, allow placing orders with $0 total without payment instruments or billing addresses. @default false */
+        allowZeroTotalOrders: boolean;
+    };
     pages: {
         cart: {
             showRecommendations: boolean;
@@ -39,6 +43,12 @@ interface UIConfig {
             showLineItemListPrice: boolean;
             showLineItemPromoBadge: boolean;
             showLineItemBonusBadge: boolean;
+        };
+        swatches: {
+            /** Maximum number of distinct swatches that can be selected per order. @default 0 */
+            maxDistinctSwatches: number;
+            /** Maximum quantity allowed per individual swatch product. @default 1 */
+            maxQtyPerSwatch: number;
         };
         category: {
             showCategoryLabel: boolean;
@@ -52,6 +62,8 @@ interface UIConfig {
             sidebarCategoryRefinement?: {
                 enabled: boolean;
             };
+            /** When true, product tiles link to the master product PDP instead of the represented variant. @default false */
+            tileLinksToMasterProduct?: boolean;
         };
         product: {
             showRatingAverage: boolean;
@@ -63,6 +75,8 @@ interface UIConfig {
             collapsibleSwatchSections?: boolean;
             /** PDP product-image gallery layout: 'stacked' (hero + thumbnails) or 'mosaic'. @default 'stacked' */
             galleryLayout?: 'stacked' | 'mosaic';
+            /** PDP Add-to-Cart quantity UX. @default 'pre-select' */
+            addToCartQuantityMode?: 'inline' | 'pre-select';
         };
     };
     bonusTile: {
@@ -72,6 +86,9 @@ interface UIConfig {
 }
 
 export const uiConfig: UIConfig = {
+    checkout: {
+        allowZeroTotalOrders: false,
+    },
     pages: {
         cart: {
             showRecommendations: false,
@@ -79,6 +96,10 @@ export const uiConfig: UIConfig = {
             showLineItemListPrice: false,
             showLineItemPromoBadge: false,
             showLineItemBonusBadge: false,
+        },
+        swatches: {
+            maxDistinctSwatches: 0,
+            maxQtyPerSwatch: 1,
         },
         category: {
             showCategoryLabel: true,

@@ -193,7 +193,7 @@ exports[`ProductAccordion stories snapshot > Playground story renders and matche
           id="radix-_r_6_"
           type="button"
         >
-          Care Instructions
+          Key Benefits
           <svg
             aria-hidden="true"
             class="lucide lucide-chevron-down text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"

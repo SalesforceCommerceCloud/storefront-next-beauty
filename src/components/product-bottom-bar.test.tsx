@@ -318,6 +318,31 @@ describe('ProductBottomBar', () => {
         });
     });
 
+    describe('Accessibility', () => {
+        test('is inert while hidden and interactive once visible', async () => {
+            const { container } = renderComponent();
+
+            // Default state: bar is translated off-screen, so it must be inert to keep its
+            // Add to Cart button out of the tab order and the a11y tree.
+            const bar = container.querySelector('[data-slot="product-bottom-bar"]');
+            expect(bar).toHaveClass('translate-y-full');
+            expect(bar).toHaveAttribute('inert');
+
+            // Scroll the main button out of view: the bar slides in and must drop inert.
+            act(() => {
+                intersectionObserverCallback(
+                    [{ isIntersecting: false } as IntersectionObserverEntry],
+                    {} as IntersectionObserver
+                );
+            });
+
+            await waitFor(() => {
+                expect(bar).toHaveClass('translate-y-0');
+                expect(bar).not.toHaveAttribute('inert');
+            });
+        });
+    });
+
     describe('Add to Cart Button', () => {
         test('button has correct styling classes', () => {
             renderComponent();

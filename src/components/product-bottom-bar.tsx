@@ -71,6 +71,10 @@ export default function ProductBottomBar({ product }: ProductBottomBarProps): Re
     return (
         <div
             data-slot="product-bottom-bar"
+            // Hidden is a visual translate only; without `inert` the CTA would stay in the tab order
+            // and the a11y tree while off-screen, so keyboard/AT users could reach an invisible control
+            // and a second "Add to Cart" would be announced. `inert` removes the hidden bar from both.
+            inert={!isVisible ? true : undefined}
             className={cn(
                 'fixed bottom-0 left-0 right-0 z-40',
                 'border-t border-border bg-card',

@@ -372,6 +372,39 @@ main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
     border-radius: 50%;
 }
 
+/* PDP product details: retain the structured list's rounded table treatment
+ * while the disclosure itself keeps the shared default appearance. */
+details:has(> div > [data-slot='spec-table']) > div [data-slot='spec-table'] > dl {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+details:has(> div > [data-slot='spec-table']) > div [data-slot='spec-table'] > dl > div {
+    padding-inline: 1rem;
+    padding-block: 0.75rem;
+}
+
+details:has(> div > [data-slot='spec-table']) > div [data-slot='spec-table'] > dl > div:last-child {
+    border-bottom-width: 0;
+}
+
+@media (max-width: 39.99rem) {
+    details:has(> div > [data-slot='spec-table']) > div [data-slot='spec-table'] > dl > div {
+        display: block;
+    }
+
+    details:has(> div > [data-slot='spec-table']) > div [data-slot='spec-table'] > dl dt {
+        width: auto;
+    }
+
+    details:has(> div > [data-slot='spec-table']) > div [data-slot='spec-table'] > dl dd {
+        margin-top: 0.25rem;
+        text-align: left;
+    }
+}
+
 /* Add bottom padding when product bottom bar is visible to prevent footer overlap */
 body:has([data-slot="product-bottom-bar"]:not(.translate-y-full)) {
     padding-bottom: 88px;

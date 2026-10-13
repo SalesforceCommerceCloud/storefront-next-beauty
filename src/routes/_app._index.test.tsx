@@ -27,6 +27,10 @@ import { fetchCategories } from '@/lib/api/categories.server';
 import { getConfig } from '@salesforce/storefront-next-runtime/config';
 import type { AppConfig } from '@/types/config';
 
+vi.mock('@/hooks/use-seo-url-context', () => ({
+    useSeoUrlContext: () => ({ siteId: 'RefArchGlobal' }),
+}));
+
 const { t } = getTranslation();
 
 // Mock data
@@ -147,10 +151,6 @@ vi.mock('@/components/ui/skeleton', () => ({
 vi.mock('@/components/home/skeleton', () => ({
     default: () => <div data-testid="home-skeleton" />,
 }));
-
-// Mock images
-vi.mock('/images/hero-new-arrivals.webp', () => ({ default: '/mock-image.png' }));
-vi.mock('/images/hero-cube.webp', () => ({ default: '/mock-hero-cube.webp' }));
 
 // Mock react-i18next with partial mock to preserve other exports
 vi.mock('react-i18next', async () => {

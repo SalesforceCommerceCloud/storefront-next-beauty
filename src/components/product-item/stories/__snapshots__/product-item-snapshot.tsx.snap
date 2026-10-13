@@ -51,9 +51,9 @@ exports[`ProductItem stories snapshot > AutoBonusProduct story renders and match
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Men's Classic Deer Gloves"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Men's Classic Deer Gloves
                     </a>
@@ -192,9 +192,9 @@ exports[`ProductItem stories snapshot > ChoiceBasedBonusProduct story renders an
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Choice Bonus Gift"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Choice Bonus Gift
                     </a>
@@ -353,9 +353,9 @@ exports[`ProductItem stories snapshot > Default story renders and matches snapsh
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Men's Classic Deer Gloves"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Men's Classic Deer Gloves
                     </a>
@@ -506,9 +506,9 @@ exports[`ProductItem stories snapshot > DiscountedPrice story renders and matche
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Men's Classic Deer Gloves"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Men's Classic Deer Gloves
                     </a>
@@ -659,9 +659,9 @@ exports[`ProductItem stories snapshot > LongProductName story renders and matche
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Women's Premium Extra-Fine Italian Merino Wool Blend Long-Sleeve Quarter-Zip Sweater with Elbow Patches and Reinforced Stitching"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Women's Premium Extra-Fine Italian Merino Wool Blend Long-Sleeve Quarter-Zip Sweater with Elbow Patches and Reinforced Stitching
                     </a>
@@ -810,9 +810,9 @@ exports[`ProductItem stories snapshot > MissingImages story renders and matches 
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Men's Classic Deer Gloves"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Men's Classic Deer Gloves
                     </a>
@@ -963,9 +963,9 @@ exports[`ProductItem stories snapshot > MultipleQuantity story renders and match
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Men's Classic Deer Gloves"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Men's Classic Deer Gloves
                     </a>
@@ -1116,9 +1116,9 @@ exports[`ProductItem stories snapshot > SummaryVariant story renders and matches
         >
           <a
             class="hover:text-primary block break-words"
-            href="/RefArchGlobal/en-GB/product/TG508M"
+            href="/RefArchGlobal/en-GB/p/TG508M"
             title="Men's Classic Deer Gloves"
-            to="/RefArchGlobal/en-GB/product/TG508M"
+            to="/RefArchGlobal/en-GB/p/TG508M"
           >
             Men's Classic Deer Gloves
           </a>
@@ -1219,9 +1219,9 @@ exports[`ProductItem stories snapshot > WithActions story renders and matches sn
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Men's Classic Deer Gloves"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Men's Classic Deer Gloves
                     </a>
@@ -1394,9 +1394,9 @@ exports[`ProductItem stories snapshot > WithInventoryMessage story renders and m
                   >
                     <a
                       class="hover:text-primary block break-words"
-                      href="/RefArchGlobal/en-GB/product/TG508M"
+                      href="/RefArchGlobal/en-GB/p/TG508M"
                       title="Men's Classic Deer Gloves"
-                      to="/RefArchGlobal/en-GB/product/TG508M"
+                      to="/RefArchGlobal/en-GB/p/TG508M"
                     >
                       Men's Classic Deer Gloves
                     </a>
