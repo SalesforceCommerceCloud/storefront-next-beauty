@@ -25,6 +25,7 @@
     --muted-hover: oklch(0.91 0.018 88);
 
     --accent: oklch(0.92 0.02 89);
+    --skeleton: oklch(0.92 0.02 89);
     --accent-foreground: oklch(0.31 0.018 80);
 
     /* Boundary tokens darkened to clear WCAG SC 1.4.11 (3:1) against the default
