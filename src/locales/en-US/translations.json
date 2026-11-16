@@ -1882,6 +1882,15 @@
             "message": "An unexpected error happened on our end. Our team has been notified and is sorting it out.",
             "secondaryMessage": "Try again in a moment, or keep browsing while we tidy up."
         },
+        "commerceContext": {
+            "confirmationTitle": "Store confirmation required",
+            "confirmationMessage": "Your current store and basket are unchanged. A store change needs confirmation before you can continue.",
+            "unavailableTitle": "Your shopping session needs attention",
+            "unavailableMessage": "We couldn’t finish preparing your shopping session. You can retry without signing in again.",
+            "signOutMessage": "You can sign out to continue as a guest. Signing out clears your current basket.",
+            "retry": "Try again",
+            "signOut": "Sign out"
+        },
         "defaultTitle": "Something is off behind the counter",
         "defaultDescription": "An error occurred",
         "defaultDetails": "An unexpected error occurred.",
