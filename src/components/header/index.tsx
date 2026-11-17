@@ -180,78 +180,81 @@ export default function Header({
     // recolored via `color`, not `filter` — so unlike the canonical
     // raster-logo header there's no `filter` to animate here.)
     return (
-        <header
-            ref={headerRef}
-            data-page-at-top="true"
-            className={cn(
-                // `fixed` lets hero content bleed behind the header at normal heights. At the 400%
-                // zoom proxy (viewport height <= 400px) it drops to `static` so a pinned header can
-                // no longer sit on top of focused content (WCAG 2.4.11 Focus Not Obscured), matching
-                // the canonical header's `[@media(max-height:400px)]:static` treatment. The reserved
-                // <main> top padding is zeroed at the same breakpoint in base.css so the now-in-flow
-                // header doesn't double-offset the content.
-                'bg-header-background text-header-foreground fixed top-0 left-0 right-0 z-50 [@media(max-height:400px)]:static',
-                'border-b border-header-border',
-                'transition-[background-color,border-color,color] duration-300 ease-out'
-            )}>
-            {/* PageConfigManager applies page-level UI config (header transparency, main padding)
+        <>
+            <header
+                ref={headerRef}
+                data-page-at-top="true"
+                className={cn(
+                    // `fixed` lets hero content bleed behind the header at normal heights. At the 400%
+                    // zoom proxy (viewport height <= 400px) it drops to `static` so a pinned header can
+                    // no longer sit on top of focused content (WCAG 2.4.11 Focus Not Obscured), matching
+                    // the canonical header's `[@media(max-height:400px)]:static` treatment. The reserved
+                    // <main> top padding is zeroed at the same breakpoint in base.css so the now-in-flow
+                    // header doesn't double-offset the content.
+                    'bg-header-background text-header-foreground fixed top-0 left-0 right-0 z-50 [@media(max-height:400px)]:static',
+                    'border-b border-header-border',
+                    'transition-[background-color,border-color,color] duration-300 ease-out'
+                )}>
+                {/* PageConfigManager applies page-level UI config (header transparency, main padding)
                 to DOM elements via data attributes. Rendered here instead of _app.tsx to avoid
                 duplicating ~120 lines of layout code. Header is always present on _app.* routes,
                 and the manager uses document.querySelector() so placement doesn't affect functionality. */}
-            <PageConfigManager />
-            {announcementSlot}
-            <UITarget targetId="sfcc.header.promo.top" />
-            {beforeHeader}
-            <div className="section-container py-6">
-                {/* Three-column grid: nav (left) · centered logo · actions (right) */}
-                <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-4">
-                    {/* LEFT — Navigation menu */}
-                    <div className="flex items-center justify-start gap-x-4 lg:gap-x-6">
-                        <div className="lg:hidden flex items-center">{children}</div>
-                        <div
-                            className="hidden lg:flex items-center"
-                            onMouseOver={handleNavMouseOver}
-                            onFocus={handleNavFocus}
-                            onMouseLeave={handleNavMouseLeave}>
-                            {children}
+                <PageConfigManager />
+                {announcementSlot}
+                <UITarget targetId="sfcc.header.promo.top" />
+                {beforeHeader}
+                <div className="section-container py-6">
+                    {/* Three-column grid: nav (left) · centered logo · actions (right) */}
+                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-4">
+                        {/* LEFT — Navigation menu */}
+                        <div className="flex items-center justify-start gap-x-4 lg:gap-x-6">
+                            <div className="lg:hidden flex items-center">{children}</div>
+                            <div
+                                className="hidden lg:flex items-center"
+                                onMouseOver={handleNavMouseOver}
+                                onFocus={handleNavFocus}
+                                onMouseLeave={handleNavMouseLeave}>
+                                {children}
+                            </div>
+                        </div>
+
+                        {/* CENTER — Logo (geometrically centered) */}
+                        <Link
+                            to="/"
+                            className="flex-shrink-0 flex items-center justify-self-center"
+                            data-testid="header-logo">
+                            <Logo className="header-logo h-10 lg:h-14 w-auto transition-colors duration-300 ease-out" />
+                        </Link>
+
+                        {/* RIGHT — Search + chat + user + cart */}
+                        <div className="flex items-center justify-end gap-x-1 lg:gap-x-2">
+                            <div className="hidden lg:block" data-testid="header-search-desktop">
+                                <LocationKeyedSearch />
+                            </div>
+                            <UITarget targetId="sfcc.header.before.cart" />
+                            {showChat && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="cursor-pointer lg:px-2 px-1 hover:bg-transparent hover:opacity-60 transition-opacity"
+                                    onClick={() => openAgentWidget()}
+                                    aria-label={t('openChat')}>
+                                    <SparklesIcon />
+                                </Button>
+                            )}
+                            <UserActions />
+                            <CartBadge />
                         </div>
                     </div>
 
-                    {/* CENTER — Logo (geometrically centered) */}
-                    <Link
-                        to="/"
-                        className="flex-shrink-0 flex items-center justify-self-center"
-                        data-testid="header-logo">
-                        <Logo className="header-logo h-10 lg:h-14 w-auto transition-colors duration-300 ease-out" />
-                    </Link>
-
-                    {/* RIGHT — Search + chat + user + cart */}
-                    <div className="flex items-center justify-end gap-x-1 lg:gap-x-2">
-                        <div className="hidden lg:block" data-testid="header-search-desktop">
-                            <LocationKeyedSearch />
-                        </div>
-                        <UITarget targetId="sfcc.header.before.cart" />
-                        {showChat && (
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="cursor-pointer lg:px-2 px-1 hover:bg-transparent hover:opacity-60 transition-opacity"
-                                onClick={() => openAgentWidget()}
-                                aria-label={t('openChat')}>
-                                <SparklesIcon />
-                            </Button>
-                        )}
-                        <UserActions />
-                        <CartBadge />
+                    {/* Mobile search - second row */}
+                    <div className="pb-2 pt-3 lg:hidden" data-testid="header-search-mobile">
+                        <LocationKeyedSearch />
                     </div>
+                    <UITarget targetId="sfcc.header.bnpl.banner" />
                 </div>
-
-                {/* Mobile search - second row */}
-                <div className="pb-2 pt-3 lg:hidden" data-testid="header-search-mobile">
-                    <LocationKeyedSearch />
-                </div>
-                <UITarget targetId="sfcc.header.bnpl.banner" />
-            </div>
-        </header>
+            </header>
+            <UITarget targetId="sfcc.header.after" />
+        </>
     );
 }

@@ -19,6 +19,11 @@ import { ApiError, type ShopperProducts } from '@/scapi';
 import { appConfigContext } from '@salesforce/storefront-next-runtime/config';
 import { siteContext } from '@salesforce/storefront-next-runtime/site-context';
 import { NormalizedApiError } from '@/lib/api/normalized-api-error';
+// @sfdc-extension-block-start SFDC_EXT_BOPIS
+vi.mock('@/extensions/store-locator/lib/resolve-selected-store.server', () => ({
+    resolveSelectedStore: vi.fn(() => Promise.resolve({ selectedStoreInfo: null, store: null, error: null })),
+}));
+// @sfdc-extension-block-end SFDC_EXT_BOPIS
 
 const { mockFetchProductById, mockPdpSectionApi, mockGetReturnsAndWarranty, mockAttemptRouteSeoFallback } = vi.hoisted(
     () => ({
