@@ -290,6 +290,7 @@ exports[`Header stories snapshot > Default story renders and matches snapshot 1`
             </svg>
             <span
               class="hidden lg:inline"
+              data-header-label="true"
             >
               Choose your store
             </span>
@@ -713,6 +714,7 @@ exports[`Header stories snapshot > MobileView story renders and matches snapshot
               </svg>
               <span
                 class="hidden lg:inline"
+                data-header-label="true"
               >
                 Choose your store
               </span>
@@ -1132,6 +1134,7 @@ exports[`Header stories snapshot > WithAnnouncementBanner story renders and matc
             </svg>
             <span
               class="hidden lg:inline"
+              data-header-label="true"
             >
               Choose your store
             </span>

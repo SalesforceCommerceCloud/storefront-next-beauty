@@ -29,18 +29,11 @@ import { Link } from '@/components/link';
 import Search from '@/components/header/search';
 import CartBadge from '@/components/header/cart-badge';
 import UserActions from '@/components/header/user-actions/user-actions';
-import { useTranslation } from 'react-i18next';
 import Logo from '../logo';
-import { Button } from '@/components/ui/button';
-import { SparklesIcon } from '@/components/icons';
+import ChatPill from '@/components/header/chat-pill';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import type { AppConfig } from '@/types/config';
-import {
-    openAgentWidget,
-    isCimulateEnabled,
-    validateCimulateConfig,
-    resolveShopperAgentConfig,
-} from '@/components/cimulate';
+import { isCimulateEnabled, validateCimulateConfig, resolveShopperAgentConfig } from '@/components/cimulate';
 import { UITarget } from '@/targets/ui-target';
 import { cn } from '@/lib/utils';
 import { Component } from '@/lib/decorators/component';
@@ -82,7 +75,6 @@ export default function Header({
     announcementSlot,
     variant = 'full',
 }: HeaderProps): ReactElement {
-    const { t } = useTranslation('header');
     const headerRef = useRef<HTMLElement>(null);
     const config = useConfig<AppConfig>();
     const shopperAgent = resolveShopperAgentConfig(config);
@@ -232,16 +224,7 @@ export default function Header({
                                 <LocationKeyedSearch />
                             </div>
                             <UITarget targetId="sfcc.header.before.cart" />
-                            {showChat && (
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="cursor-pointer lg:px-2 px-1 hover:bg-transparent hover:opacity-60 transition-opacity"
-                                    onClick={() => openAgentWidget()}
-                                    aria-label={t('openChat')}>
-                                    <SparklesIcon />
-                                </Button>
-                            )}
+                            {showChat && <ChatPill label={shopperAgent?.headerText} />}
                             <UserActions />
                             <CartBadge />
                         </div>
