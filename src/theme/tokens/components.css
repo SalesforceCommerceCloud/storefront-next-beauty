@@ -1,4 +1,15 @@
 :root {
+    /* Compact product-tile media inherits the theme's muted surface. */
+    --product-media: var(--muted);
+    /* Category Card overlay treatment and its readable foreground. */
+    --category-card-overlay: linear-gradient(to top, color-mix(in oklch, var(--brand-black) 80%, transparent), color-mix(in oklch, var(--brand-black) 50%, transparent), transparent);
+    --category-card-overlay-foreground: var(--brand-white);
+
+    /* Image-backed Content Card scrims, independent of the artwork source. */
+    --content-card-overlay-dark: linear-gradient(to top, color-mix(in oklch, var(--brand-black) 90%, transparent), color-mix(in oklch, var(--brand-black) 75%, transparent), color-mix(in oklch, var(--brand-black) 60%, transparent));
+    --content-card-overlay-light-top: linear-gradient(to bottom, color-mix(in oklch, var(--background) 95%, transparent), color-mix(in oklch, var(--background) 60%, transparent), transparent);
+    --content-card-overlay-light-bottom: linear-gradient(to top, color-mix(in oklch, var(--background) 95%, transparent), color-mix(in oklch, var(--background) 60%, transparent), transparent);
+
     /* payment provider colors */
     --paypal-gold: #FFC439;
     --paypal-gold-hover: #F5BB41; /* rgb(245, 187, 65) */
@@ -34,4 +45,8 @@
 
     /* order info card border */
     --order-border: #d9d3c7; /* rgb(217, 211, 199) */
+}
+
+:root {
+    --product-tile-compact-blend: normal;
 }
