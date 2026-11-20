@@ -847,6 +847,7 @@
             "title": "Store Preferences",
             "subtitle": "Set the store you shop, and the people who can pick up for you.",
             "preferredStore": {
+                "accountDefaultError": "Your store choice was applied, but could not be saved to your account. Try again.",
                 "heading": "Preferred Store for Pickup",
                 "description": "Select your preferred store for in-store pickup orders",
                 "changeStore": "Change store",
