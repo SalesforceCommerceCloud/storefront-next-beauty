@@ -29,7 +29,8 @@
  * preserves the `<section> → <h3>`(two spans)`→ carousel` structure those rules depend on.
  */
 import { type ReactElement, type ReactNode, Suspense, useMemo, useEffect, useRef, useState } from 'react';
-import { Await, useFetcher } from 'react-router';
+import { Await } from 'react-router';
+import { useAuthFetcher as useFetcher } from '@/hooks/use-auth-fetcher';
 import type { ShopperBasketsV2, ShopperProducts, ShopperSearch } from '@/scapi';
 import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';

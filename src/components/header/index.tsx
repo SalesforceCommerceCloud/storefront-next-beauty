@@ -146,7 +146,7 @@ export default function Header({
         return (
             <header
                 ref={headerRef}
-                className="bg-header-background text-header-foreground border-b border-header-border sticky top-0 z-50 [@media(max-height:400px)]:static">
+                className="bg-header-background text-header-foreground border-b border-header-border sticky top-[var(--agent-banner-height,0px)] z-50 [@media(max-height:400px)]:static">
                 <div className="section-container">
                     <div className="flex items-center h-16">
                         <Link to="/" className="flex-shrink-0 flex items-center" data-testid="header-logo">
