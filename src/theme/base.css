@@ -31,13 +31,16 @@
      * Matches the header's measured height so keyboard navigation and anchor links scroll the
      * target element clear of the header. (WCAG 2.1 SC 2.4.7 Focus Visible) */
     html {
-        scroll-padding-top: var(--header-height, 145px);
+        /* Reserve the fixed header's responsive height before it is measured. */
+        --header-height: 145px;
+        --store-prompt-offset: var(--header-height);
+        scroll-padding-top: var(--header-height);
         scrollbar-gutter: stable;
     }
 
     @media (min-width: 64rem) {
         html {
-            scroll-padding-top: var(--header-height, 105px);
+            --header-height: 105px;
         }
     }
 
@@ -243,34 +246,16 @@ main[data-has-top-padding='true'] .border-order-border {
  * password reset, maintenance, 404) renders no header, so it opts out via
  * `data-layout="empty"` — otherwise it'd carry phantom top padding. */
 main:not([data-layout='empty']) {
-    /* Fallback so <main> reserves the fixed header's space in the SERVER-rendered
-     * HTML. Without it, `--header-height` is undefined until the header's mount
-     * effect measures it (header/index.tsx) and `padding-top: var(--header-height)`
-     * resolves to 0 at first paint — <main> renders flush to the top, then jumps
-     * down ~header-height after hydration (deterministic CLS ~0.23 on the PDP).
-     *
-     * The fallback is responsive because the header is: it carries a mobile-only
-     * search row (`lg:hidden`, header/index.tsx) so it measures ~145px below `lg`
-     * and ~105px at `lg`+. Match those so first paint reserves the right space at
-     * both widths; the mount effect then refines to the exact measured px (a
-     * sub-pixel correction). Keep these in sync with the header's layout. */
-    padding-top: var(--header-height, 145px);
-}
-
-@media (min-width: 64rem) {
-    main:not([data-layout='empty']) {
-        padding-top: var(--header-height, 105px);
-    }
+    /* html supplies the responsive height for SSR; header/index.tsx replaces it
+     * with the measured height after mount to avoid a first-paint layout jump. */
+    padding-top: var(--header-height);
 }
 
 /* Pages whose route handle declares `header.transparentOnLoad = true`
  * (currently just the home page) opt OUT of the padding so the hero can
  * bleed full-bleed behind the transparent header. Driven by a stable
- * data attribute set by PageConfigManager from the route's transparency
- * config (mount + transparency changes), NOT by the live
- * `data-page-at-top` scroll state — that way the header
- * transparent → opaque transition does NOT also trigger a layout shift
- * on <main>'s padding. The header chrome alone fades; content stays put.
+ * data attribute rendered by the app shell from route config, NOT by the live
+ * `data-page-at-top` scroll state — so header changes do not shift <main>.
  *
  * This mirrors the `isHomepage ? undefined : padding` pattern in `_app.tsx`. */
 main[data-hero-bleed='true'] {
@@ -280,8 +265,8 @@ main[data-hero-bleed='true'] {
 /* PDP: add extra vertical spacing beyond header height.
  *
  * Scoped to `:not([data-hero-bleed='true'])` so hero-bleed always wins
- * when both flags are set. The two flags come from independent effects in
- * page-config-manager.tsx (`data-hero-bleed` from `transparentOnLoad`,
+ * when both flags are set. The two flags come from route config
+ * (`data-hero-bleed` from `transparentOnLoad`,
  * `data-has-top-padding` from `hasTopPadding`) with no mutual exclusion in
  * the component — today's routes set exactly one each (home=transparent,
  * PDP=padding), but a future landing page wanting a transparent hero PLUS
@@ -290,18 +275,8 @@ main[data-hero-bleed='true'] {
  * instead of 0 and reopening the layout-shift gap. This guard pins the
  * intended winner regardless of source order. */
 main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
-    /* Same responsive header-height fallback as the base rule above (145px
-     * mobile; the `lg`+ 105px override is the @media block below — placed AFTER
-     * this rule so it wins by source order at same specificity) — keeps the
-     * PDP's `header-height + vertical-spacing` padding present at SSR so there's
-     * no post-hydration jump. */
-    padding-top: calc(var(--header-height, 145px) + var(--ui-vertical-spacing));
-}
-
-@media (min-width: 64rem) {
-    main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
-        padding-top: calc(var(--header-height, 105px) + var(--ui-vertical-spacing));
-    }
+    /* The responsive header-height token is available during SSR. */
+    padding-top: calc(var(--header-height) + var(--ui-vertical-spacing));
 }
 
 /* At the 400% zoom proxy (viewport height <= 400px) the header drops to
@@ -313,9 +288,10 @@ main[data-has-top-padding='true']:not([data-hero-bleed='true']) {
  * the top. Zero the reserved top padding (and the matching scroll padding, which
  * only exists to clear a pinned header) at this breakpoint. Placed after the
  * responsive rules above so it wins by source order when a viewport is both wide
- * and short. */
+ * and short. The home store prompt uses the same offset token and must also reset. */
 @media (max-height: 400px) {
     html {
+        --store-prompt-offset: 0px;
         scroll-padding-top: 0;
     }
 

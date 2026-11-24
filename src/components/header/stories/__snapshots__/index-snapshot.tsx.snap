@@ -433,7 +433,8 @@ exports[`Header stories snapshot > Default story renders and matches snapshot 1`
   </header>
   <section
     aria-labelledby="store-locator-home-prompt-heading"
-    class="border-b border-border bg-muted text-foreground"
+    class="border-b border-border bg-muted text-foreground mt-[var(--store-prompt-offset,0px)]"
+    data-home-store-prompt="true"
     data-testid="store-locator-home-prompt"
   >
     <div
@@ -857,7 +858,8 @@ exports[`Header stories snapshot > MobileView story renders and matches snapshot
     </header>
     <section
       aria-labelledby="store-locator-home-prompt-heading"
-      class="border-b border-border bg-muted text-foreground"
+      class="border-b border-border bg-muted text-foreground mt-[var(--store-prompt-offset,0px)]"
+      data-home-store-prompt="true"
       data-testid="store-locator-home-prompt"
     >
       <div
@@ -1277,7 +1279,8 @@ exports[`Header stories snapshot > WithAnnouncementBanner story renders and matc
   </header>
   <section
     aria-labelledby="store-locator-home-prompt-heading"
-    class="border-b border-border bg-muted text-foreground"
+    class="border-b border-border bg-muted text-foreground mt-[var(--store-prompt-offset,0px)]"
+    data-home-store-prompt="true"
     data-testid="store-locator-home-prompt"
   >
     <div

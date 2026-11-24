@@ -43,6 +43,9 @@ import { useTranslation } from 'react-i18next';
 import type { NormalizedApiError } from '@/lib/api/normalized-api-error';
 import { createCategoryUrlFromLegacyPath } from '@/route-paths';
 import { useSeoUrlContext } from '@/hooks/use-seo-url-context';
+// @sfdc-extension-block-start SFDC_EXT_STORE_LOCATOR
+import { resolveSelectedStore } from '@/extensions/store-locator/lib/resolve-selected-store.server';
+// @sfdc-extension-block-end SFDC_EXT_STORE_LOCATOR
 
 export { shouldRevalidate } from '@/lib/revalidation/routes/home';
 
@@ -131,6 +134,11 @@ export async function loader(args: LoaderFunctionArgs): Promise<HomePageData> {
     const currency = (args.context.get(siteContext) as SiteContext).currency;
     const pageUrl = buildCanonicalUrl(requestUrl.origin, requestUrl.pathname, requestUrl.search);
     const page = fetchPageWithComponentData(args, { pageId: 'homepage' });
+    // @sfdc-extension-block-start SFDC_EXT_STORE_LOCATOR
+    // The header and prompt must agree on the selected store in the first HTML frame.
+    // This shares the root loader's request-local read and runs beside the page fetch.
+    const selectedStoreResolution = resolveSelectedStore(args.context);
+    // @sfdc-extension-block-end SFDC_EXT_STORE_LOCATOR
     const searchResult = fetchCarouselProducts(args.context, {
         categoryId: 'root',
         limit: config.pages.home.featuredProductsCount,
@@ -142,8 +150,13 @@ export async function loader(args: LoaderFunctionArgs): Promise<HomePageData> {
     // first, observe their eventual outcome so a later API failure cannot become unhandled.
     void Promise.allSettled([searchResult, categories]);
 
+    const pageData = await page;
+    // @sfdc-extension-block-start SFDC_EXT_STORE_LOCATOR
+    await selectedStoreResolution;
+    // @sfdc-extension-block-end SFDC_EXT_STORE_LOCATOR
+
     return {
-        page: await page,
+        page: pageData,
         searchResult,
         categories,
         pageUrl,

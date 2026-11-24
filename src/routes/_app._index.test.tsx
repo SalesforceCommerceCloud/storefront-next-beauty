@@ -26,6 +26,7 @@ import { fetchSearchProducts } from '@/lib/api/search.server';
 import { fetchCategories } from '@/lib/api/categories.server';
 import { getConfig } from '@salesforce/storefront-next-runtime/config';
 import type { AppConfig } from '@/types/config';
+import { resolveSelectedStore, type Resolution } from '@/extensions/store-locator/lib/resolve-selected-store.server';
 
 vi.mock('@/hooks/use-seo-url-context', () => ({
     useSeoUrlContext: () => ({ siteId: 'RefArchGlobal' }),
@@ -213,6 +214,10 @@ vi.mock('@/lib/page-designer/page-loader.server', () => ({
     fetchPageWithComponentData: vi.fn(),
 }));
 
+vi.mock('@/extensions/store-locator/lib/resolve-selected-store.server', () => ({
+    resolveSelectedStore: vi.fn(),
+}));
+
 vi.mock('@/lib/api/search.server', () => ({
     fetchSearchProducts: vi.fn(() => Promise.resolve(mockSearchResult)),
 }));
@@ -267,6 +272,7 @@ describe('HomePage', () => {
             ...createMockPage([]),
             componentData: {},
         });
+        vi.mocked(resolveSelectedStore).mockResolvedValue({ selectedStoreInfo: null, store: null, error: null });
         vi.mocked(getConfig).mockReturnValue({ pages: { home: { featuredProductsCount: 8 } } } as AppConfig);
     });
 
@@ -443,6 +449,29 @@ describe('HomePage', () => {
         });
 
         describe('loader (server-side)', () => {
+            test('waits for store selection before rendering the home page', async () => {
+                let releaseStore!: (resolution: Resolution) => void;
+                vi.mocked(resolveSelectedStore).mockReturnValue(
+                    new Promise((resolve) => {
+                        releaseStore = resolve;
+                    })
+                );
+
+                const result = loader(baseLoaderArgs);
+                let rendered = false;
+                void result.then(() => {
+                    rendered = true;
+                });
+
+                await Promise.resolve();
+                await Promise.resolve();
+                expect(rendered).toBe(false);
+
+                releaseStore({ selectedStoreInfo: { id: 'saved-store' }, store: null, error: null });
+                await result;
+                expect(rendered).toBe(true);
+            });
+
             test('starts independent data requests before the critical page resolves', async () => {
                 let resolvePage!: (page: ShopperExperience.schemas['Page']) => void;
                 vi.mocked(fetchPageWithComponentData).mockReturnValue(

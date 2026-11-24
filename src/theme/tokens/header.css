@@ -60,9 +60,9 @@
 
 /*
  * "Header opaque" override scopes: when any floating header surface
- * (hamburger drawer, search suggestions, mega-menu dropdown) is open, drop
- * the transparent-on-hero treatment so the dropdown reads against the cream
- * header instead of letting the hero bleed through. Declared TWICE so it
+ * (hamburger drawer, search suggestions, mega-menu dropdown) is open, or the
+ * home store prompt is rendered, use the cream header surface. The prompt
+ * selector works in server-rendered HTML before hydration. Declared TWICE so it
  * lands on BOTH the <header data-page-at-top='true'> element itself (so its
  * bg-header-background utility resolves to cream) AND :root (so any
  * portaled dropdown viewport at body level also picks up the cream surface).
@@ -70,9 +70,11 @@
 html[data-mobile-menu-open='true'] [data-page-at-top='true'],
 html[data-search-open='true'] [data-page-at-top='true'],
 html[data-mega-menu-open='true'] [data-page-at-top='true'],
+html:has([data-home-store-prompt]) [data-page-at-top='true'],
 html[data-mobile-menu-open='true'],
 html[data-search-open='true'],
-html[data-mega-menu-open='true'] {
+html[data-mega-menu-open='true'],
+html:has([data-home-store-prompt]) {
     --header-background: oklch(0.985 0.012 90);
     --header-foreground: oklch(0.24 0.02 80);
     --header-border: oklch(0.87 0.02 88);
