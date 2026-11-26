@@ -55,6 +55,7 @@ vi.mock('@/lib/logger.server', () => ({
 
 vi.mock('@salesforce/storefront-next-runtime/i18n', () => ({
     getTranslation: vi.fn(() => ({
+        t: (key: string) => key,
         i18next: {
             t: (key: string) => key.replace('product:', ''),
         },
